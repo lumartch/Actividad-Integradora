@@ -8,7 +8,20 @@
 #define ARCH_USR "Usuarios.txt"
 #define ARCH_AC "Academicos.txt"
 #define ARCH_NO_REG "No_Registro.txt"
+#define ARCH_FORMACION "Formacion_Academica.txt"
+#define ARCH_PRODUCCION "Produccion_Academica.txt"
+#define ARCH_DOCENCIA "Docencia_Academica.txt"
+#define ARCH_TUTORIA "Tutoria_academica.txt"
 
+#ifndef _WIN32
+#define CLEAR "clear"
+#define MKDIR "mkdir Archivos/"
+#define DIR "Archivos/"
+#else
+#define CLEAR "cls"
+#define MKDIR "mkdir Archivos\\"
+#define DIR "Archivos\\"
+#endif
 
 using namespace std;
 

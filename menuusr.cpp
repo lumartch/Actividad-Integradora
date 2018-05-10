@@ -9,6 +9,8 @@ MenuUsr::~MenuUsr() {
 }
 
 MenuUsr::MenuUsr(const Academico& academico, const Usuario& usuario) {
+    //Inicializa con los datos de dos objetos, Usuario contiene la direccion de archivo del Academico
+    //para cuando se terminen las modificaciones
     this->academico = academico;
     this->usuario = usuario;
     menuPrincipal();
@@ -40,6 +42,11 @@ void MenuUsr::menuPrincipal() {
         } else if(opc == "5") {
             tutoria();
         } else {
+            //Abre el archivo y coloca el puntero en la posicion de escritura para sobreescribir el academico
+            fstream file_academico(string(DIR) + string(ARCH_AC), ios::in|ios::out);
+            file_academico.seekp(usuario.getDireccionFisica(), ios::beg);
+            file_academico.write((char*)&academico, sizeof(Academico));
+            file_academico.close();
             cout << endl << "Gracias por usar el administrador de usuario....";
         }
         pausa();
@@ -58,10 +65,75 @@ void MenuUsr::infoPersonal() {
         cout << "5) Actualizar email." << endl;
         cout << "6) Actualizar estado civil." << endl;
         cout << "7) Administrar dependientes economicos." << endl;
-        cout << "0) Salir..." << endl;
-        cout << ">> ";
-        getline(cin, opc);
+        cout << "0) Salir..." << endl << endl;
+        do{
+            cout << ">> ";
+            getline(cin, opc);
+        }while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and
+               opc != "5" and opc != "6" and opc != "7" and opc != "0");
+        //Edicion del perfil de usuario
+        if(opc == "1"){
+            string nombre;
+            cout << endl << "Ingrese el nuevo nombre del academico: ";
+            getline(cin, nombre);
+            academico.setNombre(nombre);
+            cout << endl << "¡Nombre actualizado!";
+        }
+        else if(opc == "2"){
+            string domicilio;
+            cout << endl << "Ingrese el nuevo domicilio del academico: ";
+            getline(cin, domicilio);
+            academico.setDomicilio(domicilio);
+            cout << endl << "¡Domicilio actualizado!";
+        }
+        else if(opc == "3"){
+            string ciudad;
+            cout << endl << "Ingrese la nueva ciudad del academico: ";
+            getline(cin, ciudad);
+            academico.setCiudad(ciudad);
+            cout << endl << "¡Ciudad actualizada!";
+        }
+        else if(opc == "4"){
+            string telefono;
+            cout << endl << "Ingrese el nuevo telefono del academico: ";
+            getline(cin, telefono);
+            academico.setTelefono(telefono);
+            cout << endl << "¡Telefono actualizado!";
+        }
+        else if(opc == "5"){
+            string email;
+            cout << endl << "Ingrese el nuevo email del academico: ";
+            getline(cin, email);
+            academico.setEmail(email);
+            cout << endl << "¡Email actualizado!";
+        }
+        else if(opc == "6"){
+            string estadoCivil;
+            cout << endl << "Seleccione el estado civil del academico." << endl;
+            cout << "1) Soltero." << endl;
+            cout << "2) Casado." << endl << endl;
+            do{
+                cout << ">> ";
+                getline(cin, estadoCivil);
+            }while(estadoCivil != "1" and estadoCivil != "2");
+            if(estadoCivil == "1"){
+                academico.setEstadoCivil("Soltero");
+            } else {
+                academico.setEstadoCivil("Casado");
+            }
+            cout << endl << "¡Estado civil actualizado!";
+        }
+        else if(opc == "7"){
+            //Menú de dependientes economicos
+        }
+        else{
+            cout << "Terminando de modificar información personal...";
+        }
+        if(opc != "0"){
+            pausa();
+        }
     }while(opc != "0");
+
 }
 
 void MenuUsr::formacion() {
@@ -77,6 +149,7 @@ void MenuUsr::formacion() {
         cout << ">> ";
         getline(cin, opc);
     }while(opc != "0");
+
 }
 
 

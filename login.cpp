@@ -1,6 +1,8 @@
 #include "login.h"
 
 Login::Login() {
+    //Crea el directorio de los archivos por defecto
+    system(string(MKDIR).c_str());
     crearArchivosDefecto();
     menuLogin();
 }
@@ -32,7 +34,7 @@ void Login::menuLogin() {
 }
 
 void Login::buscarUsuario(const std::string& username, const std::string& password) {
-    ifstream file(ARCH_USR);
+    ifstream file(string(DIR) + string(ARCH_USR));
     if(!file.good()){
         return;
     }
@@ -54,7 +56,7 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
     if(existe){
         //Login de usuario existente
         Academico academico;
-        ifstream file_academico(ARCH_AC);
+        ifstream file_academico(string(DIR) + string(ARCH_AC));
         if(!file_academico){
             cout << "No existe el archivo.";
             file_academico.close();
@@ -82,7 +84,7 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
 
 void Login::crearArchivosDefecto() {
     //Si no existe el archivo crea nuevos archivos
-    ifstream archivo_academicos(ARCH_AC);
+    ifstream archivo_academicos(string(DIR) + string(ARCH_AC));
     if(archivo_academicos.good()){
        archivo_academicos.close();
        return;
@@ -90,7 +92,7 @@ void Login::crearArchivosDefecto() {
     archivo_academicos.close();
 
     //Crea nuevo academico Administrador en caso de no existir el documento
-    ofstream arch_academicos_nuevo(ARCH_AC);
+    ofstream arch_academicos_nuevo(string(DIR) + string(ARCH_AC));
     Academico ac_admin;
     ac_admin.setNombre("Administrador");
     arch_academicos_nuevo.write((char*)&ac_admin, sizeof(Academico));
@@ -100,11 +102,11 @@ void Login::crearArchivosDefecto() {
     //Crea nuevo usuario Administrador
     int noReg = 0;
     Usuario usuario(++noReg, "admin", "admin", "Admin", direccionFisica);
-    ofstream file_usuario(ARCH_USR);
+    ofstream file_usuario(string(DIR) + string(ARCH_USR));
     file_usuario.write((char*)&usuario, sizeof(Usuario));
     file_usuario.close();
     //Crea el archivo de contador Por si no existia
-    ofstream file_reg(ARCH_NO_REG);
+    ofstream file_reg(string(DIR) + string(ARCH_NO_REG));
     file_reg.write((char*)&noReg, sizeof(int));
     file_reg.close();
 }

@@ -1,15 +1,15 @@
 #include "formacion.h"
 
 Formacion::Formacion() {
-    strcpy(this->username, "");
+    this->noReg = 0;
     strcpy(this->tipo, "");
     strcpy(this->nombre, "");
     strcpy(this->institucion, "");
     strcpy(this->cedula, "");
 }
 
-void Formacion::setUsername(const std::string& username) {
-    strcpy(this->username, username.c_str());
+void Formacion::setNoReg(const int& noReg) {
+    this->noReg = noReg;
 }
 
 void Formacion::setTipo(const std::string& tipo) {
@@ -40,8 +40,8 @@ void Formacion::setCedula(const std::string& cedula) {
     strcpy(this->cedula, cedula.c_str());
 }
 
-char* Formacion::getUsername() {
-    return username;
+int Formacion::getNoReg() {
+    return noReg;
 }
 
 char* Formacion::getTipo() {

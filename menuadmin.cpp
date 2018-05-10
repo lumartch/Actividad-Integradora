@@ -10,9 +10,10 @@ MenuAdmin::~MenuAdmin() {
 
 MenuAdmin::MenuAdmin(const Academico& academico, const Usuario& usuario) {
     //Inicializa el No de registro para proximas insersiones
-    ifstream file_reg(ARCH_NO_REG);
+    ifstream file_reg(string(DIR) + string(ARCH_NO_REG));
     file_reg.read((char*)&this->noReg, sizeof(int));
     file_reg.close();
+
     //Nace el menu con los datos de la cuenta usuario y del academico
     this->academico = academico;
     this->usuario = usuario;
@@ -140,13 +141,13 @@ void MenuAdmin::agregarUsuario() {
 void MenuAdmin::mostrarUsuario() {
     system("clear");
     cout << "*** Mostrar usuario ***" <<endl << endl;
-    ifstream arch_usr(ARCH_USR);
+    ifstream arch_usr(string(DIR) + string(ARCH_USR));
     if(!arch_usr.good()) {
         cout << "ERROR. No existe el archivo.";
         arch_usr.close();
         return;
     }
-    ifstream arch_ac(ARCH_AC);
+    ifstream arch_ac(string(DIR) + string(ARCH_AC));
     while(!arch_usr.eof()) {
         Usuario usr;
         arch_usr.read((char*)&usr, sizeof(Usuario));
@@ -184,7 +185,7 @@ void MenuAdmin::pausa() {
 }
 
 bool MenuAdmin::existeUsername(const std::string& username) {
-    ifstream file(ARCH_USR);
+    ifstream file(string(DIR) + string(ARCH_USR));
     if(!file.good()) {
         return false;
     }
@@ -207,17 +208,17 @@ void MenuAdmin::insertarUsuario(Usuario& usuario) {
     Academico academico;
     //Crea el registro dentro del archivo de academicos
     academico.setNombre(std::string(usuario.getUsername()));
-    ofstream arch_ac(ARCH_AC, ios::app);
+    ofstream arch_ac(string(DIR) + string(ARCH_AC), ios::app);
     long int direccionFisica = arch_ac.tellp();
     arch_ac.write((char*)&academico, sizeof(Academico));
     arch_ac.close();
     //Toma el valor de la posicion física del academico y la asigna al usuario
     usuario.setDireccionFisica(direccionFisica);
-    ofstream arch_usr(ARCH_USR, ios::app);
+    ofstream arch_usr(string(DIR) + string(ARCH_USR), ios::app);
     arch_usr.write((char*)&usuario, sizeof(Usuario));
     arch_usr.close();
     //Sobreescribe el valor del no de registros
-    ofstream file_reg(ARCH_NO_REG);
+    ofstream file_reg(string(DIR) + string(ARCH_NO_REG));
     file_reg.write((char*)&noReg, sizeof(int));
     file_reg.close();
 }

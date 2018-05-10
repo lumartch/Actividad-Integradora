@@ -8,8 +8,8 @@ class Usuario {
 
 private:
     int noReg;
-    char username[20];
-    char password[20];
+    char username[30];
+    char password[30];
     char tipo[20];
     long int direccionFisica;
 public:

@@ -5,7 +5,7 @@
 
 class Formacion {
 private:
-    char username[20];
+    int noReg;
     char tipo[30];
     char nombre[20];
     char institucion[30];
@@ -15,7 +15,7 @@ private:
     char cedula[20];
 public:
     Formacion();
-    void setUsername(const std::string &username);
+    void setNoReg(const int & noReg);
     void setTipo(const std::string &tipo);
     void setNombre(const std::string &nombre);
     void setInstitucion(const std::string &institucion);
@@ -23,7 +23,7 @@ public:
     void setFechaFinal(const Fecha& fechaFinal);
     void setFechaObtencion(const Fecha& fechaObtencion);
     void setCedula(const std::string &cedula);
-    char* getUsername();
+    int getNoReg();
     char* getTipo();
     char* getNombre();
     char* getInstitucion();

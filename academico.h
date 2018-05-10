@@ -7,11 +7,11 @@
 class Academico {
 private:
     int noReg;
-    char nombre[30];
-    char domicilio[40];
-    char ciudad[30];
-    char telefono[10];
-    char email[20];
+    char nombre[100];
+    char domicilio[100];
+    char ciudad[100];
+    char telefono[15];
+    char email[50];
     char estadoCivil[15];
     //char fotografia[50];
 public:
