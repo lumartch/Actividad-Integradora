@@ -23,7 +23,7 @@ MenuAdmin::MenuAdmin(const Academico& academico, const Usuario& usuario) {
 void MenuAdmin::menuPrincipal() {
     string opc;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "No.Registros : " << noReg << endl;
         cout << "*** Menu del administrador -> " << academico.getNombre() << " ***" << endl << endl;
         cout << "1) Administrar perfil."<< endl;
@@ -60,7 +60,7 @@ void MenuAdmin::administrarPerfil() {
 void MenuAdmin::administrarUsuarios() {
     string opc;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "*** Administracion de usuarios ***" << endl << endl;
         cout << "1) Agregar usuario." << endl;
         cout << "2) Mostrar usuario." << endl;
@@ -99,7 +99,7 @@ void MenuAdmin::administrarProduccion()
 }
 
 void MenuAdmin::agregarUsuario() {
-    system("clear");
+    system(CLEAR);
     cout << "*** Agregar nuevo usuario ***" << endl << endl;
     Usuario newUsuario;
     string auxStr;
@@ -110,7 +110,7 @@ void MenuAdmin::agregarUsuario() {
         getline(cin, auxStr);
         if(existeUsername(auxStr)) {
             existencia = true;
-            cout << endl << "Username ya existe. Intente de nuevo.";
+            cout << "Username ya existe. Intente de nuevo." << endl << endl;
         } else {
             existencia = false;
         }
@@ -139,7 +139,7 @@ void MenuAdmin::agregarUsuario() {
 }
 
 void MenuAdmin::mostrarUsuario() {
-    system("clear");
+    system(CLEAR);
     cout << "*** Mostrar usuario ***" <<endl << endl;
     ifstream arch_usr(string(DIR) + string(ARCH_USR));
     if(!arch_usr.good()) {
@@ -162,7 +162,7 @@ void MenuAdmin::mostrarUsuario() {
 }
 
 void MenuAdmin::modificarUsuario() {
-    system("clear");
+    system(CLEAR);
     string username;
     cout << "*** Modificación de usuario ***" << endl << endl;
     cout << "Ingrese el usuario (username) a buscar: ";

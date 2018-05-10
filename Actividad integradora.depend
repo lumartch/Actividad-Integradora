@@ -52,7 +52,7 @@
 1525974400 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/login.h
 	"menuadmin.h"
 
-1525987827 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuadmin.cpp
+1525988979 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuadmin.cpp
 	"menuadmin.h"
 
 1525974401 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuadmin.h
@@ -61,9 +61,10 @@
 1525987703 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.cpp
 	"menuusr.h"
 
-1525986369 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.h
+1525990698 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.h
 	"usuario.h"
 	"academico.h"
+	"dependiente.h"
 	<fstream>
 	<iostream>
 
@@ -71,6 +72,13 @@
 	"usuario.h"
 
 1525987085 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/usuario.h
+	<string>
+	<cstring>
+
+1525990578 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/dependiente.cpp
+	"dependiente.h"
+
+1525990476 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/dependiente.h
 	<string>
 	<cstring>
 

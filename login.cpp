@@ -10,7 +10,7 @@ Login::Login() {
 void Login::menuLogin() {
     string opc;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "*** Login de Academicos ***" << endl << endl;
         cout << "1) Iniciar sesion." << endl;
         cout << "0) Salir..." << endl << endl;
