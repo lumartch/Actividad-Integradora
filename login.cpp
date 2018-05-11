@@ -93,15 +93,16 @@ void Login::crearArchivosDefecto() {
 
     //Crea nuevo academico Administrador en caso de no existir el documento
     ofstream arch_academicos_nuevo(string(DIR) + string(ARCH_AC));
+    int noReg = 1;
     Academico ac_admin;
     ac_admin.setNombre("Administrador");
+    ac_admin.setNoReg(noReg);
     arch_academicos_nuevo.write((char*)&ac_admin, sizeof(Academico));
     long int direccionFisica = arch_academicos_nuevo.tellp();
     direccionFisica -= sizeof(Academico);
     arch_academicos_nuevo.close();
 
     //Crea nuevo usuario Administrador
-    int noReg = 1;
     Usuario usuario(noReg, "admin", "admin", "Admin", direccionFisica);
     ofstream file_usuario(string(DIR) + string(ARCH_USR));
     file_usuario.write((char*)&usuario, sizeof(Usuario));
@@ -115,6 +116,10 @@ void Login::crearArchivosDefecto() {
     //Crea archivo de dependientes economicos
     ofstream file_dep(string(DIR) + string(ARCH_DEPENDIENTE));
     file_dep.close();
+
+    //Crea archivo de formacion academica
+    ofstream file_form(string(DIR) + string(ARCH_FORMACION));
+    file_form.close();
 }
 
 void Login::pausa() {

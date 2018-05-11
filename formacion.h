@@ -7,12 +7,12 @@ class Formacion {
 private:
     int noReg;
     char tipo[30];
-    char nombre[20];
-    char institucion[30];
+    char nombre[100];
+    char institucion[100];
     Fecha fechaInicio;
     Fecha fechaFinal;
     Fecha fechaObtencion;
-    char cedula[20];
+    char cedula[50];
 public:
     Formacion();
     void setNoReg(const int & noReg);
