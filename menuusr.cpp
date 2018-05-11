@@ -53,7 +53,7 @@ void MenuUsr::menuPrincipal() {
             file_academico.close();
             cout << endl << "Gracias por usar el administrador de usuario....";
         }
-        if(opc != "0"){
+        if(opc != "0") {
             pausa();
         }
     } while(opc != "0");
@@ -144,36 +144,34 @@ void MenuUsr::dependientesEconomicos() {
         cout << "3) Modificar dependiente." << endl;
         cout << "4) Eliminar dependiente." << endl;
         cout << "0) Salir..." << endl << endl;
-        do{
+        do {
             cout << ">> ";
             getline(cin, opc);
-        }while(opc != "0" and opc != "1" and opc != "2"
-               and opc != "3" and opc != "4");
-        if(opc == "1"){
+        } while(opc != "0" and opc != "1" and opc != "2"
+                and opc != "3" and opc != "4");
+        if(opc == "1") {
             string nombre, edad;
             bool bandera = true;
-            do{
+            do {
                 //Revisar si no hay homonimos
-                cout << "Ingrese el nombre del dependiente: ";
+                cout << endl << "Ingrese el nombre del dependiente: ";
                 getline(cin, nombre);
-                if(existeDependiente(nombre)){
+                if(existeDependiente(nombre)) {
                     string opc;
                     cout << "Existe el nombre de dependiente. ¿Desea ingresar un homonimo del dependiente?(S/N): ";
-                    do{
+                    do {
                         cout << ">> ";
                         getline(cin, opc);
-                    }while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
-                    if(opc == "s" or opc == "S"){
+                    } while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
+                    if(opc == "s" or opc == "S") {
                         bandera = true;
-                    }
-                    else{
+                    } else {
                         bandera = false;
                     }
-                }
-                else{
+                } else {
                     bandera = true;
                 }
-            }while(!bandera);
+            } while(!bandera);
             cout << "Ingrese la edad del dependiente: ";
             getline(cin, edad);
 
@@ -184,16 +182,14 @@ void MenuUsr::dependientesEconomicos() {
             dep.setEdad(atoi(edad.c_str()));
 
             //Guarda dentro del archivo el objeto
-            ofstream file(string(DIR) + string(ARCH_DEPENDIENTE), ios::app);
-            file.write((char*) &dep, sizeof(Dependiente));
-            file.close();
+            guardaDependiente(dep, string(DIR) + string(ARCH_DEPENDIENTE));
+
             cout << endl <<"¡Nuevo dependiente agregado exitosamente!";
-        }
-        else if(opc == "2"){
+        } else if(opc == "2") {
             system(CLEAR);
             cout << "*** Mostrando dependientes economicos del academico " << this->academico.getNombre() << " ***" << endl << endl;
             ifstream file(string(DIR) + string(ARCH_DEPENDIENTE));
-            if(!file.good()){
+            if(!file.good()) {
                 file.close();
                 ofstream file_dep(string(DIR) + string(ARCH_DEPENDIENTE));
                 file_dep.close();
@@ -201,62 +197,130 @@ void MenuUsr::dependientesEconomicos() {
                 return;
             }
             int i = 1;
-            while(!file.eof()){
+            bool bandera = false;
+            while(!file.eof()) {
                 Dependiente dep;
                 file.read((char*)&dep, sizeof(Dependiente));
-                if(file.eof()){ break; }
+                if(file.eof()) {
+                    break;
+                }
                 //Busca si existe el nombre de dependiente por el usuario
-                if(dep.getNoReg() == academico.getNoReg()){
-                    cout  << "Dependiente #" << i << endl;
+                if(dep.getNoReg() == academico.getNoReg()) {
+                    bandera = true;
+                    /*long int posArchivo = file.tellg();
+                    posArchivo -= sizeof(Dependiente);
+                    cout << "Pos: " << posArchivo << endl;*/
+                    cout << "Dependiente #" << i << endl;
                     cout << "Nombre: " << dep.getNombre() << endl;
                     cout << "Edad: " << dep.getEdad() << endl << endl;
                     i++;
                 }
             }
             file.close();
-        }
-        else if(opc == "3"){
+            if(!bandera) {
+                cout << "No hay dependientes para este usuario." << endl;
+            }
+        } else if(opc == "3") {
             string nombre;
             cout << endl << "Ingrese el nombre del dependiente a modificar: ";
             getline(cin, nombre);
-            if(existeDependiente(nombre)){
-                ifstream file_out(string(DIR) + string(ARCH_DEPENDIENTE));
-                while(!file_out.eof()){
-                    Dependiente dep;
+            if(existeDependiente(nombre)) {
+                Dependiente dep;
+                long int posArchivo = 0;
+                fstream file_out(string(DIR) + string(ARCH_DEPENDIENTE), ios::in|ios::out);
+                while(!file_out.eof()) {
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()){ break; }
-                    if(string(dep.getNombre()) != nombre){
-                        ofstream file(string(DIR) + "Temporal.txt");
-                        file.write((char*) &dep, sizeof(Dependiente));
-                        file.close();
+                    if(file_out.eof()) { break; }
+                    //Rompe el ciclo cuando encuentra al Dependiente para modificarlo
+                    if(string(dep.getNombre()) == nombre) {
+                        //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                        posArchivo = file_out.tellg();
+                        posArchivo -= sizeof(Dependiente);
+                        break;
                     }
                 }
                 file_out.close();
-                cout << "Se elimino el dependiente exitosamente.";
-                string rem = string(DIR) + string(ARCH_DEPENDIENTE);
-                string rena = string(DIR) + "Temporal.txt";
-                remove(rem.c_str());
-                //rename(rena.c_str(), rem.c_str());
-            }
-            else{
+                //Menú de modificación
+                string opc;
+                do{
+                    system(CLEAR);
+                    cout << "** Dependiente: " << dep.getNombre() << " -> Edad: " << dep.getEdad() << " ***" << endl << endl;
+                    cout << "¿Que desea modificar?" << endl;
+                    cout << "1) Nombre." << endl;
+                    cout << "2) Edad." << endl;
+                    cout << "0) Salir..." << endl << endl;
+                    do{
+                        cout << ">> ";
+                        getline(cin, opc);
+                    }while(opc != "1" and opc != "2" and opc != "0");
+
+                    if(opc == "1"){
+                        string nombre;
+                        bool bandera = false;
+                        do{
+                            cout << endl << "Ingrese el nuevo nombre del dependiente: ";
+                            getline(cin, nombre);
+                            if(existeDependiente(nombre)){
+                                cout << "El nombre de dependiente ya existe, intente con uno nuevo." << endl;
+                                bandera = true;
+                            }
+                            else{
+                                bandera = false;
+                            }
+                        }while(bandera);
+                        dep.setNombre(nombre);
+                    }
+                    else if(opc == "2"){
+                        string edad;
+                        cout << endl << "Ingrese la nueva edad del dependiente: ";
+                        getline(cin, edad);
+                        dep.setEdad(atoi(edad.c_str()));
+                    }
+                    else{
+                        fstream file(string(DIR) + string(ARCH_DEPENDIENTE), ios::in|ios::out);
+                        file.seekg(posArchivo, ios::beg);
+                        file.write((char*)& dep, sizeof(Dependiente));
+                        file.close();
+                        cout << endl << "Modificación completa del dependiente.";
+                    }
+                    if(opc != "0"){
+                        pausa();
+                    }
+                }while(opc != "0");
+
+            } else {
                 cout << endl << "No existe el dependiente.";
             }
-        }
-        else if(opc == "4"){
+        } else if(opc == "4") {
             string nombre;
             cout << endl << "Ingrese el nombre del dependiente a eliminar: ";
             getline(cin, nombre);
-            if(existeDependiente(nombre)){
-
-            }
-            else{
+            if(existeDependiente(nombre)) {
+                ifstream file_out(string(DIR) + string(ARCH_DEPENDIENTE));
+                while(!file_out.eof()) {
+                    Dependiente dep;
+                    file_out.read((char*)&dep, sizeof(Dependiente));
+                    if(file_out.eof()) {
+                        break;
+                    }
+                    if(string(dep.getNombre()) != nombre) {
+                        guardaDependiente(dep, string(DIR) + "Temporal.txt");
+                    }
+                }
+                file_out.close();
+                //Eliminacion del archivo viejo y sustitucion por el nuevo
+                string rem = string(DIR) + string(ARCH_DEPENDIENTE);
+                string rena = string(DIR) + "Temporal.txt";
+                remove(rem.c_str());
+                rename(rena.c_str(), rem.c_str());
+                cout << "Se elimino el dependiente exitosamente.";
+            } else {
                 cout << endl << "No existe el dependiente.";
             }
-        }
-        else{
+        } else {
             cout << endl << "Regresando al menú de administración de información personal...";
         }
-        if(opc != "0"){
+        if(opc != "0") {
             pausa();
         }
     } while(opc != "0");
@@ -274,7 +338,70 @@ void MenuUsr::formacion() {
         cout << "0) Salir..." << endl;
         cout << ">> ";
         getline(cin, opc);
-        if(opc != "0"){
+        if(opc == "1") {
+            string tipoGrado;
+            cout << endl << "Elija el tipo de grado." << endl;
+            cout << "1) Licenciatura." << endl;
+            cout << "2) Especialidad." << endl;
+            cout << "3) Maestria." << endl;
+            cout << "4) Doctorado." << endl;
+            do {
+                cout << ">> ";
+                getline(cin, tipoGrado);
+            } while(opc != "1" and opc != "2" and opc != "3" and opc != "4");
+            if(opc == "1") {
+                tipoGrado = "Licenciatura";
+            } else if(opc == "2") {
+                tipoGrado = "Especialidad";
+            } else if(opc == "3") {
+                tipoGrado = "Maestria";
+            } else {
+                tipoGrado = "Doctorado";
+            }
+            string nombreGrado, institucion;
+            cout << "Ingrese el nombre del grado: ";
+            getline(cin, nombreGrado);
+            cout << "Ingrese la institución de procedencia: ";
+            getline(cin, institucion);
+
+            Fecha fechaIni, fechaFin, fechaOb;
+            string fecha;
+            cout << "Ingrese la fecha de inicio de cursos (Formato: DIA/MES/AÑO): ";
+            getline(cin, fecha, '/');
+            fechaIni.setDia(atoi(fecha.c_str()));
+            getline(cin, fecha, '/');
+            fechaIni.setMes(atoi(fecha.c_str()));
+            getline(cin, fecha, '\n');
+            fechaIni.setAnio(atoi(fecha.c_str()));
+            cout << "Ingrese la fecha de fin de cursos (Formato: DIA/MES/AÑO): ";
+            getline(cin, fecha, '/');
+            fechaFin.setDia(atoi(fecha.c_str()));
+            getline(cin, fecha, '/');
+            fechaFin.setMes(atoi(fecha.c_str()));
+            getline(cin, fecha, '\n');
+            fechaFin.setAnio(atoi(fecha.c_str()));
+            cout << "Ingrese la fecha de obtención (Formato: DIA/MES/AÑO): ";
+            getline(cin, fecha, '/');
+            fechaOb.setDia(atoi(fecha.c_str()));
+            getline(cin, fecha, '/');
+            fechaOb.setMes(atoi(fecha.c_str()));
+            getline(cin, fecha, '\n');
+            fechaOb.setAnio(atoi(fecha.c_str()));
+            string cedula;
+            cout << "Ingrese el número de cédula profesional: ";
+            getline(cin, cedula);
+
+            //
+        } else if(opc == "2") {
+
+        } else if(opc == "3") {
+
+        } else if(opc == "4") {
+
+        } else {
+
+        }
+        if(opc != "0") {
             pausa();
         }
     } while(opc != "0");
@@ -294,7 +421,7 @@ void MenuUsr::produccion() {
         cout << "0) Salir..." << endl;
         cout << ">> ";
         getline(cin, opc);
-        if(opc != "0"){
+        if(opc != "0") {
             pausa();
         }
     } while(opc != "0");
@@ -312,7 +439,7 @@ void MenuUsr::docencia() {
         cout << "0) Salir..." << endl;
         cout << ">> ";
         getline(cin, opc);
-        if(opc != "0"){
+        if(opc != "0") {
             pausa();
         }
     } while(opc != "0");
@@ -330,7 +457,7 @@ void MenuUsr::tutoria() {
         cout << "0) Salir..." << endl;
         cout << ">> ";
         getline(cin, opc);
-        if(opc != "0"){
+        if(opc != "0") {
             pausa();
         }
     } while(opc != "0");
@@ -341,25 +468,41 @@ void MenuUsr::pausa() {
     cin.ignore();
 }
 
+void MenuUsr::guardaDependiente(Dependiente& dep, const std::string& archivo) {
+    //Guarda dentro del archivo el objeto
+    ofstream file(archivo, ios::app);
+    file.write((char*) &dep, sizeof(Dependiente));
+    file.close();
+}
+
 bool MenuUsr::existeDependiente(const std::string& nombre) {
     ifstream file(string(DIR) + string(ARCH_DEPENDIENTE));
-    if(!file.good()){
+    if(!file.good()) {
         file.close();
         ofstream file_dep(string(DIR) + string(ARCH_DEPENDIENTE));
         file_dep.close();
         return false;
     }
-    while(!file.eof()){
+    while(!file.eof()) {
         Dependiente dep;
         file.read((char*)&dep, sizeof(Dependiente));
-        if(file.eof()){ break; }
+        if(file.eof()) {
+            break;
+        }
         //Busca si existe el nombre de dependiente por el usuario
-        if(string(dep.getNombre()) == nombre and dep.getNoReg() == academico.getNoReg()){
+        if(string(dep.getNombre()) == nombre and dep.getNoReg() == academico.getNoReg()) {
             file.close();
             return true;
         }
     }
     file.close();
     return false;
+}
+
+void MenuUsr::guardaDocencia(Docencia& doc, const std::string& archivo) {
+    //Guarda el objeto dentro del archivo
+    ofstream file(archivo, ios::app);
+    file.write((char*) &doc, sizeof(Docencia));
+    file.close();
 }
 

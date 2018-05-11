@@ -5,6 +5,7 @@
 #include "usuario.h"
 #include "academico.h"
 #include "dependiente.h"
+#include "docencia.h"
 
 //Dependencias de librerias
 #include <fstream>
@@ -38,7 +39,9 @@ private:
     Academico academico;
     Usuario usuario;
     void pausa();
-    bool existeDependiente(const std::string&nombre);
+    void guardaDependiente(Dependiente& dep, const std::string& archivo);
+    void guardaDocencia(Docencia& doc, const std::string& archivo);
+    bool existeDependiente(const std::string& nombre);
 public:
     MenuUsr();
     MenuUsr(const Academico & academico, const Usuario & usuario);
