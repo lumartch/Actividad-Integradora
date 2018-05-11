@@ -8,12 +8,11 @@
 class Produccion {
 private:
     int noReg;
-    char tipo[30];
-    char nombre[30];
+    char tipo[50];
+    char nombre[100];
     Fecha fechaElaboracion;
-    //Lista colaboradores;
-    char noRegistro[20];
-    char status[10];
+    char noRegistro[50];
+    char status[50];
 public:
     Produccion();
     void setNoReg(const int& noReg);

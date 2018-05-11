@@ -11,7 +11,7 @@ private:
     char nombre[20];
     Fecha fechaInicio;
     Fecha fechaFin;
-    char cantidadHoras[20];
+    char cantidadHoras[10];
 public:
     Docencia();
     void setNoReg(const int& noReg);

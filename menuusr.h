@@ -6,10 +6,14 @@
 #include "academico.h"
 #include "dependiente.h"
 #include "formacion.h"
+#include "docencia.h"
+#include "tutoria.h"
+#include "produccion.h"
 
 //Dependencias de librerias
 #include <fstream>
 #include <iostream>
+#include <regex>
 
 //Definicion del nombre de archivos
 #define ARCH_USR "Usuarios.txt"
@@ -43,6 +47,14 @@ private:
     bool existeDependiente(const std::string& nombre);
     void guardaFormacion(Formacion& form, const std::string& archivo);
     bool existeFormacion(const std::string &tipo, const std::string &nombre);
+    void guardaDocencia(Docencia& doc, const std::string& archivo);
+    bool existeDocencia(const std::string& nombre);
+    void guardaTutoria(Tutoria &tut, const std::string& archivo);
+    bool existeTutoria(const std::string& nombreTutorado);
+    void guardaProduccion(Produccion &pro, const std::string& archivo);
+    bool existeProduccion(const std::string& nombre);
+
+    bool fechaCorrecta(const std::string& fecha);
 public:
     MenuUsr();
     MenuUsr(const Academico & academico, const Usuario & usuario);

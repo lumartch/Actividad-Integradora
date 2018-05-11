@@ -85,8 +85,10 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
 void Login::crearArchivosDefecto() {
     //Si no existe el archivo crea nuevos archivos
     ifstream archivo_academicos(string(DIR) + string(ARCH_AC));
-    if(archivo_academicos.good()){
+    ifstream archivo_usuarios(string(DIR) + string(ARCH_USR));
+    if(archivo_academicos.good() and archivo_usuarios.good()){
        archivo_academicos.close();
+       archivo_usuarios.close();
        return;
     }
     archivo_academicos.close();
@@ -98,6 +100,7 @@ void Login::crearArchivosDefecto() {
     ac_admin.setNombre("Administrador");
     ac_admin.setNoReg(noReg);
     arch_academicos_nuevo.write((char*)&ac_admin, sizeof(Academico));
+    //Toma la direccion física de donde se escribio y lo pasa a la cuenta usuario para que sepa de donde leer
     long int direccionFisica = arch_academicos_nuevo.tellp();
     direccionFisica -= sizeof(Academico);
     arch_academicos_nuevo.close();
@@ -120,6 +123,18 @@ void Login::crearArchivosDefecto() {
     //Crea archivo de formacion academica
     ofstream file_form(string(DIR) + string(ARCH_FORMACION));
     file_form.close();
+
+    //Crea archivo de docencia academica
+    ofstream file_doc(string(DIR) + string(ARCH_DOCENCIA));
+    file_doc.close();
+
+    //Crea archivo de tutorias
+    ofstream file_tut(string(DIR) + string(ARCH_TUTORIA));
+    file_tut.close();
+
+    //Crea archivo de produccion
+    ofstream file_prod(string(DIR) + string(ARCH_PRODUCCION));
+    file_prod.close();
 }
 
 void Login::pausa() {
