@@ -24,7 +24,6 @@ void MenuAdmin::menuPrincipal() {
     string opc;
     do {
         system(CLEAR);
-        cout << "No.Registros : " << noReg << endl;
         cout << "*** Menu del administrador -> " << academico.getNombre() << " ***" << endl << endl;
         cout << "1) Administrar perfil."<< endl;
         cout << "2) Administrar usuarios."<< endl;
@@ -44,9 +43,9 @@ void MenuAdmin::menuPrincipal() {
         } else if(opc == "4") {
             administrarProduccion();
         } else {
-            cout << endl << "Gracias por usar el administrador de usuarios.";
+            cout << endl << "Gracias por usar el menú de administradores...";
         }
-        if(opc != "0" and opc != "1") {
+        if(opc != "0"){
             pausa();
         }
     } while(opc != "0");
@@ -133,7 +132,8 @@ void MenuAdmin::agregarUsuario() {
     } else {
         newUsuario.setTipo("User");
     }
-    newUsuario.setNoReg(++noReg);
+    this->noReg++;
+    newUsuario.setNoReg(this->noReg);
     insertarUsuario(newUsuario);
     cout << endl << "Usuario registrado exitosamente.";
 }
@@ -154,10 +154,11 @@ void MenuAdmin::mostrarUsuario() {
         if(arch_usr.eof()) { break; }
 
         Academico ac;
-        cout << usr.toString();
+        cout << "Usuario #" << usr.getNoRegistro() << endl;
+        cout << usr.toString() << endl;
         arch_ac.seekg(usr.getDireccionFisica(), ios::beg);
         arch_ac.read((char*)&ac, sizeof(Academico));
-        cout << ac.toString()<< endl;
+        cout << ac.toString()<< endl << endl;
     }
 }
 
@@ -205,20 +206,24 @@ bool MenuAdmin::existeUsername(const std::string& username) {
 }
 
 void MenuAdmin::insertarUsuario(Usuario& usuario) {
-    Academico academico;
+
     //Crea el registro dentro del archivo de academicos
+    Academico academico;
+    academico.setNoReg(this->noReg);
     academico.setNombre(std::string(usuario.getUsername()));
     ofstream arch_ac(string(DIR) + string(ARCH_AC), ios::app);
     long int direccionFisica = arch_ac.tellp();
     arch_ac.write((char*)&academico, sizeof(Academico));
     arch_ac.close();
+
     //Toma el valor de la posicion física del academico y la asigna al usuario
     usuario.setDireccionFisica(direccionFisica);
     ofstream arch_usr(string(DIR) + string(ARCH_USR), ios::app);
     arch_usr.write((char*)&usuario, sizeof(Usuario));
     arch_usr.close();
+
     //Sobreescribe el valor del no de registros
     ofstream file_reg(string(DIR) + string(ARCH_NO_REG));
-    file_reg.write((char*)&noReg, sizeof(int));
+    file_reg.write((char*)&this->noReg, sizeof(int));
     file_reg.close();
 }

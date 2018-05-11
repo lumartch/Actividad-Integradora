@@ -27,7 +27,7 @@ void Login::menuLogin() {
             getline(cin, password);
             buscarUsuario(username, password);
         } else {
-            cout << endl << "Gracias por usar el administrador de academicos." << endl << endl;
+            cout << endl << "Gracias por usar el administrador de academicos..." << endl << endl;
         }
         pausa();
     } while(opc != "0");
@@ -99,16 +99,22 @@ void Login::crearArchivosDefecto() {
     long int direccionFisica = arch_academicos_nuevo.tellp();
     direccionFisica -= sizeof(Academico);
     arch_academicos_nuevo.close();
+
     //Crea nuevo usuario Administrador
-    int noReg = 0;
-    Usuario usuario(++noReg, "admin", "admin", "Admin", direccionFisica);
+    int noReg = 1;
+    Usuario usuario(noReg, "admin", "admin", "Admin", direccionFisica);
     ofstream file_usuario(string(DIR) + string(ARCH_USR));
     file_usuario.write((char*)&usuario, sizeof(Usuario));
     file_usuario.close();
+
     //Crea el archivo de contador Por si no existia
     ofstream file_reg(string(DIR) + string(ARCH_NO_REG));
     file_reg.write((char*)&noReg, sizeof(int));
     file_reg.close();
+
+    //Crea archivo de dependientes economicos
+    ofstream file_dep(string(DIR) + string(ARCH_DEPENDIENTE));
+    file_dep.close();
 }
 
 void Login::pausa() {

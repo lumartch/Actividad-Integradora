@@ -60,7 +60,7 @@ long int Usuario::getDireccionFisica() {
 
 std::string Usuario::toString() {
     std::string res = "Username: " + std::string(username) + " -> Tipo: " + std::string(tipo) + "\n";
-    res += "Password: " + std::string(password) + " -> Direccion Fisica: " + std::to_string(direccionFisica) + "\n";
+    res += "Direccion Fisica: " + std::to_string(direccionFisica);
     return res;
 }
 

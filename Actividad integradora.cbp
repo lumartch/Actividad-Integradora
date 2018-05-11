@@ -36,6 +36,8 @@
 		</Compiler>
 		<Unit filename="academico.cpp" />
 		<Unit filename="academico.h" />
+		<Unit filename="dependiente.cpp" />
+		<Unit filename="dependiente.h" />
 		<Unit filename="docencia.cpp" />
 		<Unit filename="docencia.h" />
 		<Unit filename="fecha.cpp" />

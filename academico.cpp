@@ -84,7 +84,7 @@ char* Academico::getEstadoCivil() {
 std::string Academico::toString() {
     std::string res = "Nombre: " + std::string(nombre) + " -> Email: " + std::string(email) + "\n";
     res += "Ciudad: "+ std::string(ciudad) + " -> Domicilio: " + std::string(domicilio) + "\n";
-    res += "Telefono: "+ std::string(telefono) + " -> Estado Civil: " + std::string(estadoCivil) + "\n";
+    res += "Telefono: "+ std::string(telefono) + " -> Estado Civil: " + std::string(estadoCivil);
     return res;
 }
 
