@@ -9,6 +9,7 @@
 #include "docencia.h"
 #include "tutoria.h"
 #include "produccion.h"
+#include "autor.h"
 
 //Dependencias de librerias
 #include <fstream>
@@ -22,6 +23,7 @@
 #define ARCH_DEPENDIENTE "Dependiente_Academico.txt"
 #define ARCH_FORMACION "Formacion_Academica.txt"
 #define ARCH_PRODUCCION "Produccion_Academica.txt"
+#define ARCH_AUTOR "Autor_Produccion.txt"
 #define ARCH_DOCENCIA "Docencia_Academica.txt"
 #define ARCH_TUTORIA "Tutoria_academica.txt"
 
@@ -52,7 +54,11 @@ private:
     void guardaTutoria(Tutoria &tut, const std::string& archivo);
     bool existeTutoria(const std::string& nombreTutorado);
     void guardaProduccion(Produccion &pro, const std::string& archivo);
-    bool existeProduccion(const std::string& nombre);
+    bool existeProduccion(const std::string& tipo, const std::string& nombre);
+    bool existeNoRegProduccion(const std::string& noRegistro);
+
+    void guardaAutor(Autor& aut, const std::string& archivo);
+    bool existeAutor(const std::string& nombre, const std::string& noRegistro);
 
     bool fechaCorrecta(const std::string& fecha);
 public:
@@ -61,11 +67,11 @@ public:
     void menuPrincipal();
     void infoPersonal();
     void dependientesEconomicos();
-    void imprimirInformacion();
     void formacion();
     void produccion();
     void docencia();
     void tutoria();
+    void configuracion();
     virtual ~MenuUsr();
 };
 

@@ -26,13 +26,12 @@ void MenuUsr::menuPrincipal() {
         cout << "3) Administrar producción academica." << endl;
         cout << "4) Administrar docencia." << endl;
         cout << "5) Administrar tutoria." << endl;
-        cout << "6) Mostrar información." << endl;
-        cout << "7) Configuración." << endl;
+        cout << "6) Configuración." << endl;
         cout << "0) Salir..." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
-        } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "5" and opc != "6" and opc != "7" and opc != "0");
+        } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "5" and opc != "6" and opc != "0");
         if(opc == "1") {
             infoPersonal();
         } else if(opc == "2") {
@@ -44,13 +43,7 @@ void MenuUsr::menuPrincipal() {
         } else if(opc == "5") {
             tutoria();
         } else if(opc == "6") {
-        } else if(opc == "7") {
         } else {
-            //Abre el archivo y coloca el puntero en la posicion de escritura para sobreescribir el academico
-            fstream file_academico(string(DIR) + string(ARCH_AC), ios::in|ios::out);
-            file_academico.seekp(usuario.getDireccionFisica(), ios::beg);
-            file_academico.write((char*)&academico, sizeof(Academico));
-            file_academico.close();
             cout << endl << "Gracias por usar el administrador de usuario....";
         }
         if(opc != "0") {
@@ -82,31 +75,31 @@ void MenuUsr::infoPersonal() {
             string nombre;
             cout << endl << "Ingrese el nuevo nombre del academico: ";
             getline(cin, nombre);
-            academico.setNombre(nombre);
+            this->academico.setNombre(nombre);
             cout << endl << "¡Nombre actualizado!";
         } else if(opc == "2") {
             string domicilio;
             cout << endl << "Ingrese el nuevo domicilio del academico: ";
             getline(cin, domicilio);
-            academico.setDomicilio(domicilio);
+            this->academico.setDomicilio(domicilio);
             cout << endl << "¡Domicilio actualizado!";
         } else if(opc == "3") {
             string ciudad;
             cout << endl << "Ingrese la nueva ciudad del academico: ";
             getline(cin, ciudad);
-            academico.setCiudad(ciudad);
+            this->academico.setCiudad(ciudad);
             cout << endl << "¡Ciudad actualizada!";
         } else if(opc == "4") {
             string telefono;
             cout << endl << "Ingrese el nuevo telefono del academico: ";
             getline(cin, telefono);
-            academico.setTelefono(telefono);
+            this->academico.setTelefono(telefono);
             cout << endl << "¡Telefono actualizado!";
         } else if(opc == "5") {
             string email;
             cout << endl << "Ingrese el nuevo email del academico: ";
             getline(cin, email);
-            academico.setEmail(email);
+            this->academico.setEmail(email);
             cout << endl << "¡Email actualizado!";
         } else if(opc == "6") {
             string estadoCivil;
@@ -118,14 +111,19 @@ void MenuUsr::infoPersonal() {
                 getline(cin, estadoCivil);
             } while(estadoCivil != "1" and estadoCivil != "2");
             if(estadoCivil == "1") {
-                academico.setEstadoCivil("Soltero");
+                this->academico.setEstadoCivil("Soltero");
             } else {
-                academico.setEstadoCivil("Casado");
+                this->academico.setEstadoCivil("Casado");
             }
             cout << endl << "¡Estado civil actualizado!";
         } else if(opc == "7") {
             dependientesEconomicos();
         } else {
+            //Abre el archivo y coloca el puntero en la posicion de escritura para sobreescribir el academico
+            fstream file_academico(string(DIR) + string(ARCH_AC), ios::in|ios::out);
+            file_academico.seekp(usuario.getDireccionFisica(), ios::beg);
+            file_academico.write((char*)&this->academico, sizeof(Academico));
+            file_academico.close();
             cout << endl << "Terminando de modificar información personal...";
         }
         if(opc != "0") {
@@ -205,7 +203,7 @@ void MenuUsr::dependientesEconomicos() {
                     break;
                 }
                 //Busca si existe el nombre de dependiente por el usuario
-                if(dep.getNoReg() == academico.getNoReg()) {
+                if(dep.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
                     cout << "Dependiente #" << i << endl;
                     cout << "Nombre: " << dep.getNombre() << endl;
@@ -228,11 +226,9 @@ void MenuUsr::dependientesEconomicos() {
                 fstream file_out(string(DIR) + string(ARCH_DEPENDIENTE), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra al Dependiente para modificarlo
-                    if(string(dep.getNombre()) == nombre and dep.getNoReg() != academico.getNoReg()) {
+                    if(string(dep.getNombre()) == nombre and dep.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
                         posArchivo = file_out.tellg();
                         posArchivo -= sizeof(Dependiente);
@@ -298,11 +294,12 @@ void MenuUsr::dependientesEconomicos() {
                 while(!file_out.eof()) {
                     Dependiente dep;
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
-                    if(string(dep.getNombre()) != nombre and dep.getNoReg() != academico.getNoReg()) {
+                    if(string(dep.getNombre()) == nombre and dep.getNoReg() == this->academico.getNoReg()) {
+                        cout << "Eliminando: " << dep.getNombre() << endl;
+                    }
+                    else{
                         guardaDependiente(dep, string(DIR) + "Temporal.txt");
                     }
                 }
@@ -348,7 +345,7 @@ void MenuUsr::formacion() {
             cout << "4) Doctorado." << endl << endl;
             do {
                 cout << ">> ";
-                getline(cin, tipoGrado);
+                getline(cin, opc);
             } while(opc != "1" and opc != "2" and opc != "3" and opc != "4");
             if(opc == "1") {
                 tipoGrado = "Licenciatura";
@@ -409,6 +406,8 @@ void MenuUsr::formacion() {
             form.setFechaObtencion(fechaOb);
             form.setCedula(cedula);
             guardaFormacion(form, string(DIR) + string(ARCH_FORMACION));
+
+            cout << endl <<"¡Nueva formación agregada exitosamente!";
         } else if(opc == "2") {
             system(CLEAR);
             cout << "*** Formación academica actual de " << this->academico.getNombre() << " ***" << endl << endl;
@@ -428,7 +427,7 @@ void MenuUsr::formacion() {
                     break;
                 }
                 //Busca si existe el nombre de dependiente por el usuario
-                if(form.getNoReg() == academico.getNoReg()) {
+                if(form.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
                     cout << "Titulo: " << form.getTipo() << " " << form.getNombre() << endl;
                     cout << "Institución academica: " << form.getInstitucion() << endl;
@@ -443,7 +442,7 @@ void MenuUsr::formacion() {
         } else if(opc == "3") {
             system(CLEAR);
             string tipoGrado, opc;
-            cout << "*** Modificar formación academica de " << academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Modificar formación academica de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo y nombre de grado a modificar." << endl;
             cout << "1) Licenciatura." << endl;
             cout << "2) Especialidad." << endl;
@@ -478,7 +477,7 @@ void MenuUsr::formacion() {
                     }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
                     if(string(form.getTipo()) == tipoGrado and string(form.getNombre()) == nombreGrado
-                            and form.getNoReg() == academico.getNoReg()) {
+                            and form.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
                         posArchivo = file_out.tellg();
                         posArchivo -= sizeof(Formacion);
@@ -589,7 +588,7 @@ void MenuUsr::formacion() {
         } else if(opc == "4") {
             system(CLEAR);
             string tipoGrado, opc;
-            cout << "*** Eliminando formación  de " << academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Eliminando formación  de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo y nombred de grado a eliminar." << endl;
             cout << "1) Licenciatura." << endl;
             cout << "2) Especialidad." << endl;
@@ -613,16 +612,19 @@ void MenuUsr::formacion() {
             getline(cin, nombreGrado);
             //Verifica si existe la formación academica
             if(existeFormacion(tipoGrado, nombreGrado)) {
-                ifstream file_out(string(DIR) + string(ARCH_FORMACION));
+                fstream file_out(string(DIR) + string(ARCH_FORMACION));
                 while(!file_out.eof()) {
+                    //Lee el objeto
                     Formacion form;
                     file_out.read((char*)&form, sizeof(Formacion));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    //Verifica que el archivo no se haya terminado
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
-                    if(string(form.getTipo()) != tipoGrado and string(form.getNombre()) != nombreGrado
-                            and form.getNoReg() != academico.getNoReg()) {
+                    if(string(form.getTipo()) == tipoGrado and string(form.getNombre()) == nombreGrado
+                       and form.getNoReg() == this->academico.getNoReg()) {
+                        cout << "Eliminando: " << form.getTipo() << " " << form.getNombre() << endl;
+                    }
+                    else{
                         guardaFormacion(form, string(DIR) + "Temporal.txt");
                     }
                 }
@@ -659,12 +661,583 @@ void MenuUsr::produccion() {
         do {
             cout << ">> ";
             getline(cin, opc);
-        } while(opc != "0" and opc != "2" and opc != "3" and opc != "4");
+        } while(opc != "0" and opc != "1" and opc != "2" and opc != "3" and opc != "4");
         if(opc == "1") {
+
+            system(CLEAR);
+            string opcion;
+            cout << "*** Ingresando producción del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "Elija el tipo de producción a crear." << endl;
+            cout << "1) Capitulo de libro." << endl;
+            cout << "2) Libro." << endl;
+            cout << "3) Informe." << endl;
+            cout << "4) Artículo." << endl;
+            cout << "5) Desarrollo de software." << endl << endl;
+            do{
+                cout << ">> ";
+                getline(cin, opcion);
+            }while(opcion != "1" and opcion != "2" and opcion != "3" and opcion != "4" and opcion != "5");
+
+            string tipo;
+            if(opcion == "1"){
+                tipo = "Capitulo de libro";
+            }
+            else if(opcion == "2"){
+                tipo = "Libro";
+            }
+            else if(opcion == "3"){
+                tipo = "Informe";
+            }
+            else if(opcion == "4"){
+                tipo = "Artículo";
+            }
+            else {
+                tipo = "Desarrollo de software";
+            }
+            string nombre;
+            cout << "Ingrese el nombre de la producción: ";
+            getline(cin, nombre);
+
+            if(existeProduccion(tipo, nombre)){
+                cout << "Producción ya existente. Imposible de registrar" << endl;
+            }
+            else{
+
+                string fecha;
+                Fecha fechaElab;
+                cout << "Ingrese la fecha de elaboracion (Formato DD/MM/AAAA): ";
+                getline(cin, fecha, '/');
+                fechaElab.setDia(atoi(fecha.c_str()));
+                getline(cin, fecha, '/');
+                fechaElab.setMes(atoi(fecha.c_str()));
+                getline(cin, fecha, '\n');
+                fechaElab.setAnio(atoi(fecha.c_str()));
+
+                string noRegistro;
+                bool existe = false;
+                do{
+                    cout << "Ingrese el número de registro de la producción: ";
+                    getline(cin, noRegistro);
+                    if(existeNoRegProduccion(noRegistro)){
+                        cout << "El número de registro que intenta ingresar ya existe. Intente de nuevo." << endl << endl;
+                        existe = true;
+                    }
+                    else{
+                        existe = false;
+                    }
+                }while(existe);
+
+                string status;
+                cout << "Elija el status actual de la producción." << endl;
+                cout << "1) Aceptado." << endl;
+                cout << "2) En proceso." << endl;
+                cout << "3) Publicado." << endl << endl;
+                do{
+                    cout << ">> ";
+                    getline(cin, opc);
+                }while(opc != "1" and opc != "2" and opc != "3");
+                if(opc == "1"){
+                    status = "Aceptado";
+                }
+                else if(opc == "2"){
+                    status = "En proceso";
+                }
+                else {
+                    status = "Publicado";
+                }
+
+                Produccion pro;
+                pro.setNoReg(this->academico.getNoReg());
+                pro.setTipo(tipo);
+                pro.setFechaElaboracion(fechaElab);
+                pro.setNombre(nombre);
+                pro.setNoRegistro(noRegistro);
+                pro.setStatus(status);
+
+                guardaProduccion(pro, string(DIR) + string(ARCH_PRODUCCION));
+
+                cout << endl << "¿Desea agregar autores a la produccion? (S/N): ";
+                do{
+                    cout << ">> ";
+                    getline(cin, opc);
+                }while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
+                if(opc == "S" or opc == "s"){
+                    do{
+                        Autor aut;
+                        string nombre;
+                        bool existe = false;
+                        do{
+                            cout << "Ingrese el nombre del autor: ";
+                            getline(cin, nombre);
+                            if(existeAutor(nombre, string(pro.getNoRegistro()))){
+                                cout << "El autor que intenta ingresar ya existe. Intente de nuevo.";
+                                existe = true;
+                            }
+                            else{
+                                existe = false;
+                            }
+                        }while(existe);
+                        aut.setNombre(nombre);
+                        aut.setNoRegistro(string(pro.getNoRegistro()));
+                        guardaAutor(aut, string(DIR) + string(ARCH_AUTOR));
+                        cout << endl <<"¡Nuevo autor agregado exitosamente!" << endl;
+                        do{
+                            cout << "¿Desea agregar otro autor? (S/N): ";
+                            getline(cin, opc);
+                        }while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
+
+                    }while(opc == "s" or opc == "S");
+                }
+
+                cout << endl <<"¡Nueva producción agregada exitosamente!" << endl;
+            }
+
         }
-        else if(opc == "2") {}
-        else if(opc == "3") {}
-        else if(opc == "4") {}
+        else if(opc == "2") {
+            system(CLEAR);
+            cout << "*** Producción academica actual de " << this->academico.getNombre() << " ***" << endl << endl;
+            ifstream file(string(DIR) + string(ARCH_PRODUCCION));
+            if(!file.good()) {
+                file.close();
+                ofstream file_pro(string(DIR) + string(ARCH_PRODUCCION));
+                file_pro.close();
+                cout << "ERROR. No existe el archivo. Creando archivo...";
+                return;
+            }
+            bool bandera = false;
+            while(!file.eof()) {
+                Produccion pro;
+                file.read((char*)&pro, sizeof(Produccion));
+                if(file.eof()) { break; }
+                //Busca si existe el nombre de dependiente por el usuario
+                if(pro.getNoReg() == this->academico.getNoReg()) {
+                    bandera = true;
+                    cout << "Titulo: " << pro.getTipo() << " " << pro.getNombre() << endl;
+                    cout << "Fecha de elaboracion: " << pro.getFechaElaboracion().toString() << endl;
+                    cout << "No. Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
+                    cout << "Autores: " << endl;
+
+                    ifstream file_aut(string(DIR) + string(ARCH_AUTOR));
+                    if(!file_aut.good()){
+                        file_aut.close();
+
+                        ofstream file_pro(string(DIR) + string(ARCH_PRODUCCION));
+                        file_pro.close();
+                        cout << "ERROR. No existe el archivo. Creando archivo...";
+                    }
+                    else{
+                        bool existe = false;
+                        while(!file_aut.eof()){
+                            Autor aut;
+                            file_aut.read((char*)&aut, sizeof(Autor));
+                            if(file_aut.eof()){ break; }
+                            if(string(aut.getNoRegistro()) == string(pro.getNoRegistro())){
+                                cout << "Nombre: " << aut.getNombre() << endl;
+                                existe = true;
+                            }
+                        }
+                        if(!existe){
+                            cout << "La produccion no tiene coperación de otros autores." << endl;
+                        }
+                        file_aut.close();
+                    }
+                    cout << endl;
+                }
+            }
+            file.close();
+            if(!bandera) {
+                cout << "No hay formación academica para este usuario." << endl;
+            }
+        }
+        else if(opc == "3") {
+            system(CLEAR);
+            string opcion;
+            cout << "*** Modificar producción del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "Elija el tipo de producción y el nombre para modificar." << endl;
+            cout << "1) Capitulo de libro." << endl;
+            cout << "2) Libro." << endl;
+            cout << "3) Informe." << endl;
+            cout << "4) Artículo." << endl;
+            cout << "5) Desarrollo de software." << endl << endl;
+            do{
+                cout << ">> ";
+                getline(cin, opcion);
+            }while(opcion != "1" and opcion != "2" and opcion != "3" and opcion != "4" and opcion != "5");
+
+            string tipo;
+            if(opcion == "1"){
+                tipo = "Capitulo de libro";
+            }
+            else if(opcion == "2"){
+                tipo = "Libro";
+            }
+            else if(opcion == "3"){
+                tipo = "Informe";
+            }
+            else if(opcion == "4"){
+                tipo = "Artículo";
+            }
+            else {
+                tipo = "Desarrollo de software";
+            }
+            string nombre;
+            cout << "Ingrese el nombre de la producción: ";
+            getline(cin, nombre);
+
+            if(existeProduccion(tipo, nombre)){
+                Produccion pro;
+                long int posArchivo = 0;
+                //Busca al dependiente dentro del archivo
+                fstream file_out(string(DIR) + string(ARCH_PRODUCCION), ios::in|ios::out);
+                while(!file_out.eof()) {
+                    file_out.read((char*)&pro, sizeof(Produccion));
+                    if(file_out.eof()) { break; }
+                    //Rompe el ciclo cuando encuentra la formacion para modificarla
+                    if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre
+                            and pro.getNoReg() == this->academico.getNoReg()) {
+                        //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                        posArchivo = file_out.tellg();
+                        posArchivo -= sizeof(Produccion);
+                        break;
+                    }
+                }
+                file_out.close();
+                string opc;
+                do{
+                    system(CLEAR);
+                    cout << "*** Modificación de la producción -> " << pro.getTipo() << " " << pro.getNombre() << " ***" << endl << endl;
+                    cout << "1) Tipo." << endl;
+                    cout << "2) Nombre" << endl;
+                    cout << "3) Fecha de elaboración." << endl;
+                    cout << "4) Número de registro." << endl;
+                    cout << "5) Status." << endl;
+                    cout << "6) Colaboradores." << endl;
+                    cout << "0) Salir..." << endl << endl;
+                    do {
+                        cout << ">> ";
+                        getline(cin, opc);
+                    } while(opc != "0" and opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "5" and opc != "6");
+                    if(opc == "1") {
+                        string opcion, tipo;
+                        cout << "Elija el tipo de producción." << endl;
+                        cout << "1) Capitulo de libro." << endl;
+                        cout << "2) Libro." << endl;
+                        cout << "3) Informe." << endl;
+                        cout << "4) Artículo." << endl;
+                        cout << "5) Desarrollo de software." << endl << endl;
+                        do{
+                            cout << ">> ";
+                            getline(cin, opcion);
+                        }while(opcion != "1" and opcion != "2" and opcion != "3" and opcion != "4" and opcion != "5");
+                        if(opcion == "1"){
+                            tipo = "Capitulo de libro";
+                        }
+                        else if(opcion == "2"){
+                            tipo = "Libro";
+                        }
+                        else if(opcion == "3"){
+                            tipo = "Informe";
+                        }
+                        else if(opcion == "4"){
+                            tipo = "Artículo";
+                        }
+                        else {
+                            tipo = "Desarrollo de software";
+                        }
+
+                        if(existeProduccion(tipo, pro.getNombre())) {
+                            cout << endl << "La producción que intenta agregar ya existe. Es imposible registrarla." << endl;
+                        } else {
+                            pro.setTipo(tipo);
+                        }
+                    } else if (opc == "2") {
+                        string nombre;
+                        cout << "Ingrese el nombre de la producción: ";
+                        getline(cin, nombre);
+                        if(existeProduccion(pro.getTipo(), nombre)) {
+                            cout << endl << "La producción que intenta agregar ya existe. Es imposible registrarla." << endl;
+                        } else {
+                            pro.setNombre(nombre);
+                        }
+                    } else if (opc == "3") {
+                        string fecha;
+                        Fecha fechaElab;
+                        cout << "Ingrese la fecha de elaboracion (Formato DD/MM/AAAA): ";
+                        getline(cin, fecha, '/');
+                        fechaElab.setDia(atoi(fecha.c_str()));
+                        getline(cin, fecha, '/');
+                        fechaElab.setMes(atoi(fecha.c_str()));
+                        getline(cin, fecha, '\n');
+                        fechaElab.setAnio(atoi(fecha.c_str()));
+                        pro.setFechaElaboracion(fechaElab);
+                    } else if (opc == "4") {
+                        string noRegistro;
+                        bool existe = false;
+                        do{
+                            cout << "Ingrese el número de registro de la producción: ";
+                            getline(cin, noRegistro);
+                            if(existeNoRegProduccion(noRegistro)){
+                                cout << "El número de registro que intenta ingresar ya existe. Intente de nuevo." << endl << endl;
+                                existe = true;
+                            }
+                            else{
+                                existe = false;
+                            }
+                        }while(existe);
+                        //Modifica la relación con los autores para que no se pierda concordancia de datos
+                        Autor aut;
+                        fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                        while(!file_out.eof()) {
+                            file_out.read((char*)&aut, sizeof(Autor));
+                            if(file_out.eof()) { break; }
+                            //Rompe el ciclo cuando encuentra la formacion para modificarla
+                            if(string(pro.getNoRegistro()) == string(aut.getNoRegistro()) and string(aut.getNombre()) == nombre) {
+                                //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                                aut.setNoRegistro(noRegistro);
+                                guardaAutor(aut, string(DIR) + "Temporal_autor.txt");
+                            }
+                            else{
+                                guardaAutor(aut, string(DIR) + "Temporal_autor.txt");
+                            }
+                        }
+                        file_out.close();
+                        string rem = string(DIR) + string(ARCH_AUTOR);
+                        string rena = string(DIR) + "Temporal_autor.txt";
+                        remove(rem.c_str());
+                        rename(rena.c_str(), rem.c_str());
+                        //Finalmente asigna el dato al objeto
+                        pro.setNoRegistro(noRegistro);
+                    } else if (opc == "5") {
+                        string status, opc;
+                        cout << "Elija el status actual de la producción." << endl;
+                        cout << "1) Aceptado." << endl;
+                        cout << "2) En proceso." << endl;
+                        cout << "3) Publicado." << endl << endl;
+                        do{
+                            cout << ">> ";
+                            getline(cin, opc);
+                        }while(opc != "1" and opc != "2" and opc != "3");
+                        if(opc == "1"){
+                            status = "Aceptado";
+                        }
+                        else if(opc == "2"){
+                            status = "En proceso";
+                        }
+                        else {
+                            status = "Publicado";
+                        }
+                        pro.setStatus(status);
+                    } else if (opc == "6") {
+                        string opc;
+                        do{
+                            cout << "*** Administración de colaboradores, producción " << pro.getTipo() << " " << pro.getNombre() << " ***" << endl << endl;
+                            cout << "1) Agregar autor." << endl;
+                            cout << "2) Modificar autor." << endl;
+                            cout << "3) Eliminar autor." << endl;
+                            cout << "0) Salir..." << endl << endl;
+                            do{
+                                cout << ">> ";
+                                getline(cin, opc);
+                            }while(opc != "0" and opc != "1" and opc != "2" and opc != "3");
+                            if(opc == "1"){
+                                string nombre;
+                                cout << "Ingrese el nombre del autor a ingresar: ";
+                                getline(cin, nombre);
+                                if(existeAutor(nombre, string(pro.getNoRegistro()))){
+                                    cout << "Autor existente. Imposible de registrar";
+                                }
+                                else{
+                                    Autor aut;
+                                    aut.setNombre(nombre);
+                                    aut.setNoRegistro(string(pro.getNoRegistro()));
+                                    guardaAutor(aut, string(DIR) + string(ARCH_AUTOR));
+                                }
+                            }
+                            else if(opc == "2"){
+                                string nombre;
+                                cout << "Ingrese el nombre del autor a modificar: ";
+                                getline(cin, nombre);
+                                if(existeAutor(nombre, string(pro.getNoRegistro()))){
+                                    Autor aut;
+                                    long int posArchivo = 0;
+                                    //Busca al dependiente dentro del archivo
+                                    fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                                    while(!file_out.eof()) {
+                                        file_out.read((char*)&aut, sizeof(Autor));
+                                        if(file_out.eof()) { break; }
+                                        //Rompe el ciclo cuando encuentra la formacion para modificarla
+                                        if(string(pro.getNoRegistro()) == string(aut.getNoRegistro()) and string(aut.getNombre()) == nombre) {
+                                            //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                                            posArchivo = file_out.tellg();
+                                            posArchivo -= sizeof(Autor);
+                                            break;
+                                        }
+                                    }
+                                    file_out.close();
+                                    string opc;
+                                    do{
+                                        system(CLEAR);
+                                        cout << "*** Administración del autor " << aut.getNombre() << " ***" << endl << endl;
+                                        cout << "1) Cambiar nombre." << endl;
+                                        cout << "0) Salir..." << endl << endl;
+                                        do{
+                                            cout << ">> ";
+                                            getline(cin, opc);
+                                        }while(opc != "0" and opc != "1");
+                                        if(opc == "1"){
+                                            string nombre;
+                                            cout << "Ingrese el nombre del autor: ";
+                                            getline(cin, nombre);
+                                            if(existeAutor(nombre, string(pro.getNoRegistro()))){
+                                                cout << endl <<"El autor ya existe. Es imposible registrar el nuevo nombre.";
+                                            }else{
+                                                aut.setNombre(nombre);
+                                            }
+                                        }
+                                        else{
+                                            fstream file(string(DIR) + string(ARCH_AUTOR), ios::in|ios::out);
+                                            file.seekg(posArchivo, ios::beg);
+                                            file.write((char*)& aut, sizeof(Autor));
+                                            file.close();
+                                            cout << endl << "Modificación terminada para el autor...";
+                                        }
+                                    }while(opc != "0");
+                                }else{
+                                    cout << endl << "No existe el autor";
+                                }
+                            }
+                            else if(opc == "3"){
+                                string nombre;
+                                cout << "Ingrese el nombre del autor a eliminar: ";
+                                getline(cin, nombre);
+                                if(existeAutor(nombre, string(pro.getNoRegistro()))){
+                                    Autor aut;
+                                    //Busca al dependiente dentro del archivo
+                                    fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                                    while(!file_out.eof()) {
+                                        file_out.read((char*)&aut, sizeof(Autor));
+                                        if(file_out.eof()) { break; }
+                                        //Rompe el ciclo cuando encuentra la formacion para modificarla
+                                        if(string(pro.getNoRegistro()) == string(aut.getNoRegistro()) and string(aut.getNombre()) == nombre) {
+                                            //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                                            cout << endl << "Eliminando: " << aut.getNombre() << endl;
+                                        }
+                                        else{
+                                            guardaAutor(aut, string(DIR) + "Temporal_autor.txt");
+                                        }
+                                    }
+                                    file_out.close();
+                                    string rem = string(DIR) + string(ARCH_AUTOR);
+                                    string rena = string(DIR) + "Temporal_autor.txt";
+                                    remove(rem.c_str());
+                                    rename(rena.c_str(), rem.c_str());
+                                }else{
+                                    cout << endl << "No existe el autor";
+                                }
+                            }
+                            else{
+                                cout << endl << "Administración de autores terminada.";
+                            }
+                        }while(opc != "0");
+                    } else {
+                        fstream file(string(DIR) + string(ARCH_PRODUCCION), ios::in|ios::out);
+                        file.seekg(posArchivo, ios::beg);
+                        file.write((char*)& pro, sizeof(Produccion));
+                        file.close();
+                        cout << endl << "Modificación completa de la producción.";
+                    }
+                }while(opc != "0");
+            }
+            else{
+                cout << "Producción inexistente. Es imposible modificar." << endl;
+            }
+        }
+        else if(opc == "4") {
+            system(CLEAR);
+            string opcion;
+            cout << "*** Eliminar producción del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "Elija el tipo de producción y el nombre para eliminar." << endl;
+            cout << "1) Capitulo de libro." << endl;
+            cout << "2) Libro." << endl;
+            cout << "3) Informe." << endl;
+            cout << "4) Artículo." << endl;
+            cout << "5) Desarrollo de software." << endl << endl;
+            do{
+                cout << ">> ";
+                getline(cin, opcion);
+            }while(opcion != "1" and opcion != "2" and opcion != "3" and opcion != "4" and opcion != "5");
+
+            string tipo;
+            if(opcion == "1"){
+                tipo = "Capitulo de libro";
+            }
+            else if(opcion == "2"){
+                tipo = "Libro";
+            }
+            else if(opcion == "3"){
+                tipo = "Informe";
+            }
+            else if(opcion == "4"){
+                tipo = "Artículo";
+            }
+            else {
+                tipo = "Desarrollo de software";
+            }
+            string nombre;
+            cout << "Ingrese el nombre de la producción: ";
+            getline(cin, nombre);
+
+            if(existeProduccion(tipo, nombre)){
+                string noRegistro;
+                ifstream file_out(string(DIR) + string(ARCH_PRODUCCION));
+                while(!file_out.eof()) {
+                    Produccion pro;
+                    file_out.read((char*)&pro, sizeof(Produccion));
+                    if(file_out.eof()) { break; }
+                    //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
+                    if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre and pro.getNoReg() == academico.getNoReg()) {
+                        cout << "Eliminando: " << pro.getTipo() << " " << pro.getNombre() << endl;
+                        noRegistro = pro.getNoRegistro();
+                    }
+                    else{
+                        guardaProduccion(pro, string(DIR) + "Temporal.txt");
+                    }
+                }
+                file_out.close();
+                //Eliminacion del archivo viejo y sustitucion por el nuevo
+                string rem = string(DIR) + string(ARCH_PRODUCCION);
+                string rena = string(DIR) + "Temporal.txt";
+                remove(rem.c_str());
+                rename(rena.c_str(), rem.c_str());
+                cout << "Se elimino la formación exitosamente.";
+
+                //Eliminacion de los autores de la produccion
+                fstream file_aut(string(DIR) + string(ARCH_AUTOR));
+                if(!file_aut.good()){
+                    cout << "No se abrio el archivo";
+                }
+                while(!file_aut.eof()){
+                    Autor aut;
+                    file_aut.read((char*)&aut, sizeof(Autor));
+                    if(file_aut.eof()) { break; }
+                    if(noRegistro != string(aut.getNoRegistro())){
+                        guardaAutor(aut, string(DIR) +  "Temporal_autor.txt");
+                        cout << "NO Son iguales los no Registro" << endl;
+                    }
+                    else{
+                        cout << "Son iguales los no Registro" << endl;
+                    }
+                }
+                file_aut.close();
+                rem = string(DIR) + string(ARCH_AUTOR);
+                rena = string(DIR) + "Temporal_autor.txt";
+                remove(rem.c_str());
+                rename(rena.c_str(), rem.c_str());
+            }
+            else{
+                cout << "Producción inexistente. Es imposible eliminar." << endl;
+            }
+        }
         else {
             cout << endl << "Regresando al menú de administración de información personal...";
         }
@@ -723,6 +1296,7 @@ void MenuUsr::docencia() {
                 doc.setCantidadHoras(horasSemanales);
                 //Guarda en el archivo
                 guardaDocencia(doc, string(DIR) + string(ARCH_DOCENCIA));
+                cout << endl <<"¡Nueva materia agregada exitosamente!";
             }
         } else if(opc == "2") {
             system(CLEAR);
@@ -739,11 +1313,9 @@ void MenuUsr::docencia() {
             while(!file.eof()) {
                 Docencia doc;
                 file.read((char*)&doc, sizeof(Docencia));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
-                if(doc.getNoReg() == academico.getNoReg()) {
+                if(doc.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
                     cout << "Materia: " << doc.getNombre() << endl;
                     cout << "Fecha de inicio: " << doc.getFechaInicio().toString() << " -> Fecha de fin: " << doc.getFechaFin().toString() << endl;
@@ -757,7 +1329,7 @@ void MenuUsr::docencia() {
         } else if(opc == "3") {
             system(CLEAR);
             string nombre;
-            cout << "*** Modificar materia de " << academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Modificar materia de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre de la materia a modificar: ";
             getline(cin, nombre);
             //Verifica si existe la formación academica
@@ -772,7 +1344,7 @@ void MenuUsr::docencia() {
                         break;
                     }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
-                    if(string(doc.getNombre()) == nombre and doc.getNoReg() == academico.getNoReg()) {
+                    if(string(doc.getNombre()) == nombre and doc.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
                         posArchivo = file_out.tellg();
                         posArchivo -= sizeof(Docencia);
@@ -845,7 +1417,7 @@ void MenuUsr::docencia() {
         } else if(opc == "4") {
             system(CLEAR);
             string nombre;
-            cout << "*** Eliminando materia de " << academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Eliminando materia de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre de la materia a eliminar: ";
             getline(cin, nombre);
             //Verifica si existe la formación academica
@@ -858,7 +1430,10 @@ void MenuUsr::docencia() {
                         break;
                     }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
-                    if(string(doc.getNombre()) != nombre and doc.getNoReg() != academico.getNoReg()) {
+                    if(string(doc.getNombre()) == nombre and doc.getNoReg() == this->academico.getNoReg()) {
+                        cout << "Eliminando: " << doc.getNombre() << endl;
+                    }
+                    else{
                         guardaDocencia(doc, string(DIR) + "Temporal.txt");
                     }
                 }
@@ -930,6 +1505,7 @@ void MenuUsr::tutoria() {
                 tut.setCantidadHoras(horasSemanales);
                 //Guarda en el archivo
                 guardaTutoria(tut, string(DIR) + string(ARCH_TUTORIA));
+                cout << endl <<"¡Nuevo alumno tutorado agregado exitosamente!";
             }
         }
         else if(opc == "2") {
@@ -964,7 +1540,7 @@ void MenuUsr::tutoria() {
         else if(opc == "3") {
             system(CLEAR);
             string nombre;
-            cout << "*** Modificar alumno tutorado de " << academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Modificar alumno tutorado de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre del alumno a modificar: ";
             getline(cin, nombre);
             //Verifica si existe la formación academica
@@ -977,7 +1553,7 @@ void MenuUsr::tutoria() {
                     file_out.read((char*)&tut, sizeof(Tutoria));
                     if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
-                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == academico.getNoReg()) {
+                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
                         posArchivo = file_out.tellg();
                         posArchivo -= sizeof(Tutoria);
@@ -1051,7 +1627,7 @@ void MenuUsr::tutoria() {
         else if(opc == "4") {
             system(CLEAR);
             string nombre;
-            cout << "*** Eliminando alumno tutorado de " << academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Eliminando alumno tutorado de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre del alumno a eliminar: ";
             getline(cin, nombre);
             //Verifica si existe la formación academica
@@ -1062,7 +1638,10 @@ void MenuUsr::tutoria() {
                     file_out.read((char*)&tut, sizeof(Tutoria));
                     if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
-                    if(string(tut.getNombreTutorado()) != nombre and tut.getNoReg() != academico.getNoReg()) {
+                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == academico.getNoReg()) {
+                        cout << "Eliminando: " << tut.getNombreTutorado() << endl;
+                    }
+                    else{
                         guardaTutoria(tut, string(DIR) + "Temporal.txt");
                     }
                 }
@@ -1222,7 +1801,7 @@ void MenuUsr::guardaProduccion(Produccion& pro, const std::string& archivo) {
     file.close();
 }
 
-bool MenuUsr::existeProduccion(const std::string& nombre) {
+bool MenuUsr::existeProduccion(const std::string& tipo, const std::string& nombre) {
     ifstream file(string(DIR) + string(ARCH_PRODUCCION));
     if(!file.good()) {
         file.close();
@@ -1235,13 +1814,70 @@ bool MenuUsr::existeProduccion(const std::string& nombre) {
         file.read((char*)&pro, sizeof(Produccion));
         if(file.eof()) { break; }
         //Busca si existe el nombre de formación
-        if(string(pro.getNombre()) == nombre and pro.getNoReg() == academico.getNoReg()) {
+        if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre and pro.getNoReg() == academico.getNoReg()) {
             file.close();
             return true;
         }
     }
     file.close();
     return false;
+}
+
+bool MenuUsr::existeNoRegProduccion(const std::string& noRegistro) {
+    ifstream file(string(DIR) + string(ARCH_PRODUCCION));
+    if(!file.good()) {
+        file.close();
+        ofstream file_prod(string(DIR) + string(ARCH_PRODUCCION));
+        file_prod.close();
+        return false;
+    }
+    while(!file.eof()) {
+        Produccion pro;
+        file.read((char*)&pro, sizeof(Produccion));
+        if(file.eof()) { break; }
+        //Busca si existe el nombre de formación
+        if(string(pro.getNoRegistro()) == noRegistro and pro.getNoReg() == academico.getNoReg()) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void MenuUsr::guardaAutor(Autor& aut, const std::string& archivo) {
+    //Guarda el objeto dentro del archivo
+    ofstream file(archivo, ios::app);
+    file.write((char*) &aut, sizeof(Autor));
+    file.close();
+}
+
+bool MenuUsr::existeAutor(const std::string& nombre, const std::string& noRegistro) {
+    ifstream file(string(DIR) + string(ARCH_AUTOR));
+    if(!file.good()) {
+        file.close();
+        ofstream file_aut(string(DIR) + string(ARCH_AUTOR));
+        file_aut.close();
+        return false;
+    }
+    while(!file.eof()) {
+        Autor aut;
+        file.read((char*)&aut, sizeof(Autor));
+        if(file.eof()) {
+            break;
+        }
+        //Busca si existe el nombre de formación
+        if(string(aut.getNombre()) == nombre and aut.getNoRegistro() == noRegistro) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void MenuUsr::configuracion() {
+
 }
 //Implementar luego expresión regular
 bool MenuUsr::fechaCorrecta(const std::string& fecha) {
@@ -1251,4 +1887,3 @@ bool MenuUsr::fechaCorrecta(const std::string& fecha) {
     }
     return false;
 }
-

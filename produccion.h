@@ -7,10 +7,12 @@
 
 class Produccion {
 private:
+    //No Reg es el valor con el que se identifica con el academico
     int noReg;
     char tipo[50];
     char nombre[100];
     Fecha fechaElaboracion;
+    //NoRegistro es el valor propio de la produccion
     char noRegistro[50];
     char status[50];
 public:

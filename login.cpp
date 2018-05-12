@@ -135,6 +135,10 @@ void Login::crearArchivosDefecto() {
     //Crea archivo de produccion
     ofstream file_prod(string(DIR) + string(ARCH_PRODUCCION));
     file_prod.close();
+
+    //Crea archivo de autores de produccion
+    ofstream file_aut(string(DIR) + string(ARCH_AUTOR));
+    file_aut.close();
 }
 
 void Login::pausa() {
