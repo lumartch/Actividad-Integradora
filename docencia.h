@@ -8,7 +8,7 @@
 class Docencia {
 private:
     int noReg;
-    char nombre[20];
+    char nombre[50];
     Fecha fechaInicio;
     Fecha fechaFin;
     char cantidadHoras[10];

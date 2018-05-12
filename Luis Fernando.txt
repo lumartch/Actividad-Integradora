@@ -1,0 +1,30 @@
+---------------------------------------------------------------
+Academico: Luis Fernando    | Email: N/A
+Domicilio: N/A ->  Ciudad: N/A
+Telefono: N/A       | Estado civil: N/A
+---------------------------------------------------------------
+*****************Dependientes economicos***********************
+Nombre: Cesar - > Edad: 15
+Nombre: Alfredito - > Edad: 14
+Nombre: Fernandito - > Edad: 11
+---------------------------------------------------------------
+*********************Formación academica***********************
+Licenciatura en música
+Fecha de inicio: 23/8/2012 - > Fecha de fin: 25/8/2015
+Institución de procedencia: Escuela de música sacra   | Fecha de obtención: 20/9/2015
+Número de cedula profesional: QWEASD
+
+Maestria en composición musical
+Fecha de inicio: 20/9/2015 - > Fecha de fin: 26/8/2016
+Institución de procedencia: Universidad de guadalajara   | Fecha de obtención: 30/9/2016
+Número de cedula profesional: BETHO
+
+---------------------------------------------------------------
+***************************Docencia****************************
+El academico no tiene ninguna docencia registrada.
+---------------------------------------------------------------
+***************************Tutorias****************************
+Nombre del alumno tutorado: Miguelito -> Horas semanales: 4
+Fecha de inicio: 23/1/2018 -> Fecha de fin: 26/4/2018
+
+---------------------------------------------------------------

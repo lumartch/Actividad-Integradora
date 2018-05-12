@@ -1,0 +1,36 @@
+---------------------------------------------------------------
+Academico: Luis Fernando Martínez Castellanos    | Email: lumartch@gmail.com
+Domicilio: Guardia nacional #14 ->  Ciudad: Zapopan, Jal. México.
+Telefono: 3310735062       | Estado civil: Soltero
+---------------------------------------------------------------
+*****************Dependientes economicos***********************
+Nombre: Thor - > Edad: 15
+Nombre: Tony Stark - > Edad: 14
+Nombre: Loki - > Edad: 13
+Nombre: Steve - > Edad: 17
+---------------------------------------------------------------
+*********************Formación academica***********************
+Licenciatura en computación
+Fecha de inicio: 20/5/2011 - > Fecha de fin: 23/8/2015
+Institución de procedencia: Universidad de Guadalajara   | Fecha de obtención: 14/9/2015
+Número de cedula profesional: QWERTY
+
+Especialidad en AI
+Fecha de inicio: 1/1/2016 - > Fecha de fin: 8/8/2017
+Institución de procedencia: MIT   | Fecha de obtención: 23/8/2017
+Número de cedula profesional: ASDW
+
+---------------------------------------------------------------
+***************************Docencia****************************
+Materia: Algoritmia -> Horas semanales: uctura de datos 
+Fecha de inicio: 0/0/-563148688 -> Fecha de fin: 22084/1/1920234309
+
+---------------------------------------------------------------
+***************************Tutorias****************************
+Nombre del alumno tutorado: Marti McFly -> Horas semanales: 4
+Fecha de inicio: 25/2/2018 -> Fecha de fin: 30/5/2018
+
+Nombre del alumno tutorado: Luis Fernando -> Horas semanales: 6
+Fecha de inicio: 23/3/2018 -> Fecha de fin: 30/5/2018
+
+---------------------------------------------------------------
