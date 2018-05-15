@@ -56,11 +56,12 @@ private:
     void guardaProduccion(Produccion &pro, const std::string& archivo);
     bool existeProduccion(const std::string& tipo, const std::string& nombre);
     bool existeNoRegProduccion(const std::string& noRegistro);
-
     void guardaAutor(Autor& aut, const std::string& archivo);
     bool existeAutor(const std::string& nombre, const std::string& noRegistro);
-
     bool fechaCorrecta(const std::string& fecha);
+    Fecha regresaFecha(std::string& fecha);
+    bool formatoNumero(const std::string& numero);
+    bool formatoEmail(const std::string& email);
 public:
     MenuUsr();
     MenuUsr(const Academico & academico, const Usuario & usuario);

@@ -22,8 +22,8 @@ void MenuUsr::menuPrincipal() {
         system(CLEAR);
         cout << "*** Menu del usuario " << this->academico.getNombre() <<" ***" << endl << endl;
         cout << "1) Administrar información personal." << endl;
-        cout << "2) Administrar formación academica." << endl;
-        cout << "3) Administrar producción academica." << endl;
+        cout << "2) Administrar formación académica." << endl;
+        cout << "3) Administrar producción académica." << endl;
         cout << "4) Administrar docencia." << endl;
         cout << "5) Administrar tutoria." << endl;
         cout << "6) Configuración." << endl;
@@ -57,7 +57,7 @@ void MenuUsr::infoPersonal() {
     string opc;
     do {
         system(CLEAR);
-        cout << "*** Administracion de informacion personal - "<< this->academico.getNombre() <<" ***" << endl << endl;
+        cout << "*** Administración de información personal - "<< this->academico.getNombre() <<" ***" << endl << endl;
         cout << "1) Actualizar nombre." << endl;
         cout << "2) Actualizar domicilio." << endl;
         cout << "3) Actualizar ciudad." << endl;
@@ -74,37 +74,49 @@ void MenuUsr::infoPersonal() {
         //Edicion del perfil de usuario
         if(opc == "1") {
             string nombre;
-            cout << endl << "Ingrese el nuevo nombre del academico: ";
+            cout << endl << "Ingrese el nuevo nombre del académico: ";
             getline(cin, nombre);
             this->academico.setNombre(nombre);
             cout << endl << "¡Nombre actualizado!";
         } else if(opc == "2") {
             string domicilio;
-            cout << endl << "Ingrese el nuevo domicilio del academico: ";
+            cout << endl << "Ingrese el nuevo domicilio del académico: ";
             getline(cin, domicilio);
             this->academico.setDomicilio(domicilio);
             cout << endl << "¡Domicilio actualizado!";
         } else if(opc == "3") {
             string ciudad;
-            cout << endl << "Ingrese la nueva ciudad del academico: ";
+            cout << endl << "Ingrese la nueva ciudad del académico: ";
             getline(cin, ciudad);
             this->academico.setCiudad(ciudad);
             cout << endl << "¡Ciudad actualizada!";
         } else if(opc == "4") {
             string telefono;
-            cout << endl << "Ingrese el nuevo telefono del academico: ";
-            getline(cin, telefono);
+            cout << endl;
+            do {
+                cout << "Ingrese el nuevo telefono del académico (10 Dígitos): ";
+                getline(cin, telefono);
+                if(telefono.length() != 10 or !formatoNumero(telefono)) {
+                    cout << "El formato de telefono es incorrecto. Intente de nuevo." << endl;
+                }
+            } while(telefono.length() != 10 or !formatoNumero(telefono));
             this->academico.setTelefono(telefono);
             cout << endl << "¡Telefono actualizado!";
         } else if(opc == "5") {
             string email;
-            cout << endl << "Ingrese el nuevo email del academico: ";
-            getline(cin, email);
+            cout << endl;
+            do {
+                cout << "Ingrese el nuevo email del académico: ";
+                getline(cin, email);
+                if(!formatoEmail(email)) {
+                    cout << "Formato incorrecto de email. Intente de nuevo." << endl;
+                }
+            } while(!formatoEmail(email));
             this->academico.setEmail(email);
             cout << endl << "¡Email actualizado!";
         } else if(opc == "6") {
             string estadoCivil;
-            cout << endl << "Seleccione el estado civil del academico." << endl;
+            cout << endl << "Seleccione el estado civil del académico." << endl;
             cout << "1) Soltero." << endl;
             cout << "2) Casado." << endl << endl;
             do {
@@ -137,7 +149,7 @@ void MenuUsr::dependientesEconomicos() {
     string opc;
     do {
         system(CLEAR);
-        cout << "*** Dependientes economicos de " << this->academico.getNombre() << " ***" << endl << endl;
+        cout << "*** Dependientes económicos de " << this->academico.getNombre() << " ***" << endl << endl;
         cout << "1) Agregar dependiente." << endl;
         cout << "2) Mostrar dependientes." << endl;
         cout << "3) Modificar dependiente." << endl;
@@ -156,23 +168,19 @@ void MenuUsr::dependientesEconomicos() {
                 cout << endl << "Ingrese el nombre del dependiente: ";
                 getline(cin, nombre);
                 if(existeDependiente(nombre)) {
-                    string opc;
-                    cout << "Existe el nombre de dependiente. ¿Desea ingresar un homonimo del dependiente?(S/N): ";
-                    do {
-                        cout << ">> ";
-                        getline(cin, opc);
-                    } while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
-                    if(opc == "s" or opc == "S") {
-                        bandera = true;
-                    } else {
-                        bandera = false;
-                    }
-                } else {
+                    cout << "El nombre del dependiente ya existe. Intente de nuevo." << endl;
                     bandera = true;
+                } else {
+                    bandera = false;
                 }
-            } while(!bandera);
-            cout << "Ingrese la edad del dependiente: ";
-            getline(cin, edad);
+            } while(bandera);
+            do {
+                cout << "Ingrese la edad del dependiente: ";
+                getline(cin, edad);
+                if(!formatoNumero(edad)) {
+                    cout << "El formato no es númerico. Intente de nuevo." << endl;
+                }
+            } while(!formatoNumero(edad));
 
             //Ingresa informacion dentro del objeto
             Dependiente dep;
@@ -186,7 +194,7 @@ void MenuUsr::dependientesEconomicos() {
             cout << endl <<"¡Nuevo dependiente agregado exitosamente!";
         } else if(opc == "2") {
             system(CLEAR);
-            cout << "*** Mostrando dependientes economicos del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Mostrando dependientes económicos del academico " << this->academico.getNombre() << " ***" << endl << endl;
             ifstream file(string(DIR) + string(ARCH_DEPENDIENTE));
             if(!file.good()) {
                 file.close();
@@ -269,8 +277,13 @@ void MenuUsr::dependientesEconomicos() {
                         dep.setNombre(nombre);
                     } else if(opc == "2") {
                         string edad;
-                        cout << endl << "Ingrese la nueva edad del dependiente: ";
-                        getline(cin, edad);
+                        do {
+                            cout << endl << "Ingrese la nueva edad del dependiente: ";
+                            getline(cin, edad);
+                            if(!formatoNumero(edad)) {
+                                cout << "El formato no es númerico. Intente de nuevo." << endl;
+                            }
+                        } while(!formatoNumero(edad));
                         dep.setEdad(atoi(edad.c_str()));
                     } else {
                         //Sobreescribe el dependiente en la posicion de memoria previamente obtenida
@@ -330,7 +343,7 @@ void MenuUsr::formacion() {
     string opc;
     do {
         system(CLEAR);
-        cout << "*** Administracion de la formación academica de - "<< this->academico.getNombre() <<" ***" << endl << endl;
+        cout << "*** Administración de la formación académica de - "<< this->academico.getNombre() <<" ***" << endl << endl;
         cout << "1) Agregar nuevo grado de estudios." << endl;
         cout << "2) Mostrar grados de estudio." << endl;
         cout << "3) Modificar grado de estudio." << endl;
@@ -341,7 +354,7 @@ void MenuUsr::formacion() {
         if(opc == "1") {
             system(CLEAR);
             string tipoGrado, opc;
-            cout << "*** Ingresando formación del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Ingresando formación del académico " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo de grado." << endl;
             cout << "1) Licenciatura." << endl;
             cout << "2) Especialidad." << endl;
@@ -374,27 +387,30 @@ void MenuUsr::formacion() {
             Fecha fechaIni, fechaFin, fechaOb;
             //Corroborar el formato despues
             string fecha;
-            cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
-            getline(cin, fecha, '/');
-            fechaIni.setDia(atoi(fecha.c_str()));
-            getline(cin, fecha, '/');
-            fechaIni.setMes(atoi(fecha.c_str()));
-            getline(cin, fecha, '\n');
-            fechaIni.setAnio(atoi(fecha.c_str()));
-            cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
-            getline(cin, fecha, '/');
-            fechaFin.setDia(atoi(fecha.c_str()));
-            getline(cin, fecha, '/');
-            fechaFin.setMes(atoi(fecha.c_str()));
-            getline(cin, fecha, '\n');
-            fechaFin.setAnio(atoi(fecha.c_str()));
-            cout << "Ingrese la fecha de obtención (Formato: DD/MM/AAAA): ";
-            getline(cin, fecha, '/');
-            fechaOb.setDia(atoi(fecha.c_str()));
-            getline(cin, fecha, '/');
-            fechaOb.setMes(atoi(fecha.c_str()));
-            getline(cin, fecha, '\n');
-            fechaOb.setAnio(atoi(fecha.c_str()));
+            do {
+                cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
+                getline(cin, fecha);
+                if(!fechaCorrecta(fecha)) {
+                    cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                }
+            } while(!fechaCorrecta(fecha));
+            fechaIni = regresaFecha(fecha);
+            do {
+                cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
+                getline(cin, fecha);
+                if(!fechaCorrecta(fecha)) {
+                    cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                }
+            } while(!fechaCorrecta(fecha));
+            fechaFin = regresaFecha(fecha);
+            do {
+                cout << "Ingrese la fecha de obtención (Formato: DD/MM/AAAA): ";
+                getline(cin, fecha);
+                if(!fechaCorrecta(fecha)) {
+                    cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                }
+            } while(!fechaCorrecta(fecha));
+            fechaOb = regresaFecha(fecha);
             string cedula;
             cout << "Ingrese el número de cédula profesional: ";
             getline(cin, cedula);
@@ -414,7 +430,7 @@ void MenuUsr::formacion() {
             cout << endl <<"¡Nueva formación agregada exitosamente!";
         } else if(opc == "2") {
             system(CLEAR);
-            cout << "*** Formación academica actual de " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Formación académica actual de " << this->academico.getNombre() << " ***" << endl << endl;
             ifstream file(string(DIR) + string(ARCH_FORMACION));
             if(!file.good()) {
                 file.close();
@@ -434,19 +450,19 @@ void MenuUsr::formacion() {
                 if(form.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
                     cout << "Titulo: " << form.getTipo() << " " << form.getNombre() << endl;
-                    cout << "Institución academica: " << form.getInstitucion() << endl;
+                    cout << "Institución académica: " << form.getInstitucion() << endl;
                     cout << "Fecha de inicio: " << form.getFechaInicio().toString() << " -> Fecha de fin: " << form.getFechaFinal().toString() << endl;
                     cout << "Fecha de obtencion: " << form.getFechaObtencion().toString() << " -> Cedula: " << form.getCedula() << endl << endl;
                 }
             }
             file.close();
             if(!bandera) {
-                cout << "No hay formación academica para este usuario." << endl;
+                cout << "No hay formación académica para este usuario." << endl;
             }
         } else if(opc == "3") {
             system(CLEAR);
             string tipoGrado, opc;
-            cout << "*** Modificar formación academica de " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Modificar formación académica de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo y nombre de grado a modificar." << endl;
             cout << "1) Licenciatura." << endl;
             cout << "2) Especialidad." << endl;
@@ -468,7 +484,7 @@ void MenuUsr::formacion() {
             string nombreGrado;
             cout << endl << "Ingrese el nombre: ";
             getline(cin, nombreGrado);
-            //Verifica si existe la formación academica
+            //Verifica si existe la formación académica
             if(existeFormacion(tipoGrado, nombreGrado)) {
                 Formacion form;
                 long int posArchivo = 0;
@@ -542,35 +558,38 @@ void MenuUsr::formacion() {
                     } else if (opc == "3") {
                         Fecha fechaIni;
                         string fecha;
-                        cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaIni.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaIni.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaIni.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaIni = regresaFecha(fecha);
                         form.setFechaInicio(fechaIni);
                     } else if (opc == "4") {
                         Fecha fechaFin;
                         string fecha;
-                        cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaFin.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaFin.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaFin.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaFin = regresaFecha(fecha);
                         form.setFechaFinal(fechaFin);
                     } else if (opc == "5") {
                         Fecha fechaOb;
                         string fecha;
-                        cout << "Ingrese la fecha de obtención (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaOb.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaOb.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaOb.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de obtención (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaOb = regresaFecha(fecha);
                         form.setFechaObtencion(fechaOb);
                     } else if (opc == "6") {
                         string cedula;
@@ -614,7 +633,7 @@ void MenuUsr::formacion() {
             string nombreGrado;
             cout << endl << "Ingrese el nombre: ";
             getline(cin, nombreGrado);
-            //Verifica si existe la formación academica
+            //Verifica si existe la formación académica
             if(existeFormacion(tipoGrado, nombreGrado)) {
                 fstream file_out(string(DIR) + string(ARCH_FORMACION));
                 while(!file_out.eof()) {
@@ -657,7 +676,7 @@ void MenuUsr::produccion() {
     string opc;
     do {
         system(CLEAR);
-        cout << "*** Administracion de la producción academica - "<< this->academico.getNombre() <<" ***" << endl << endl;
+        cout << "*** Administración de la producción académica - "<< this->academico.getNombre() <<" ***" << endl << endl;
         cout << "1) Agregar nueva producción." << endl;
         cout << "2) Mostrar producciones." << endl;
         cout << "3) Modificar producción." << endl;
@@ -671,7 +690,7 @@ void MenuUsr::produccion() {
 
             system(CLEAR);
             string opcion;
-            cout << "*** Ingresando producción del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Ingresando producción del académico " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo de producción a crear." << endl;
             cout << "1) Capitulo de libro." << endl;
             cout << "2) Libro." << endl;
@@ -705,13 +724,14 @@ void MenuUsr::produccion() {
 
                 string fecha;
                 Fecha fechaElab;
-                cout << "Ingrese la fecha de elaboracion (Formato DD/MM/AAAA): ";
-                getline(cin, fecha, '/');
-                fechaElab.setDia(atoi(fecha.c_str()));
-                getline(cin, fecha, '/');
-                fechaElab.setMes(atoi(fecha.c_str()));
-                getline(cin, fecha, '\n');
-                fechaElab.setAnio(atoi(fecha.c_str()));
+                do {
+                    cout << "Ingrese la fecha de elaboracion (Formato DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaElab = regresaFecha(fecha);
 
                 string noRegistro;
                 bool existe = false;
@@ -753,9 +773,9 @@ void MenuUsr::produccion() {
 
                 guardaProduccion(pro, string(DIR) + string(ARCH_PRODUCCION));
 
-                cout << endl << "¿Desea agregar autores a la produccion? (S/N): ";
+                cout << endl;
                 do {
-                    cout << ">> ";
+                    cout << "¿Desea agregar autores a la produccion? (S/N): ";
                     getline(cin, opc);
                 } while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
                 if(opc == "S" or opc == "s") {
@@ -790,7 +810,7 @@ void MenuUsr::produccion() {
 
         } else if(opc == "2") {
             system(CLEAR);
-            cout << "*** Producción academica actual de " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Producción académica actual de " << this->academico.getNombre() << " ***" << endl << endl;
             ifstream file(string(DIR) + string(ARCH_PRODUCCION));
             if(!file.good()) {
                 file.close();
@@ -810,7 +830,7 @@ void MenuUsr::produccion() {
                 if(pro.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
                     cout << "Titulo: " << pro.getTipo() << " " << pro.getNombre() << endl;
-                    cout << "Fecha de elaboracion: " << pro.getFechaElaboracion().toString() << endl;
+                    cout << "Fecha de elaboración: " << pro.getFechaElaboracion().toString() << endl;
                     cout << "No. Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
                     cout << "Autores: " << endl;
 
@@ -844,12 +864,12 @@ void MenuUsr::produccion() {
             }
             file.close();
             if(!bandera) {
-                cout << "No hay formación academica para este usuario." << endl;
+                cout << "No hay producción académica para este usuario." << endl;
             }
         } else if(opc == "3") {
             system(CLEAR);
             string opcion;
-            cout << "*** Modificar producción del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Modificar producción del académico " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo de producción y el nombre para modificar." << endl;
             cout << "1) Capitulo de libro." << endl;
             cout << "2) Libro." << endl;
@@ -953,13 +973,14 @@ void MenuUsr::produccion() {
                     } else if (opc == "3") {
                         string fecha;
                         Fecha fechaElab;
-                        cout << "Ingrese la fecha de elaboracion (Formato DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaElab.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaElab.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaElab.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de elaboracion (Formato DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaElab = regresaFecha(fecha);
                         pro.setFechaElaboracion(fechaElab);
                     } else if (opc == "4") {
                         string noRegistro;
@@ -1140,7 +1161,7 @@ void MenuUsr::produccion() {
         } else if(opc == "4") {
             system(CLEAR);
             string opcion;
-            cout << "*** Eliminar producción del academico " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Eliminar producción del académico " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Elija el tipo de producción y el nombre para eliminar." << endl;
             cout << "1) Capitulo de libro." << endl;
             cout << "2) Libro." << endl;
@@ -1191,7 +1212,7 @@ void MenuUsr::produccion() {
                 string rena = string(DIR) + "Temporal.txt";
                 remove(rem.c_str());
                 rename(rena.c_str(), rem.c_str());
-                cout << "Se elimino la formación exitosamente.";
+                cout << "Se elimino la producción exitosamente.";
 
                 //Eliminacion de los autores de la produccion
                 fstream file_aut(string(DIR) + string(ARCH_AUTOR));
@@ -1206,9 +1227,6 @@ void MenuUsr::produccion() {
                     }
                     if(noRegistro != string(aut.getNoRegistro())) {
                         guardaAutor(aut, string(DIR) +  "Temporal_autor.txt");
-                        cout << "NO Son iguales los no Registro" << endl;
-                    } else {
-                        cout << "Son iguales los no Registro" << endl;
                     }
                 }
                 file_aut.close();
@@ -1253,22 +1271,32 @@ void MenuUsr::docencia() {
             if(existeDocencia(nombre)) {
                 cout << "Ya existe la materia. Es imposible registrarla." << endl << endl;
             } else {
-                cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
-                getline(cin, fecha, '/');
-                fechaIni.setDia(atoi(fecha.c_str()));
-                getline(cin, fecha, '/');
-                fechaIni.setMes(atoi(fecha.c_str()));
-                getline(cin, fecha, '\n');
-                fechaIni.setAnio(atoi(fecha.c_str()));
-                cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
-                getline(cin, fecha, '/');
-                fechaFin.setDia(atoi(fecha.c_str()));
-                getline(cin, fecha, '/');
-                fechaFin.setMes(atoi(fecha.c_str()));
-                getline(cin, fecha, '\n');
-                fechaFin.setAnio(atoi(fecha.c_str()));
-                cout << "Ingrese las horas semanales: ";
-                getline(cin, horasSemanales);
+                do {
+                    cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaIni = regresaFecha(fecha);
+
+                do {
+                    cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaFin = regresaFecha(fecha);
+
+                do {
+                    cout << "Ingrese las horas semanales: ";
+                    getline(cin, horasSemanales);
+                    if(!formatoNumero(horasSemanales)) {
+                        cout << "El formato no es númerico. Intente de nuevo." << endl;
+                    }
+                } while(!formatoNumero(horasSemanales));
+
                 //Guarda informacion dentro del objeto
                 doc.setNoReg(this->academico.getNoReg());
                 doc.setNombre(nombre);
@@ -1281,7 +1309,7 @@ void MenuUsr::docencia() {
             }
         } else if(opc == "2") {
             system(CLEAR);
-            cout << "*** Docencia academica actual de " << this->academico.getNombre() << " ***" << endl << endl;
+            cout << "*** Docencia académica actual de " << this->academico.getNombre() << " ***" << endl << endl;
             ifstream file(string(DIR) + string(ARCH_DOCENCIA));
             if(!file.good()) {
                 file.close();
@@ -1315,7 +1343,7 @@ void MenuUsr::docencia() {
             cout << "*** Modificar materia de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre de la materia a modificar: ";
             getline(cin, nombre);
-            //Verifica si existe la formación academica
+            //Verifica si existe la formación académica
             if(existeDocencia(nombre)) {
                 Docencia doc;
                 long int posArchivo = 0;
@@ -1362,29 +1390,37 @@ void MenuUsr::docencia() {
                     } else if (opc == "2") {
                         Fecha fechaIni;
                         string fecha;
-                        cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaIni.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaIni.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaIni.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaIni = regresaFecha(fecha);
                         doc.setFechaInicio(fechaIni);
                     } else if (opc == "3") {
                         Fecha fechaFin;
                         string fecha;
-                        cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaFin.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaFin.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaFin.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaFin = regresaFecha(fecha);
+
                         doc.setFechaFin(fechaFin);
                     } else if (opc == "4") {
                         string horasSemanales;
-                        cout << "Ingrese las horas semanales: ";
-                        getline(cin, horasSemanales);
+                        do {
+                            cout << "Ingrese las horas semanales: ";
+                            getline(cin, horasSemanales);
+                            if(!formatoNumero(horasSemanales)) {
+                                cout << "El formato no es númerico. Intente de nuevo." << endl;
+                            }
+                        } while(!formatoNumero(horasSemanales));
                         doc.setCantidadHoras(horasSemanales);
                     } else {
                         fstream file(string(DIR) + string(ARCH_DOCENCIA), ios::in|ios::out);
@@ -1403,7 +1439,7 @@ void MenuUsr::docencia() {
             cout << "*** Eliminando materia de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre de la materia a eliminar: ";
             getline(cin, nombre);
-            //Verifica si existe la formación academica
+            //Verifica si existe la formación académica
             if(existeDocencia(nombre)) {
                 ifstream file_out(string(DIR) + string(ARCH_DOCENCIA));
                 while(!file_out.eof()) {
@@ -1442,7 +1478,7 @@ void MenuUsr::tutoria() {
     string opc;
     do {
         system(CLEAR);
-        cout << "*** Administracion de la tutoria - "<< this->academico.getNombre() <<" ***" << endl << endl;
+        cout << "*** Administración de la tutoria - "<< this->academico.getNombre() <<" ***" << endl << endl;
         cout << "1) Agregar nuevo alumno tutorado." << endl;
         cout << "2) Mostrar alumnos tutorados." << endl;
         cout << "3) Modificar alumno tutorado." << endl;
@@ -1463,22 +1499,30 @@ void MenuUsr::tutoria() {
             if(existeTutoria(nombre)) {
                 cout << "Ya existe el alumno tutorado. Es imposible registrarlo." << endl << endl;
             } else {
-                cout << "Ingrese la fecha de inicio de tutoria (Formato: DD/MM/AAAA): ";
-                getline(cin, fecha, '/');
-                fechaIni.setDia(atoi(fecha.c_str()));
-                getline(cin, fecha, '/');
-                fechaIni.setMes(atoi(fecha.c_str()));
-                getline(cin, fecha, '\n');
-                fechaIni.setAnio(atoi(fecha.c_str()));
-                cout << "Ingrese la fecha de fin de tutorias (Formato: DD/MM/AAAA): ";
-                getline(cin, fecha, '/');
-                fechaFin.setDia(atoi(fecha.c_str()));
-                getline(cin, fecha, '/');
-                fechaFin.setMes(atoi(fecha.c_str()));
-                getline(cin, fecha, '\n');
-                fechaFin.setAnio(atoi(fecha.c_str()));
-                cout << "Ingrese las horas semanales de tutorias: ";
-                getline(cin, horasSemanales);
+                do {
+                    cout << "Ingrese la fecha de inicio de tutoria (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaIni = regresaFecha(fecha);
+
+                do {
+                    cout << "Ingrese la fecha de fin de tutorias (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaFin = regresaFecha(fecha);
+                do {
+                    cout << "Ingrese las horas semanales de tutorias: ";
+                    getline(cin, horasSemanales);
+                    if(!formatoNumero(horasSemanales)) {
+                        cout << "El formato no es númerico. Intente de nuevo." << endl;
+                    }
+                } while(!formatoNumero(horasSemanales));
                 //Guarda informacion dentro del objeto
                 tut.setNoReg(this->academico.getNoReg());
                 tut.setNombreTutorado(nombre);
@@ -1525,7 +1569,7 @@ void MenuUsr::tutoria() {
             cout << "*** Modificar alumno tutorado de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre del alumno a modificar: ";
             getline(cin, nombre);
-            //Verifica si existe la formación academica
+            //Verifica si existe la formación académica
             if(existeTutoria(nombre)) {
                 Tutoria tut;
                 long int posArchivo = 0;
@@ -1572,29 +1616,38 @@ void MenuUsr::tutoria() {
                     } else if (opc == "2") {
                         Fecha fechaIni;
                         string fecha;
-                        cout << "Ingrese la fecha de inicio de tutorias (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaIni.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaIni.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaIni.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de inicio de tutorias (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaIni = regresaFecha(fecha);
+
                         tut.setFechaInicio(fechaIni);
                     } else if (opc == "3") {
                         Fecha fechaFin;
                         string fecha;
-                        cout << "Ingrese la fecha de fin de tutorias (Formato: DD/MM/AAAA): ";
-                        getline(cin, fecha, '/');
-                        fechaFin.setDia(atoi(fecha.c_str()));
-                        getline(cin, fecha, '/');
-                        fechaFin.setMes(atoi(fecha.c_str()));
-                        getline(cin, fecha, '\n');
-                        fechaFin.setAnio(atoi(fecha.c_str()));
+                        do {
+                            cout << "Ingrese la fecha de fin de tutorias (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaFin = regresaFecha(fecha);
+
                         tut.setFechaFin(fechaFin);
                     } else if (opc == "4") {
                         string horasSemanales;
-                        cout << "Ingrese las horas semanales: ";
-                        getline(cin, horasSemanales);
+                        do {
+                            cout << "Ingrese las horas semanales: ";
+                            getline(cin, horasSemanales);
+                            if(!formatoNumero(horasSemanales)) {
+                                cout << "El formato no es númerico. Intente de nuevo." << endl;
+                            }
+                        } while(!formatoNumero(horasSemanales));
                         tut.setCantidadHoras(horasSemanales);
                     } else {
                         fstream file(string(DIR) + string(ARCH_TUTORIA), ios::in|ios::out);
@@ -1613,7 +1666,7 @@ void MenuUsr::tutoria() {
             cout << "*** Eliminando alumno tutorado de " << this->academico.getNombre() << " ***" << endl << endl;
             cout << "Ingrese el nombre del alumno a eliminar: ";
             getline(cin, nombre);
-            //Verifica si existe la formación academica
+            //Verifica si existe la formación académica
             if(existeTutoria(nombre)) {
                 ifstream file_out(string(DIR) + string(ARCH_TUTORIA));
                 while(!file_out.eof()) {
@@ -1903,7 +1956,7 @@ void MenuUsr::configuracion() {
                 exportacion << "El academico no tiene ningun dependiente economico registrada." << endl;
             }
             exportacion << "---------------------------------------------------------------" << endl;
-            exportacion << "*********************Formación academica***********************" << endl;
+            exportacion << "*********************Formación académica***********************" << endl;
             existe = false;
             ifstream arch_form(string(DIR) + string(ARCH_FORMACION));
             while(!arch_form.eof()) {
@@ -1922,10 +1975,50 @@ void MenuUsr::configuracion() {
             }
             arch_form.close();
             if(!existe) {
-                exportacion << "El academico no tiene ninguna formación academica registrada." << endl;
+                exportacion << "El académico no tiene ninguna formación académica registrada." << endl;
             }
             exportacion << "---------------------------------------------------------------" << endl;
-            //Exportación de produccion academica
+            //Exportación de produccion académica
+            exportacion << "********************Producción académica***********************" << endl;
+            existe = false;
+            ifstream arch_pro(string(DIR) + string(ARCH_PRODUCCION));
+            while(!arch_pro.eof()) {
+                Produccion pro;
+                arch_pro.read((char*)&pro, sizeof(Produccion));
+                if(arch_pro.eof()) {
+                    break;
+                }
+                if(pro.getNoReg() == this->academico.getNoReg()) {
+                    exportacion << pro.getTipo() << " " << pro.getNombre() << endl;
+                    exportacion << "Fecha de elaboración: " << pro.getFechaElaboracion().toString() << endl;
+                    exportacion << "No.Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
+                    exportacion << "Autores: " << endl;
+                    bool ex = false;
+                    ifstream arch_aut(string(DIR) + string(ARCH_AUTOR));
+                    while(!arch_aut.eof()) {
+                        Autor aut;
+                        arch_aut.read((char*)&aut, sizeof(Autor));
+                        if(arch_aut.eof()) {
+                            break;
+                        }
+                        if(string(aut.getNoRegistro()) == string(pro.getNoRegistro())) {
+                            exportacion << "Nombre: " << aut.getNombre() << endl;
+                            ex = true;
+                        }
+                    }
+                    arch_aut.close();
+                    if(!ex) {
+                        exportacion << "La producción no tiene mas autores." << endl;
+                    }
+
+                    existe = true;
+                }
+            }
+            arch_pro.close();
+            if(!existe) {
+                exportacion << "El académico no tiene ninguna producción académica registrada." << endl;
+            }
+
             exportacion << "***************************Docencia****************************" << endl;
             existe = false;
             ifstream arch_doc(string(DIR) + string(ARCH_DOCENCIA));
@@ -1964,11 +2057,9 @@ void MenuUsr::configuracion() {
             }
             arch_tut.close();
             if(!existe) {
-                exportacion << "El academico no tiene ningun alumno tutorado registrado." << endl;
+                exportacion << "El académico no tiene ningun alumno tutorado registrado." << endl;
             }
             exportacion << "---------------------------------------------------------------" << endl;
-
-
 
             cout << endl << "¡Exportación exitosa!" << endl;
 
@@ -1982,10 +2073,49 @@ void MenuUsr::configuracion() {
         }
     } while(opc != "0");
 }
-//Implementar luego expresión regular
+
 bool MenuUsr::fechaCorrecta(const std::string& fecha) {
     regex rx("[0-9]{2}/[0-9]{2}/[0-9]{4}");
     if(regex_match(fecha, rx)) {
+        return true;
+    }
+    return false;
+}
+
+Fecha MenuUsr::regresaFecha(std::string& fecha) {
+    Fecha auxFecha;
+    string auxString;
+    unsigned int i;
+    auxString = "";
+    for(i = 0; fecha[i] != '/'; i++) {
+        auxString += fecha[i];
+    }
+    auxFecha.setDia(atoi(auxString.c_str()));
+    auxString = "";
+    for(i = i + 1; fecha[i] != '/'; i++) {
+        auxString += fecha[i];
+    }
+    auxFecha.setMes(atoi(auxString.c_str()));
+    auxString = "";
+    for(i = i + 1; i < fecha.length(); i++) {
+        auxString += fecha[i];
+    }
+    auxFecha.setAnio(atoi(auxString.c_str()));
+    return auxFecha;
+}
+
+bool MenuUsr::formatoNumero(const std::string& numero) {
+    regex rx("[0-9]+");
+    if(regex_match(numero, rx)) {
+        return true;
+    }
+    return false;
+}
+
+
+bool MenuUsr::formatoEmail(const std::string& email) {
+    regex rx("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+    if(regex_match(email, rx)) {
         return true;
     }
     return false;

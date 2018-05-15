@@ -1,36 +1,44 @@
 ---------------------------------------------------------------
 Academico: Luis Fernando Martínez Castellanos    | Email: lumartch@gmail.com
-Domicilio: Guardia nacional #14 ->  Ciudad: Zapopan, Jal. México.
+Domicilio: Guardia Nacional #11 ->  Ciudad: Zapopan, Jal.México
 Telefono: 3310735062       | Estado civil: Soltero
 ---------------------------------------------------------------
 *****************Dependientes economicos***********************
-Nombre: Thor - > Edad: 15
-Nombre: Tony Stark - > Edad: 14
-Nombre: Loki - > Edad: 13
-Nombre: Steve - > Edad: 17
+Nombre: Stefania Ponce de León - > Edad: 24
+Nombre: Antonio Músico - > Edad: 23
 ---------------------------------------------------------------
-*********************Formación academica***********************
-Licenciatura en computación
-Fecha de inicio: 20/5/2011 - > Fecha de fin: 23/8/2015
-Institución de procedencia: Universidad de Guadalajara   | Fecha de obtención: 14/9/2015
-Número de cedula profesional: QWERTY
+*********************Formación académica***********************
+Licenciatura en música
+Fecha de inicio: 12/8/2012 - > Fecha de fin: 23/5/2015
+Institución de procedencia: Universidad de Guadalajara   | Fecha de obtención: 8/8/2015
+Número de cedula profesional: BETHO
 
-Especialidad en AI
-Fecha de inicio: 1/1/2016 - > Fecha de fin: 8/8/2017
-Institución de procedencia: MIT   | Fecha de obtención: 23/8/2017
-Número de cedula profesional: ASDW
+Doctorado en composición
+Fecha de inicio: 1/1/2016 - > Fecha de fin: 2/2/2017
+Institución de procedencia: Berklee   | Fecha de obtención: 3/3/2017
+Número de cedula profesional: ASD123
 
 ---------------------------------------------------------------
+********************Producción académica***********************
+Libro Armonia modernoza
+Fecha de elaboración: 20/5/2018
+No.Registro: DS12 -> Status: Aceptado
+Autores: 
+Nombre: Stefania Morales Ponce de León
+Nombre: Yahaira 
 ***************************Docencia****************************
-Materia: Algoritmia -> Horas semanales: uctura de datos 
-Fecha de inicio: 0/0/-563148688 -> Fecha de fin: 22084/1/1920234309
+Materia: Armonia Moderna -> Horas semanales: 5
+Fecha de inicio: 1/2/2018 -> Fecha de fin: 23/5/2018
+
+Materia: Contrapunto -> Horas semanales: 6
+Fecha de inicio: 1/1/2018 -> Fecha de fin: 11/5/2018
 
 ---------------------------------------------------------------
 ***************************Tutorias****************************
-Nombre del alumno tutorado: Marti McFly -> Horas semanales: 4
-Fecha de inicio: 25/2/2018 -> Fecha de fin: 30/5/2018
+Nombre del alumno tutorado: Stefania Morales Ponce de León -> Horas semanales: 5
+Fecha de inicio: 11/11/2017 -> Fecha de fin: 12/1/2018
 
-Nombre del alumno tutorado: Luis Fernando -> Horas semanales: 6
-Fecha de inicio: 23/3/2018 -> Fecha de fin: 30/5/2018
+Nombre del alumno tutorado: Jose Alfredo -> Horas semanales: 6
+Fecha de inicio: 15/12/2017 -> Fecha de fin: 16/2/2018
 
 ---------------------------------------------------------------
