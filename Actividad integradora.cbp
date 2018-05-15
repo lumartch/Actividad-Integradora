@@ -34,6 +34,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Lista.cpp" />
+		<Unit filename="Lista.h" />
 		<Unit filename="academico.cpp" />
 		<Unit filename="academico.h" />
 		<Unit filename="autor.cpp" />

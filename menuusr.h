@@ -10,6 +10,7 @@
 #include "tutoria.h"
 #include "produccion.h"
 #include "autor.h"
+#include "Lista.h"
 
 //Dependencias de librerias
 #include <fstream>
@@ -32,10 +33,12 @@
 #define CLEAR "clear"
 #define MKDIR "mkdir Archivos/"
 #define DIR "Archivos/"
+#define DIRREP "Reportes/"
 #else
 #define CLEAR "cls"
 #define MKDIR "mkdir Archivos\\"
 #define DIR "Archivos\\"
+#define DIRREP "Reportes\\"
 #endif
 
 using namespace std;
@@ -62,6 +65,7 @@ private:
     Fecha regresaFecha(std::string& fecha);
     bool formatoNumero(const std::string& numero);
     bool formatoEmail(const std::string& email);
+    void creaReporte(Academico& ac);
 public:
     MenuUsr();
     MenuUsr(const Academico & academico, const Usuario & usuario);

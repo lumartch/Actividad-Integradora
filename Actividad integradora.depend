@@ -46,7 +46,7 @@
 	<cstring>
 	"fecha.h"
 
-1526112299 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/login.cpp
+1526370678 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/login.cpp
 	"login.h"
 
 1525974400 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/login.h
@@ -58,10 +58,10 @@
 1526010917 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuadmin.h
 	"menuusr.h"
 
-1526367641 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.cpp
+1526370489 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.cpp
 	"menuusr.h"
 
-1526367337 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.h
+1526370817 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/menuusr.h
 	"usuario.h"
 	"academico.h"
 	"dependiente.h"
@@ -70,6 +70,7 @@
 	"tutoria.h"
 	"produccion.h"
 	"autor.h"
+	"Lista.h"
 	<fstream>
 	<iostream>
 	<regex>
@@ -94,4 +95,13 @@
 1526112311 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/autor.h
 	<string>
 	<cstring>
+
+1526370561 source:/home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/Lista.cpp
+	"Lista.h"
+
+1526369273 /home/lumartch/Documentos/CUCEI/Estructura de datos II/Actividad Integradora/Actividad integradora/Lista.h
+	<fstream>
+	<string>
+	<cstring>
+	"academico.h"
 

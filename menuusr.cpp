@@ -1929,142 +1929,58 @@ void MenuUsr::configuracion() {
             getline(cin, opc);
         } while(opc != "0" and opc != "1" and opc != "2");
         if(opc == "1") {
-            cout << endl << "Exportando información personal..." << endl;
-            //Creación del archivo a exportar
-            ofstream exportacion(string(this->academico.getNombre()) + ".txt");
-            exportacion << "---------------------------------------------------------------" << endl;
-            exportacion << "Academico: " << this->academico.getNombre() << "    | Email: " << this->academico.getEmail() << endl;
-            exportacion << "Domicilio: " << this->academico.getDomicilio() << " ->  Ciudad: " << this->academico.getCiudad() << endl;
-            exportacion << "Telefono: " << this->academico.getTelefono() << "       | Estado civil: " << this->academico.getEstadoCivil() << endl;
-            exportacion << "---------------------------------------------------------------" << endl;
-            exportacion << "*****************Dependientes economicos***********************" << endl;
-            bool existe = false;
-            ifstream arch_dep(string(DIR) + string(ARCH_DEPENDIENTE));
-            while(!arch_dep.eof()) {
-                Dependiente dep;
-                arch_dep.read((char*)&dep, sizeof(Dependiente));
-                if(arch_dep.eof()) {
-                    break;
-                }
-                if(dep.getNoReg() == this->academico.getNoReg()) {
-                    exportacion << "Nombre: " << dep.getNombre() << " - > Edad: " << dep.getEdad() << endl;
-                    existe = true;
-                }
-            }
-            arch_dep.close();
-            if(!existe) {
-                exportacion << "El academico no tiene ningun dependiente economico registrada." << endl;
-            }
-            exportacion << "---------------------------------------------------------------" << endl;
-            exportacion << "*********************Formación académica***********************" << endl;
-            existe = false;
-            ifstream arch_form(string(DIR) + string(ARCH_FORMACION));
-            while(!arch_form.eof()) {
-                Formacion form;
-                arch_form.read((char*)&form, sizeof(Formacion));
-                if(arch_form.eof()) {
-                    break;
-                }
-                if(form.getNoReg() == this->academico.getNoReg()) {
-                    exportacion << form.getTipo() << " " << form.getNombre() << endl;
-                    exportacion << "Fecha de inicio: " << form.getFechaInicio().toString() << " - > Fecha de fin: " << form.getFechaFinal().toString() << endl;
-                    exportacion << "Institución de procedencia: " <<form.getInstitucion() << "   | Fecha de obtención: " << form.getFechaObtencion().toString() << endl;
-                    exportacion << "Número de cedula profesional: " << form.getCedula() << endl << endl;
-                    existe = true;
-                }
-            }
-            arch_form.close();
-            if(!existe) {
-                exportacion << "El académico no tiene ninguna formación académica registrada." << endl;
-            }
-            exportacion << "---------------------------------------------------------------" << endl;
-            //Exportación de produccion académica
-            exportacion << "********************Producción académica***********************" << endl;
-            existe = false;
-            ifstream arch_pro(string(DIR) + string(ARCH_PRODUCCION));
-            while(!arch_pro.eof()) {
-                Produccion pro;
-                arch_pro.read((char*)&pro, sizeof(Produccion));
-                if(arch_pro.eof()) {
-                    break;
-                }
-                if(pro.getNoReg() == this->academico.getNoReg()) {
-                    exportacion << pro.getTipo() << " " << pro.getNombre() << endl;
-                    exportacion << "Fecha de elaboración: " << pro.getFechaElaboracion().toString() << endl;
-                    exportacion << "No.Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
-                    exportacion << "Autores: " << endl;
-                    bool ex = false;
-                    ifstream arch_aut(string(DIR) + string(ARCH_AUTOR));
-                    while(!arch_aut.eof()) {
-                        Autor aut;
-                        arch_aut.read((char*)&aut, sizeof(Autor));
-                        if(arch_aut.eof()) {
-                            break;
-                        }
-                        if(string(aut.getNoRegistro()) == string(pro.getNoRegistro())) {
-                            exportacion << "Nombre: " << aut.getNombre() << endl;
-                            ex = true;
-                        }
-                    }
-                    arch_aut.close();
-                    if(!ex) {
-                        exportacion << "La producción no tiene mas autores." << endl;
-                    }
-
-                    existe = true;
-                }
-            }
-            arch_pro.close();
-            if(!existe) {
-                exportacion << "El académico no tiene ninguna producción académica registrada." << endl;
-            }
-
-            exportacion << "***************************Docencia****************************" << endl;
-            existe = false;
-            ifstream arch_doc(string(DIR) + string(ARCH_DOCENCIA));
-            while(!arch_doc.eof()) {
-                Docencia doc;
-                arch_doc.read((char*)&doc, sizeof(Docencia));
-                if(arch_doc.eof()) {
-                    break;
-                }
-                if(doc.getNoReg() == this->academico.getNoReg()) {
-                    exportacion << "Materia: " << doc.getNombre() << " -> Horas semanales: " << doc.getCantidadHoras() << endl;
-                    exportacion << "Fecha de inicio: " << doc.getFechaInicio().toString() << " -> Fecha de fin: " << doc.getFechaFin().toString() << endl << endl;
-                    existe = true;
-                }
-            }
-            arch_doc.close();
-            if(!existe) {
-                exportacion << "El academico no tiene ninguna docencia registrada." << endl;
-            }
-            exportacion << "---------------------------------------------------------------" << endl;
-
-            exportacion << "***************************Tutorias****************************" << endl;
-            existe = false;
-            ifstream arch_tut(string(DIR) + string(ARCH_TUTORIA));
-            while(!arch_tut.eof()) {
-                Tutoria tut;
-                arch_tut.read((char*)&tut, sizeof(Tutoria));
-                if(arch_tut.eof()) {
-                    break;
-                }
-                if(tut.getNoReg() == this->academico.getNoReg()) {
-                    exportacion << "Nombre del alumno tutorado: " << tut.getNombreTutorado() << " -> Horas semanales: " << tut.getCantidadHoras() << endl;
-                    exportacion << "Fecha de inicio: " << tut.getFechaInicio().toString() << " -> Fecha de fin: " << tut.getFechaFin().toString() << endl << endl;
-                    existe = true;
-                }
-            }
-            arch_tut.close();
-            if(!existe) {
-                exportacion << "El académico no tiene ningun alumno tutorado registrado." << endl;
-            }
-            exportacion << "---------------------------------------------------------------" << endl;
-
+            cout << endl << "Exportando información académica..." << endl;
+            creaReporte(this->academico);
             cout << endl << "¡Exportación exitosa!" << endl;
-
-            exportacion.close();
         } else if(opc == "2") {
+            string nombre;
+            cout << endl << "Ingrese el nombre (Completo o parcial) del academico a buscar: ";
+            getline(cin, nombre);
+
+            Lista listaResultado;
+            ifstream arch_ac(string(DIR) + string(ARCH_AC));
+            while(!arch_ac.eof()) {
+                Academico ac;
+                arch_ac.read((char*)&ac, sizeof(Academico));
+                if(arch_ac.eof()) {
+                    break;
+                }
+                if(strstr(ac.getNombre(), nombre.c_str())) {
+                    listaResultado.insertar(listaResultado.ultimaPos(), ac);
+                }
+            }
+            arch_ac.close();
+            if(listaResultado.estaVacia()) {
+                cout << "Ningún academico coincidio en la busqueda." << endl;
+            } else {
+                string opc;
+                bool bandera = false;
+                cout << listaResultado.toString();
+                cout << "0-> No exportar nada..." << endl;
+                cout << "Elija un académico para exportar su información." << endl << endl;
+                do {
+                    cout << ">> ";
+                    getline(cin, opc);
+                    if(!formatoNumero(opc)) {
+                        bandera = false;
+                    } else {
+                        if(atoi(opc.c_str()) < 0 or atoi(opc.c_str()) > listaResultado.datosTotales()) {
+                            bandera = false;
+                        } else {
+                            bandera = true;
+                        }
+                    }
+                } while(!bandera);
+                if(opc != "0"){
+                    cout << endl << "Exportando información académica..." << endl;
+                    creaReporte(listaResultado[atoi(opc.c_str())]);
+                    cout << endl << "¡Exportación exitosa!" << endl;
+                }
+                else{
+                    cout << endl << "Cancelación de reporte..." << endl;
+                }
+                listaResultado.eliminarNodos();
+            }
         } else {
             cout << endl << "Configuración terminada.";
         }
@@ -2073,6 +1989,142 @@ void MenuUsr::configuracion() {
         }
     } while(opc != "0");
 }
+
+void MenuUsr::creaReporte(Academico& ac) {
+    //Creación del archivo a exportar
+    ofstream exportacion(string(DIRREP) + string(ac.getNombre()) + ".txt");
+    exportacion << "---------------------------------------------------------------" << endl;
+    exportacion << "Academico: " << ac.getNombre() << "    | Email: " << ac.getEmail() << endl;
+    exportacion << "Domicilio: " << ac.getDomicilio() << " ->  Ciudad: " << ac.getCiudad() << endl;
+    exportacion << "Telefono: " << ac.getTelefono() << "       | Estado civil: " << ac.getEstadoCivil() << endl;
+    exportacion << "---------------------------------------------------------------" << endl;
+    exportacion << "*****************Dependientes economicos***********************" << endl;
+    bool existe = false;
+    ifstream arch_dep(string(DIR) + string(ARCH_DEPENDIENTE));
+    while(!arch_dep.eof()) {
+        Dependiente dep;
+        arch_dep.read((char*)&dep, sizeof(Dependiente));
+        if(arch_dep.eof()) {
+            break;
+        }
+        if(dep.getNoReg() == ac.getNoReg()) {
+            exportacion << "Nombre: " << dep.getNombre() << " - > Edad: " << dep.getEdad() << endl;
+            existe = true;
+        }
+    }
+    arch_dep.close();
+    if(!existe) {
+        exportacion << "El academico no tiene ningun dependiente economico registrada." << endl;
+    }
+    exportacion << "---------------------------------------------------------------" << endl;
+    exportacion << "*********************Formación académica***********************" << endl;
+    existe = false;
+    ifstream arch_form(string(DIR) + string(ARCH_FORMACION));
+    while(!arch_form.eof()) {
+        Formacion form;
+        arch_form.read((char*)&form, sizeof(Formacion));
+        if(arch_form.eof()) {
+            break;
+        }
+        if(form.getNoReg() == ac.getNoReg()) {
+            exportacion << form.getTipo() << " " << form.getNombre() << endl;
+            exportacion << "Fecha de inicio: " << form.getFechaInicio().toString() << " - > Fecha de fin: " << form.getFechaFinal().toString() << endl;
+            exportacion << "Institución de procedencia: " <<form.getInstitucion() << "   | Fecha de obtención: " << form.getFechaObtencion().toString() << endl;
+            exportacion << "Número de cedula profesional: " << form.getCedula() << endl << endl;
+            existe = true;
+        }
+    }
+    arch_form.close();
+    if(!existe) {
+        exportacion << "El académico no tiene ninguna formación académica registrada." << endl;
+    }
+    exportacion << "---------------------------------------------------------------" << endl;
+    //Exportación de produccion académica
+    exportacion << "********************Producción académica***********************" << endl;
+    existe = false;
+    ifstream arch_pro(string(DIR) + string(ARCH_PRODUCCION));
+    while(!arch_pro.eof()) {
+        Produccion pro;
+        arch_pro.read((char*)&pro, sizeof(Produccion));
+        if(arch_pro.eof()) {
+            break;
+        }
+        if(pro.getNoReg() == ac.getNoReg()) {
+            exportacion << pro.getTipo() << " " << pro.getNombre() << endl;
+            exportacion << "Fecha de elaboración: " << pro.getFechaElaboracion().toString() << endl;
+            exportacion << "No.Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
+            exportacion << "Autores: " << endl;
+            bool ex = false;
+            ifstream arch_aut(string(DIR) + string(ARCH_AUTOR));
+            while(!arch_aut.eof()) {
+                Autor aut;
+                arch_aut.read((char*)&aut, sizeof(Autor));
+                if(arch_aut.eof()) {
+                    break;
+                }
+                if(string(aut.getNoRegistro()) == string(pro.getNoRegistro())) {
+                    exportacion << "Nombre: " << aut.getNombre() << endl;
+                    ex = true;
+                }
+            }
+            arch_aut.close();
+            if(!ex) {
+                exportacion << "La producción no tiene mas autores." << endl;
+            }
+
+            existe = true;
+        }
+    }
+    arch_pro.close();
+    if(!existe) {
+        exportacion << "El académico no tiene ninguna producción académica registrada." << endl;
+    }
+
+    exportacion << "***************************Docencia****************************" << endl;
+    existe = false;
+    ifstream arch_doc(string(DIR) + string(ARCH_DOCENCIA));
+    while(!arch_doc.eof()) {
+        Docencia doc;
+        arch_doc.read((char*)&doc, sizeof(Docencia));
+        if(arch_doc.eof()) {
+            break;
+        }
+        if(doc.getNoReg() == ac.getNoReg()) {
+            exportacion << "Materia: " << doc.getNombre() << " -> Horas semanales: " << doc.getCantidadHoras() << endl;
+            exportacion << "Fecha de inicio: " << doc.getFechaInicio().toString() << " -> Fecha de fin: " << doc.getFechaFin().toString() << endl << endl;
+            existe = true;
+        }
+    }
+    arch_doc.close();
+    if(!existe) {
+        exportacion << "El academico no tiene ninguna docencia registrada." << endl;
+    }
+    exportacion << "---------------------------------------------------------------" << endl;
+
+    exportacion << "***************************Tutorias****************************" << endl;
+    existe = false;
+    ifstream arch_tut(string(DIR) + string(ARCH_TUTORIA));
+    while(!arch_tut.eof()) {
+        Tutoria tut;
+        arch_tut.read((char*)&tut, sizeof(Tutoria));
+        if(arch_tut.eof()) {
+            break;
+        }
+        if(tut.getNoReg() == ac.getNoReg()) {
+            exportacion << "Nombre del alumno tutorado: " << tut.getNombreTutorado() << " -> Horas semanales: " << tut.getCantidadHoras() << endl;
+            exportacion << "Fecha de inicio: " << tut.getFechaInicio().toString() << " -> Fecha de fin: " << tut.getFechaFin().toString() << endl << endl;
+            existe = true;
+        }
+    }
+    arch_tut.close();
+    if(!existe) {
+        exportacion << "El académico no tiene ningun alumno tutorado registrado." << endl;
+    }
+    exportacion << "---------------------------------------------------------------" << endl;
+    exportacion.close();
+}
+
+
 
 bool MenuUsr::fechaCorrecta(const std::string& fecha) {
     regex rx("[0-9]{2}/[0-9]{2}/[0-9]{4}");
