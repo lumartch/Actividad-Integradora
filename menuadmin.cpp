@@ -142,7 +142,6 @@ void MenuAdmin::mostrarUsuario() {
         Usuario usr;
         arch_usr.read((char*)&usr, sizeof(Usuario));
         if(arch_usr.eof()) { break; }
-
         Academico ac;
         cout << "Usuario #" << usr.getNoRegistro() << endl;
         cout << usr.toString() << endl;
@@ -164,10 +163,10 @@ void MenuAdmin::modificarUsuario() {
         long int posArchivo;
         Usuario usr;
         fstream arch_usr(string(DIR) + string(ARCH_USR), ios::in|ios::out);
-        while(!arch_usr.eof()){
+        while(!arch_usr.eof()) {
             arch_usr.read((char*)& usr, sizeof(Usuario));
             if(arch_usr.eof()) { break; }
-            if(string(usr.getUsername()) == username){
+            if(string(usr.getUsername()) == username) {
                 posArchivo = arch_usr.tellg();
                 posArchivo -= sizeof(Usuario);
                 break;
@@ -176,21 +175,20 @@ void MenuAdmin::modificarUsuario() {
         arch_usr.close();
 
         string opc;
-        do{
+        do {
             system(CLEAR);
             cout << "*** Modificación de datos del usuario " << usr.getUsername() << " ***" << endl << endl;
             cout << "1) Restaurar contraseña." << endl;
             cout << "2) Cambiar tipo de usuario" << endl;
             cout << "0) Salir..." << endl << endl;
-            do{
+            do {
                 cout << ">> ";
                 getline(cin, opc);
-            }while(opc != "1" and opc != "2" and opc != "0");
-            if(opc == "1"){
+            } while(opc != "1" and opc != "2" and opc != "0");
+            if(opc == "1") {
                 cout << endl << "El usuario se restaurara con una contraseña simple. Contraseña de temporal: 123" << endl;
                 usr.setPassword("123");
-            }
-            else if(opc == "2"){
+            } else if(opc == "2") {
                 string tipo;
                 cout << endl << "Elija el tipo de usuario." << endl;
                 cout << "1) Administrador." << endl;
@@ -204,25 +202,24 @@ void MenuAdmin::modificarUsuario() {
                 } else {
                     usr.setTipo("User");
                 }
-            }
-            else{
+            } else {
                 fstream arch(string(DIR) + string(ARCH_USR), ios::in|ios::out);
                 arch.seekg(posArchivo,ios::beg);
                 arch.write((char*)&usr, sizeof(Usuario));
                 arch.close();
                 cout << "Modificación completa de usuario..." << endl;
             }
-            if(opc != "0"){
+            if(opc != "0") {
                 pausa();
             }
-        }while(opc != "0");
+        } while(opc != "0");
     } else {
         cout << "No existe el usuario buscado.";
     }
 }
 
 void MenuAdmin::eliminarUsuario() {
-system(CLEAR);
+    system(CLEAR);
     string username;
     cout << "*** Eliminación de usuario ***" << endl << endl;
     cout << "Tome en cuenta que la eliminación de usuario, " << endl << "no eliminara la información como académico." << endl;
@@ -231,14 +228,13 @@ system(CLEAR);
     getline(cin, username);
     if(existeUsername(username)) {
         ifstream leer(string(DIR) + string(ARCH_USR));
-        while(!leer.eof()){
+        while(!leer.eof()) {
             Usuario usr;
             leer.read((char*)&usr, sizeof(Usuario));
-            if(leer.eof()){ break; }
-            if(string(usr.getUsername()) == username){
+            if(leer.eof()) { break; }
+            if(string(usr.getUsername()) == username) {
                 cout << endl << "Eliminando al usuario: " << usr.getUsername() << endl;
-            }
-            else{
+            } else {
                 ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                 escribir.write((char*)&usr, sizeof(Usuario));
                 escribir.close();
@@ -285,14 +281,19 @@ void MenuAdmin::administrarAcademicos() {
 void MenuAdmin::mostrarAcademicos() {
     cout << "*** Mostrar académicos ***"<< endl << endl;
     ifstream arch_ac(string(DIR) + string(ARCH_AC));
-    int i = 1;
-    while(!arch_ac.eof()) {
-        Academico ac;
-        arch_ac.read((char*)&ac, sizeof(Academico));
-        if(arch_ac.eof()) { break; }
-        cout << "Académico #" << i << endl;
-        cout << ac.toString()<< endl << endl;
-        i++;
+    if(!arch_ac.good()){
+        cout << "No hay academicos registrados." << endl;
+    }
+    else{
+        int i = 1;
+        while(!arch_ac.eof()) {
+            Academico ac;
+            arch_ac.read((char*)&ac, sizeof(Academico));
+            if(arch_ac.eof()) { break; }
+            cout << "Académico #" << i << endl;
+            cout << ac.toString()<< endl << endl;
+            i++;
+        }
     }
     arch_ac.close();
 }
@@ -306,6 +307,12 @@ void MenuAdmin::modificarAcademico() {
 
     Lista listaResultado;
     ifstream arch_ac(string(DIR) + string(ARCH_AC));
+    if(!arch_ac.good()){
+        cout << "No hay academicos registrados." << endl;
+        arch_ac.close();
+        return;
+    }
+
     while(!arch_ac.eof()) {
         Academico ac;
         arch_ac.read((char*)&ac, sizeof(Academico));
@@ -315,6 +322,7 @@ void MenuAdmin::modificarAcademico() {
         }
     }
     arch_ac.close();
+
     if(listaResultado.estaVacia()) {
         cout << "Ningún academico coincidio en la busqueda." << endl;
     } else {
@@ -358,13 +366,17 @@ void MenuAdmin::infoPersonal(Academico& ac) {
         cout << "5) Actualizar email." << endl;
         cout << "6) Actualizar estado civil." << endl;
         cout << "7) Administrar dependientes economicos." << endl;
-        cout << "8) Mostrar información de académico." << endl;
+        cout << "8) Administrar formación académica." << endl;
+        cout << "9) Administrar docencia académica." << endl;
+        cout << "10) Administrar tutoria académica." << endl;
+        cout << "11) Mostrar información de académico." << endl;
         cout << "0) Salir..." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
         } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and
-                opc != "5" and opc != "6" and opc != "7"  and opc != "8" and opc != "0");
+                opc != "5" and opc != "6" and opc != "7"  and opc != "8" and
+                opc != "9" and opc != "10"  and opc != "11" and opc != "0");
         //Edicion del perfil de usuario
         if(opc == "1") {
             string nombre;
@@ -426,6 +438,12 @@ void MenuAdmin::infoPersonal(Academico& ac) {
         } else if(opc == "7") {
             dependientesEconomicos(ac);
         } else if(opc == "8") {
+            formacion(ac);
+        } else if(opc == "9") {
+            docencia(ac);
+        } else if(opc == "10") {
+            tutoria(ac);
+        } else if(opc == "11") {
             system(CLEAR);
             cout << "---------------------------------------------------------------" << endl;
             cout << "Academico: " << ac.getNombre() << "    | Email: " << ac.getEmail() << endl;
@@ -435,16 +453,15 @@ void MenuAdmin::infoPersonal(Academico& ac) {
         } else {
             //Guarda la información recien modificada
             ifstream leer(string(DIR) + string(ARCH_AC));
-            while(!leer.eof()){
+            while(!leer.eof()) {
                 Academico auxAcademico;
                 leer.read((char*)&auxAcademico, sizeof(Academico));
-                if(leer.eof()){ break; }
-                if(ac.getNoReg() == auxAcademico.getNoReg()){
+                if(leer.eof()) { break; }
+                if(ac.getNoReg() == auxAcademico.getNoReg()) {
                     ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                     escribir.write((char*)&ac, sizeof(Academico));
                     escribir.close();
-                }
-                else{
+                } else {
                     ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                     escribir.write((char*)&auxAcademico, sizeof(Academico));
                     escribir.close();
@@ -485,7 +502,7 @@ void MenuAdmin::dependientesEconomicos(Academico& ac) {
                 //Revisar si no hay homonimos
                 cout << endl << "Ingrese el nombre del dependiente: ";
                 getline(cin, nombre);
-                if(existeDependiente(nombre)) {
+                if(existeDependiente(nombre, ac)) {
                     cout << "El nombre del dependiente ya existe. Intente de nuevo." << endl;
                     bandera = true;
                 } else {
@@ -526,9 +543,7 @@ void MenuAdmin::dependientesEconomicos(Academico& ac) {
             while(!file.eof()) {
                 Dependiente dep;
                 file.read((char*)&dep, sizeof(Dependiente));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
                 if(dep.getNoReg() == ac.getNoReg()) {
                     bandera = true;
@@ -546,14 +561,16 @@ void MenuAdmin::dependientesEconomicos(Academico& ac) {
             string nombre;
             cout << endl << "Ingrese el nombre del dependiente a modificar: ";
             getline(cin, nombre);
-            if(existeDependiente(nombre)) {
+            if(existeDependiente(nombre, ac)) {
                 Dependiente dep;
                 long int posArchivo = 0;
                 //Busca al dependiente dentro del archivo
                 fstream file_out(string(DIR) + string(ARCH_DEPENDIENTE), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()) { break; }
+                    if(file_out.eof()) {
+                        break;
+                    }
                     //Rompe el ciclo cuando encuentra al Dependiente para modificarlo
                     if(string(dep.getNombre()) == nombre and dep.getNoReg() == ac.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -583,7 +600,7 @@ void MenuAdmin::dependientesEconomicos(Academico& ac) {
                         do {
                             cout << endl << "Ingrese el nuevo nombre del dependiente: ";
                             getline(cin, nombre);
-                            if(existeDependiente(nombre)) {
+                            if(existeDependiente(nombre, ac)) {
                                 cout << "El nombre de dependiente ya existe, intente con uno nuevo." << endl;
                                 bandera = true;
                             } else {
@@ -621,14 +638,12 @@ void MenuAdmin::dependientesEconomicos(Academico& ac) {
             string nombre;
             cout << endl << "Ingrese el nombre del dependiente a eliminar: ";
             getline(cin, nombre);
-            if(existeDependiente(nombre)) {
+            if(existeDependiente(nombre, ac)) {
                 ifstream file_out(string(DIR) + string(ARCH_DEPENDIENTE));
                 while(!file_out.eof()) {
                     Dependiente dep;
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
                     if(string(dep.getNombre()) == nombre and dep.getNoReg() == ac.getNoReg()) {
                         cout << "Eliminando: " << dep.getNombre() << endl;
@@ -694,7 +709,7 @@ void MenuAdmin::formacion(Academico& ac) {
             cout << "Ingrese el nombre del grado: ";
             getline(cin, nombreGrado);
             //Si ya existe el grado no lo guarda y regresa al menu principal
-            if(existeFormacion(tipoGrado, nombreGrado)) {
+            if(existeFormacion(tipoGrado, nombreGrado, ac)) {
                 cout << endl << "La formación intenta agregar ya existe. Es imposible registrarla." << endl;
                 return;
             }
@@ -799,16 +814,14 @@ void MenuAdmin::formacion(Academico& ac) {
             cout << endl << "Ingrese el nombre: ";
             getline(cin, nombreGrado);
             //Verifica si existe la formación académica
-            if(existeFormacion(tipoGrado, nombreGrado)) {
+            if(existeFormacion(tipoGrado, nombreGrado, ac)) {
                 Formacion form;
                 long int posArchivo = 0;
                 //Busca al dependiente dentro del archivo
                 fstream file_out(string(DIR) + string(ARCH_FORMACION), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&form, sizeof(Formacion));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
                     if(string(form.getTipo()) == tipoGrado and string(form.getNombre()) == nombreGrado
                             and form.getNoReg() == ac.getNoReg()) {
@@ -855,7 +868,7 @@ void MenuAdmin::formacion(Academico& ac) {
                         } else {
                             tipoGrado = "Doctorado";
                         }
-                        if(existeFormacion(tipoGrado, form.getNombre())) {
+                        if(existeFormacion(tipoGrado, form.getNombre(), ac)) {
                             cout << endl << "La formación intenta agregar ya existe. Es imposible registrarla." << endl;
                         } else {
                             form.setTipo(tipoGrado);
@@ -864,7 +877,7 @@ void MenuAdmin::formacion(Academico& ac) {
                         string nombreGrado;
                         cout << "Ingrese el nombre del grado: ";
                         getline(cin, nombreGrado);
-                        if(existeFormacion(form.getTipo(), nombreGrado)) {
+                        if(existeFormacion(form.getTipo(), nombreGrado, ac)) {
                             cout << endl << "La formación intenta agregar ya existe. Es imposible registrarla." << endl;
                         } else {
                             form.setNombre(nombreGrado);
@@ -948,7 +961,7 @@ void MenuAdmin::formacion(Academico& ac) {
             cout << endl << "Ingrese el nombre: ";
             getline(cin, nombreGrado);
             //Verifica si existe la formación académica
-            if(existeFormacion(tipoGrado, nombreGrado)) {
+            if(existeFormacion(tipoGrado, nombreGrado, ac)) {
                 fstream file_out(string(DIR) + string(ARCH_FORMACION));
                 while(!file_out.eof()) {
                     //Lee el objeto
@@ -985,6 +998,451 @@ void MenuAdmin::formacion(Academico& ac) {
     } while(opc != "0");
 }
 
+void MenuAdmin::docencia(Academico& ac) {
+    string opc;
+    do {
+        system(CLEAR);
+        cout << "*** Administracion de la docencia - "<< ac.getNombre() <<" ***" << endl << endl;
+        cout << "1) Agregar nueva materia." << endl;
+        cout << "2) Mostrar materia." << endl;
+        cout << "3) Modificar materia." << endl;
+        cout << "4) Eliminar materia." << endl;
+        cout << "0) Salir..." << endl << endl;
+        do {
+            cout << ">> ";
+            getline(cin, opc);
+        } while(opc != "0" and opc != "1" and opc != "2" and opc != "3" and opc != "4");
+        if(opc == "1") {
+            cout << endl;
+            Docencia doc;
+            string nombre, fecha, horasSemanales;
+            Fecha fechaIni, fechaFin;
+
+            cout << "Ingrese el nombre de la materia: ";
+            getline(cin, nombre);
+            if(existeDocencia(nombre, ac)) {
+                cout << "Ya existe la materia. Es imposible registrarla." << endl << endl;
+            } else {
+
+                do {
+                    cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaIni = regresaFecha(fecha);
+
+                do {
+                    cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaFin = regresaFecha(fecha);
+
+                do {
+                    cout << "Ingrese las horas semanales: ";
+                    getline(cin, horasSemanales);
+                    if(!formatoNumero(horasSemanales)) {
+                        cout << "El formato no es númerico. Intente de nuevo." << endl;
+                    }
+                } while(!formatoNumero(horasSemanales));
+
+                //Guarda informacion dentro del objeto
+                doc.setNoReg(ac.getNoReg());
+                doc.setNombre(nombre);
+                doc.setFechaInicio(fechaIni);
+                doc.setFechaFin(fechaFin);
+                doc.setCantidadHoras(horasSemanales);
+
+                //Guarda en el archivo
+                guardaDocencia(doc, string(DIR) + string(ARCH_DOCENCIA));
+                cout << endl <<"¡Nueva materia agregada exitosamente!";
+            }
+        } else if(opc == "2") {
+            system(CLEAR);
+            cout << "*** Docencia académica actual de " << ac.getNombre() << " ***" << endl << endl;
+            ifstream file(string(DIR) + string(ARCH_DOCENCIA));
+            if(!file.good()) {
+                file.close();
+                ofstream file_form(string(DIR) + string(ARCH_DOCENCIA));
+                file_form.close();
+                cout << "ERROR. No existe el archivo. Creando archivo...";
+                return;
+            }
+            bool bandera = false;
+            while(!file.eof()) {
+                Docencia doc;
+                file.read((char*)&doc, sizeof(Docencia));
+                if(file.eof()) { break; }
+                //Busca si existe el nombre de dependiente por el usuario
+                if(doc.getNoReg() == ac.getNoReg()) {
+                    bandera = true;
+                    cout << "Materia: " << doc.getNombre() << endl;
+                    cout << "Fecha de inicio: " << doc.getFechaInicio().toString() << " -> Fecha de fin: " << doc.getFechaFin().toString() << endl;
+                    cout << "Horas semanales: " << doc.getCantidadHoras() << endl << endl;
+                }
+            }
+            file.close();
+            if(!bandera) {
+                cout << "No hay materias registradas para este usuario." << endl;
+            }
+        } else if(opc == "3") {
+            system(CLEAR);
+            string nombre;
+            cout << "*** Modificar materia de " << ac.getNombre() << " ***" << endl << endl;
+            cout << "Ingrese el nombre de la materia a modificar: ";
+            getline(cin, nombre);
+            //Verifica si existe la formación académica
+            if(existeDocencia(nombre, ac)) {
+                Docencia doc;
+                long int posArchivo = 0;
+                //Busca al dependiente dentro del archivo
+                fstream file_out(string(DIR) + string(ARCH_DOCENCIA), ios::in|ios::out);
+                while(!file_out.eof()) {
+                    file_out.read((char*)&doc, sizeof(Docencia));
+                    if(file_out.eof()) { break; }
+                    //Rompe el ciclo cuando encuentra la formacion para modificarla
+                    if(string(doc.getNombre()) == nombre and doc.getNoReg() == ac.getNoReg()) {
+                        //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                        posArchivo = file_out.tellg();
+                        posArchivo -= sizeof(Docencia);
+                        break;
+                    }
+                }
+                file_out.close();
+                //Menu de modificación
+                string opc;
+                do {
+                    system(CLEAR);
+                    cout << "*** Modificación de la materia " << doc.getNombre() << " ***" << endl << endl;
+                    cout << "1) Nombre" << endl;
+                    cout << "2) Fecha de inicio." << endl;
+                    cout << "3) Fecha de fin." << endl;
+                    cout << "4) Horas semanales." << endl;
+                    cout << "0) Salir..." << endl << endl;
+                    do {
+                        cout << ">> ";
+                        getline(cin, opc);
+                    } while(opc != "0" and opc != "1" and opc != "2" and opc != "3" and opc != "4");
+                    cout << endl;
+                    if(opc == "1") {
+                        string nombre;
+                        cout << "Ingrese el nombre de la materia: ";
+                        getline(cin, nombre);
+                        if(existeDocencia(nombre, ac)) {
+                            cout << "Ya existe la materia. Es imposible registrarla." << endl << endl;
+                        } else {
+                            doc.setNombre(nombre);
+                        }
+                    } else if (opc == "2") {
+                        Fecha fechaIni;
+                        string fecha;
+                        do {
+                            cout << "Ingrese la fecha de inicio de cursos (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaIni = regresaFecha(fecha);
+                        doc.setFechaInicio(fechaIni);
+                    } else if (opc == "3") {
+                        Fecha fechaFin;
+                        string fecha;
+                        do {
+                            cout << "Ingrese la fecha de fin de cursos (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaFin = regresaFecha(fecha);
+
+                        doc.setFechaFin(fechaFin);
+                    } else if (opc == "4") {
+                        string horasSemanales;
+                        do {
+                            cout << "Ingrese las horas semanales: ";
+                            getline(cin, horasSemanales);
+                            if(!formatoNumero(horasSemanales)) {
+                                cout << "El formato no es númerico. Intente de nuevo." << endl;
+                            }
+                        } while(!formatoNumero(horasSemanales));
+                        doc.setCantidadHoras(horasSemanales);
+                    } else {
+                        fstream file(string(DIR) + string(ARCH_DOCENCIA), ios::in|ios::out);
+                        file.seekg(posArchivo, ios::beg);
+                        file.write((char*)& doc, sizeof(Docencia));
+                        file.close();
+                        cout << endl << "Modificación completa de la materia.";
+                    }
+                } while(opc != "0");
+            } else {
+                cout << endl << "No existe la materia.";
+            }
+        } else if(opc == "4") {
+            system(CLEAR);
+            string nombre;
+            cout << "*** Eliminando materia de " << ac.getNombre() << " ***" << endl << endl;
+            cout << "Ingrese el nombre de la materia a eliminar: ";
+            getline(cin, nombre);
+            //Verifica si existe la formación académica
+            if(existeDocencia(nombre, ac)) {
+                ifstream file_out(string(DIR) + string(ARCH_DOCENCIA));
+                while(!file_out.eof()) {
+                    Docencia doc;
+                    file_out.read((char*)&doc, sizeof(Docencia));
+                    if(file_out.eof()) { break; }
+                    //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
+                    if(string(doc.getNombre()) == nombre and doc.getNoReg() == ac.getNoReg()) {
+                        cout << "Eliminando: " << doc.getNombre() << endl;
+                    } else {
+                        guardaDocencia(doc, string(DIR) + "Temporal.txt");
+                    }
+                }
+                file_out.close();
+                //Eliminacion del archivo viejo y sustitucion por el nuevo
+                string rem = string(DIR) + string(ARCH_DOCENCIA);
+                string rena = string(DIR) + "Temporal.txt";
+                remove(rem.c_str());
+                rename(rena.c_str(), rem.c_str());
+                cout << "Se elimino la materia exitosamente.";
+            } else {
+                cout << endl << "No existe la materia.";
+            }
+        } else {
+            cout << endl << "Regresando al menú de administración de información personal...";
+        }
+        if(opc != "0") {
+            pausa();
+        }
+    } while(opc != "0");
+}
+
+void MenuAdmin::tutoria(Academico& ac) {
+    string opc;
+    do {
+        system(CLEAR);
+        cout << "*** Administración de la tutoria - "<< ac.getNombre() <<" ***" << endl << endl;
+        cout << "1) Agregar nuevo alumno tutorado." << endl;
+        cout << "2) Mostrar alumnos tutorados." << endl;
+        cout << "3) Modificar alumno tutorado." << endl;
+        cout << "4) Eliminar alumno tutorado." << endl;
+        cout << "0) Salir..." << endl;
+        do {
+            cout << ">> ";
+            getline(cin, opc);
+        } while(opc != "0" and opc != "1" and opc != "2" and opc != "3" and opc != "4");
+        cout << endl;
+        if(opc == "1") {
+            cout << endl;
+            Tutoria tut;
+            string nombre, fecha, horasSemanales;
+            Fecha fechaIni, fechaFin;
+            cout << "Ingrese el nombre del alumno tutorado: ";
+            getline(cin, nombre);
+            if(existeTutoria(nombre, ac)) {
+                cout << "Ya existe el alumno tutorado. Es imposible registrarlo." << endl << endl;
+            } else {
+                do {
+                    cout << "Ingrese la fecha de inicio de tutoria (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaIni = regresaFecha(fecha);
+
+                do {
+                    cout << "Ingrese la fecha de fin de tutorias (Formato: DD/MM/AAAA): ";
+                    getline(cin, fecha);
+                    if(!fechaCorrecta(fecha)) {
+                        cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                    }
+                } while(!fechaCorrecta(fecha));
+                fechaFin = regresaFecha(fecha);
+                do {
+                    cout << "Ingrese las horas semanales de tutorias: ";
+                    getline(cin, horasSemanales);
+                    if(!formatoNumero(horasSemanales)) {
+                        cout << "El formato no es númerico. Intente de nuevo." << endl;
+                    }
+                } while(!formatoNumero(horasSemanales));
+                //Guarda informacion dentro del objeto
+                tut.setNoReg(ac.getNoReg());
+                tut.setNombreTutorado(nombre);
+                tut.setFechaInicio(fechaIni);
+                tut.setFechaFin(fechaFin);
+                tut.setCantidadHoras(horasSemanales);
+                //Guarda en el archivo
+                guardaTutoria(tut, string(DIR) + string(ARCH_TUTORIA));
+                cout << endl <<"¡Nuevo alumno tutorado agregado exitosamente!";
+            }
+        } else if(opc == "2") {
+            system(CLEAR);
+            cout << "*** Alumnos tutorados de " << ac.getNombre() << " ***" << endl << endl;
+            ifstream file(string(DIR) + string(ARCH_TUTORIA));
+            if(!file.good()) {
+                file.close();
+                ofstream file_tut(string(DIR) + string(ARCH_TUTORIA));
+                file_tut.close();
+                cout << "ERROR. No existe el archivo. Creando archivo...";
+                return;
+            }
+            bool bandera = false;
+            while(!file.eof()) {
+                Tutoria tut;
+                file.read((char*)&tut, sizeof(Tutoria));
+                if(file.eof()) { break; }
+                //Busca si existe el nombre de dependiente por el usuario
+                if(tut.getNoReg() == ac.getNoReg()) {
+                    bandera = true;
+                    cout << "Alumno tutorado: " << tut.getNombreTutorado() << endl;
+                    cout << "Fecha de inicio: " << tut.getFechaInicio().toString() << " -> Fecha de fin: " << tut.getFechaFin().toString() << endl;
+                    cout << "Horas semanales: " << tut.getCantidadHoras() << endl << endl;
+                }
+            }
+            file.close();
+            if(!bandera) {
+                cout << "No hay alumnos tutorados registrados para este usuario." << endl;
+            }
+        } else if(opc == "3") {
+            system(CLEAR);
+            string nombre;
+            cout << "*** Modificar alumno tutorado de " << ac.getNombre() << " ***" << endl << endl;
+            cout << "Ingrese el nombre del alumno a modificar: ";
+            getline(cin, nombre);
+            //Verifica si existe la formación académica
+            if(existeTutoria(nombre, ac)) {
+                Tutoria tut;
+                long int posArchivo = 0;
+                //Busca al dependiente dentro del archivo
+                fstream file_out(string(DIR) + string(ARCH_TUTORIA), ios::in|ios::out);
+                while(!file_out.eof()) {
+                    file_out.read((char*)&tut, sizeof(Tutoria));
+                    if(file_out.eof()) { break; }
+                    //Rompe el ciclo cuando encuentra la formacion para modificarla
+                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == ac.getNoReg()) {
+                        //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
+                        posArchivo = file_out.tellg();
+                        posArchivo -= sizeof(Tutoria);
+                        break;
+                    }
+                }
+                file_out.close();
+                //Menu de modificación
+                string opc;
+                do {
+                    system(CLEAR);
+                    cout << "*** Modificación del alumno " << tut.getNombreTutorado() << " ***" << endl << endl;
+                    cout << "1) Nombre" << endl;
+                    cout << "2) Fecha de inicio." << endl;
+                    cout << "3) Fecha de fin." << endl;
+                    cout << "4) Horas semanales." << endl;
+                    cout << "0) Salir..." << endl << endl;
+                    do {
+                        cout << ">> ";
+                        getline(cin, opc);
+                    } while(opc != "0" and opc != "1" and opc != "2" and opc != "3" and opc != "4");
+                    cout << endl;
+                    if(opc == "1") {
+                        string nombre;
+                        cout << "Ingrese el nombre de la materia: ";
+                        getline(cin, nombre);
+                        if(existeTutoria(nombre, ac)) {
+                            cout << "Ya existe el alumno tutorado. Es imposible registrarlo." << endl << endl;
+                        } else {
+                            tut.setNombreTutorado(nombre);
+                        }
+                    } else if (opc == "2") {
+                        Fecha fechaIni;
+                        string fecha;
+                        do {
+                            cout << "Ingrese la fecha de inicio de tutorias (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaIni = regresaFecha(fecha);
+
+                        tut.setFechaInicio(fechaIni);
+                    } else if (opc == "3") {
+                        Fecha fechaFin;
+                        string fecha;
+                        do {
+                            cout << "Ingrese la fecha de fin de tutorias (Formato: DD/MM/AAAA): ";
+                            getline(cin, fecha);
+                            if(!fechaCorrecta(fecha)) {
+                                cout << "El formato de fecha es incorrecto. Intente de nuevo." << endl << endl;
+                            }
+                        } while(!fechaCorrecta(fecha));
+                        fechaFin = regresaFecha(fecha);
+
+                        tut.setFechaFin(fechaFin);
+                    } else if (opc == "4") {
+                        string horasSemanales;
+                        do {
+                            cout << "Ingrese las horas semanales: ";
+                            getline(cin, horasSemanales);
+                            if(!formatoNumero(horasSemanales)) {
+                                cout << "El formato no es númerico. Intente de nuevo." << endl;
+                            }
+                        } while(!formatoNumero(horasSemanales));
+                        tut.setCantidadHoras(horasSemanales);
+                    } else {
+                        fstream file(string(DIR) + string(ARCH_TUTORIA), ios::in|ios::out);
+                        file.seekg(posArchivo, ios::beg);
+                        file.write((char*)& tut, sizeof(Tutoria));
+                        file.close();
+                        cout << endl << "Modificación completa del alumno tutorado.";
+                    }
+                } while(opc != "0");
+            } else {
+                cout << endl << "No existe la materia.";
+            }
+        } else if(opc == "4") {
+            system(CLEAR);
+            string nombre;
+            cout << "*** Eliminando alumno tutorado de " << ac.getNombre() << " ***" << endl << endl;
+            cout << "Ingrese el nombre del alumno a eliminar: ";
+            getline(cin, nombre);
+            //Verifica si existe la formación académica
+            if(existeTutoria(nombre, ac)) {
+                ifstream file_out(string(DIR) + string(ARCH_TUTORIA));
+                while(!file_out.eof()) {
+                    Tutoria tut;
+                    file_out.read((char*)&tut, sizeof(Tutoria));
+                    if(file_out.eof()) { break; }
+                    //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
+                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == ac.getNoReg()) {
+                        cout << "Eliminando: " << tut.getNombreTutorado() << endl;
+                    } else {
+                        guardaTutoria(tut, string(DIR) + "Temporal.txt");
+                    }
+                }
+                file_out.close();
+                //Eliminacion del archivo viejo y sustitucion por el nuevo
+                string rem = string(DIR) + string(ARCH_TUTORIA);
+                string rena = string(DIR) + "Temporal.txt";
+                remove(rem.c_str());
+                rename(rena.c_str(), rem.c_str());
+                cout << "Se elimino el alumno exitosamente.";
+            } else {
+                cout << endl << "No existe la el alumno tutorado.";
+            }
+        } else {
+            cout << endl << "Regresando al menú de administración de información personal...";
+        }
+        if(opc != "0") {
+            pausa();
+        }
+    } while(opc != "0");
+}
+
 void MenuAdmin::eliminarAcademico() {
     system(CLEAR);
     string nombre;
@@ -995,11 +1453,19 @@ void MenuAdmin::eliminarAcademico() {
     getline(cin, nombre);
     Lista listaResultado;
     ifstream arch_ac(string(DIR) + string(ARCH_AC));
+
+    if(!arch_ac.good()){
+        arch_ac.close();
+        cout << "No existen académicos registrados." << endl;
+        return;
+    }
+
     while(!arch_ac.eof()) {
         Academico ac;
         arch_ac.read((char*)&ac, sizeof(Academico));
         if(arch_ac.eof()) { break; }
-        if(strstr(ac.getNombre(), nombre.c_str())) {
+        //Busca las coincidencias con la substring, evitando que sea la cuenta actual o la cuenta primaria de administrador
+        if(strstr(ac.getNombre(), nombre.c_str()) and ac.getNoReg() != this->academico.getNoReg() and ac.getNoReg() != 1) {
             listaResultado.insertar(listaResultado.ultimaPos(), ac);
         }
     }
@@ -1033,15 +1499,14 @@ void MenuAdmin::eliminarAcademico() {
 
             //Elimina informacion de Usuario
             ifstream arch_usr(string(DIR) + string(ARCH_USR));
-            if(arch_usr.good()){
-                while(!arch_usr.eof()){
+            if(arch_usr.good()) {
+                while(!arch_usr.eof()) {
                     Usuario usr;
                     arch_usr.read((char*)&usr, sizeof(Usuario));
-                    if(arch_usr.eof()){ break; }
-                    if(usr.getNoRegistro() == academicoDelete.getNoReg()){
+                    if(arch_usr.eof()) { break; }
+                    if(usr.getNoRegistro() == academicoDelete.getNoReg()) {
                         //cout << endl << "Eliminando al usuario: " << usr.getUsername() << endl;
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&usr, sizeof(Usuario));
                         escribir.close();
@@ -1057,15 +1522,14 @@ void MenuAdmin::eliminarAcademico() {
 
             //Elimina informacion de academico
             ifstream arch_academico(string(DIR) + string(ARCH_AC));
-            if(arch_academico.good()){
-                while(!arch_academico.eof()){
+            if(arch_academico.good()) {
+                while(!arch_academico.eof()) {
                     Academico academico;
                     arch_academico.read((char*)&academico, sizeof(Academico));
-                    if(arch_academico.eof()){ break; }
-                    if(academico.getNoReg() == academicoDelete.getNoReg()){
+                    if(arch_academico.eof()) { break; }
+                    if(academico.getNoReg() == academicoDelete.getNoReg()) {
                         //cout << endl << "Eliminando al usuario: " << usr.getUsername() << endl;
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&academico, sizeof(Academico));
                         escribir.close();
@@ -1081,14 +1545,13 @@ void MenuAdmin::eliminarAcademico() {
 
             //Elimina dependientes
             ifstream arch_dep(string(DIR) + string(ARCH_DEPENDIENTE));
-            if(arch_dep.good()){
+            if(arch_dep.good()) {
                 while(!arch_dep.eof()) {
                     Dependiente dep;
                     arch_dep.read((char*)&dep, sizeof(Dependiente));
                     if(arch_dep.eof()) { break; }
                     if(dep.getNoReg() == academicoDelete.getNoReg()) {
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&dep, sizeof(Dependiente));
                         escribir.close();
@@ -1104,14 +1567,13 @@ void MenuAdmin::eliminarAcademico() {
 
             //Elimina Formacion academica
             ifstream arch_form(string(DIR) + string(ARCH_FORMACION));
-            if(arch_form.good()){
+            if(arch_form.good()) {
                 while(!arch_form.eof()) {
                     Formacion form;
                     arch_form.read((char*)&form, sizeof(Formacion));
                     if(arch_form.eof()) { break; }
                     if(form.getNoReg() == academicoDelete.getNoReg()) {
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&form, sizeof(Formacion));
                         escribir.close();
@@ -1126,7 +1588,7 @@ void MenuAdmin::eliminarAcademico() {
 
             //Eliminacion de produccion
             ifstream arch_pro(string(DIR) + string(ARCH_PRODUCCION));
-            if(arch_pro.good()){
+            if(arch_pro.good()) {
                 while(!arch_pro.eof()) {
                     Produccion pro;
                     arch_pro.read((char*)&pro, sizeof(Produccion));
@@ -1134,14 +1596,13 @@ void MenuAdmin::eliminarAcademico() {
                     if(pro.getNoReg() == academicoDelete.getNoReg()) {
                         //Eliminacion de co-autores
                         ifstream arch_aut(string(DIR) + string(ARCH_AUTOR));
-                        if(arch_aut.good()){
+                        if(arch_aut.good()) {
                             while(!arch_aut.eof()) {
                                 Autor aut;
                                 arch_aut.read((char*)&aut, sizeof(Autor));
                                 if(arch_aut.eof()) { break; }
                                 if(string(aut.getNoRegistro()) == string(pro.getNoRegistro())) {
-                                }
-                                else{
+                                } else {
                                     ofstream escribir(string(DIR) + "Temp_Autor.txt", ios::app);
                                     escribir.write((char*)&aut, sizeof(Autor));
                                     escribir.close();
@@ -1155,8 +1616,7 @@ void MenuAdmin::eliminarAcademico() {
                         }
                         arch_aut.close();
 
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&pro, sizeof(Produccion));
                         escribir.close();
@@ -1170,19 +1630,15 @@ void MenuAdmin::eliminarAcademico() {
             }
             arch_pro.close();
 
-
             //Eliminacion de docencia
             ifstream arch_doc(string(DIR) + string(ARCH_DOCENCIA));
-            if(arch_doc.good()){
+            if(arch_doc.good()) {
                 while(!arch_doc.eof()) {
                     Docencia doc;
                     arch_doc.read((char*)&doc, sizeof(Docencia));
-                    if(arch_doc.eof()) {
-                        break;
-                    }
+                    if(arch_doc.eof()) { break; }
                     if(doc.getNoReg() == academicoDelete.getNoReg()) {
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&doc, sizeof(Docencia));
                         escribir.close();
@@ -1198,14 +1654,13 @@ void MenuAdmin::eliminarAcademico() {
 
             //Elimina Tutoria
             ifstream arch_tut(string(DIR) + string(ARCH_TUTORIA));
-            if(arch_tut.good()){
+            if(arch_tut.good()) {
                 while(!arch_tut.eof()) {
                     Tutoria tut;
                     arch_tut.read((char*)&tut, sizeof(Tutoria));
                     if(arch_tut.eof()) { break; }
                     if(tut.getNoReg() == academicoDelete.getNoReg()) {
-                    }
-                    else{
+                    } else {
                         ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                         escribir.write((char*)&tut, sizeof(Tutoria));
                         escribir.close();
@@ -1258,6 +1713,9 @@ void MenuAdmin::pausa() {
 bool MenuAdmin::existeUsername(const std::string& username) {
     ifstream file(string(DIR) + string(ARCH_USR));
     if(!file.good()) {
+        file.close();
+        ofstream file_usr(string(DIR) + string(ARCH_USR));
+        file_usr.close();
         return false;
     }
     bool resultado = false;
@@ -1322,7 +1780,7 @@ void MenuAdmin::guardaDependiente(Dependiente& dep, const std::string& archivo) 
     file.close();
 }
 
-bool MenuAdmin::existeDependiente(const std::string& nombre) {
+bool MenuAdmin::existeDependiente(const std::string& nombre, Academico &ac) {
     ifstream file(string(DIR) + string(ARCH_DEPENDIENTE));
     if(!file.good()) {
         file.close();
@@ -1337,7 +1795,7 @@ bool MenuAdmin::existeDependiente(const std::string& nombre) {
             break;
         }
         //Busca si existe el nombre de dependiente por el usuario
-        if(string(dep.getNombre()) == nombre and dep.getNoReg() == this->academico.getNoReg()) {
+        if(string(dep.getNombre()) == nombre and dep.getNoReg() == ac.getNoReg()) {
             file.close();
             return true;
         }
@@ -1376,7 +1834,6 @@ Fecha MenuAdmin::regresaFecha(std::string& fecha) {
     return auxFecha;
 }
 
-
 void MenuAdmin::guardaFormacion(Formacion& form, const std::string& archivo) {
     //Guarda el objeto dentro del archivo
     ofstream file(archivo, ios::app);
@@ -1384,7 +1841,7 @@ void MenuAdmin::guardaFormacion(Formacion& form, const std::string& archivo) {
     file.close();
 }
 
-bool MenuAdmin::existeFormacion(const std::string& tipo, const std::string& nombre) {
+bool MenuAdmin::existeFormacion(const std::string& tipo, const std::string& nombre, Academico &ac) {
     ifstream file(string(DIR) + string(ARCH_FORMACION));
     if(!file.good()) {
         file.close();
@@ -1399,7 +1856,7 @@ bool MenuAdmin::existeFormacion(const std::string& tipo, const std::string& nomb
             break;
         }
         //Busca si existe el nombre de formación
-        if(string(form.getTipo()) == tipo and string(form.getNombre()) == nombre and form.getNoReg() == this->academico.getNoReg()) {
+        if(string(form.getTipo()) == tipo and string(form.getNombre()) == nombre and form.getNoReg() == ac.getNoReg()) {
             file.close();
             return true;
         }
@@ -1415,7 +1872,7 @@ void MenuAdmin::guardaDocencia(Docencia& doc, const std::string& archivo) {
     file.close();
 }
 
-bool MenuAdmin::existeDocencia(const std::string& nombre) {
+bool MenuAdmin::existeDocencia(const std::string& nombre, Academico &ac) {
     ifstream file(string(DIR) + string(ARCH_DOCENCIA));
     if(!file.good()) {
         file.close();
@@ -1430,7 +1887,7 @@ bool MenuAdmin::existeDocencia(const std::string& nombre) {
             break;
         }
         //Busca si existe el nombre de formación
-        if(string(doc.getNombre()) == nombre and doc.getNoReg() == this->academico.getNoReg()) {
+        if(string(doc.getNombre()) == nombre and doc.getNoReg() == ac.getNoReg()) {
             file.close();
             return true;
         }
@@ -1446,7 +1903,7 @@ void MenuAdmin::guardaTutoria(Tutoria& tut, const std::string& archivo) {
     file.close();
 }
 
-bool MenuAdmin::existeTutoria(const std::string& nombreTutorado) {
+bool MenuAdmin::existeTutoria(const std::string& nombreTutorado, Academico &ac) {
     ifstream file(string(DIR) + string(ARCH_TUTORIA));
     if(!file.good()) {
         file.close();
@@ -1461,7 +1918,93 @@ bool MenuAdmin::existeTutoria(const std::string& nombreTutorado) {
             break;
         }
         //Busca si existe el nombre de formación
-        if(string(tut.getNombreTutorado()) == nombreTutorado and tut.getNoReg() == this->academico.getNoReg()) {
+        if(string(tut.getNombreTutorado()) == nombreTutorado and tut.getNoReg() == ac.getNoReg()) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void MenuAdmin::guardaProduccion(Produccion& pro, const std::string& archivo) {
+    //Guarda el objeto dentro del archivo
+    ofstream file(archivo, ios::app);
+    file.write((char*) &pro, sizeof(Produccion));
+    file.close();
+}
+
+bool MenuAdmin::existeProduccion(const std::string& tipo, const std::string& nombre, Academico &ac) {
+    ifstream file(string(DIR) + string(ARCH_PRODUCCION));
+    if(!file.good()) {
+        file.close();
+        ofstream file_prod(string(DIR) + string(ARCH_PRODUCCION));
+        file_prod.close();
+        return false;
+    }
+    while(!file.eof()) {
+        Produccion pro;
+        file.read((char*)&pro, sizeof(Produccion));
+        if(file.eof()) {
+            break;
+        }
+        //Busca si existe el nombre de formación
+        if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre and pro.getNoReg() == ac.getNoReg()) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+bool MenuAdmin::existeNoRegProduccion(const std::string& noRegistro, Academico &ac) {
+    ifstream file(string(DIR) + string(ARCH_PRODUCCION));
+    if(!file.good()) {
+        file.close();
+        ofstream file_prod(string(DIR) + string(ARCH_PRODUCCION));
+        file_prod.close();
+        return false;
+    }
+    while(!file.eof()) {
+        Produccion pro;
+        file.read((char*)&pro, sizeof(Produccion));
+        if(file.eof()) {
+            break;
+        }
+        //Busca si existe el nombre de formación
+        if(string(pro.getNoRegistro()) == noRegistro and pro.getNoReg() == ac.getNoReg()) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void MenuAdmin::guardaAutor(Autor& aut, const std::string& archivo) {
+    //Guarda el objeto dentro del archivo
+    ofstream file(archivo, ios::app);
+    file.write((char*) &aut, sizeof(Autor));
+    file.close();
+}
+
+bool MenuAdmin::existeAutor(const std::string& nombre, const std::string& noRegistro) {
+    ifstream file(string(DIR) + string(ARCH_AUTOR));
+    if(!file.good()) {
+        file.close();
+        ofstream file_aut(string(DIR) + string(ARCH_AUTOR));
+        file_aut.close();
+        return false;
+    }
+    while(!file.eof()) {
+        Autor aut;
+        file.read((char*)&aut, sizeof(Autor));
+        if(file.eof()) {
+            break;
+        }
+        //Busca si existe el nombre de formación
+        if(string(aut.getNombre()) == nombre and aut.getNoRegistro() == noRegistro) {
             file.close();
             return true;
         }

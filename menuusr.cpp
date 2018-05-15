@@ -166,7 +166,6 @@ void MenuUsr::infoPersonal() {
                     pos -= sizeof(Usuario);
                     file_usuario.seekp(pos, ios::beg);
                     file_usuario.write((char*)& this->usuario, sizeof(Usuario));
-                    cout << "Si entro: " << usr.getUsername();
                     break;
                 }
             }
@@ -242,9 +241,7 @@ void MenuUsr::dependientesEconomicos() {
             while(!file.eof()) {
                 Dependiente dep;
                 file.read((char*)&dep, sizeof(Dependiente));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
                 if(dep.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
@@ -269,9 +266,7 @@ void MenuUsr::dependientesEconomicos() {
                 fstream file_out(string(DIR) + string(ARCH_DEPENDIENTE), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra al Dependiente para modificarlo
                     if(string(dep.getNombre()) == nombre and dep.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -344,9 +339,7 @@ void MenuUsr::dependientesEconomicos() {
                 while(!file_out.eof()) {
                     Dependiente dep;
                     file_out.read((char*)&dep, sizeof(Dependiente));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
                     if(string(dep.getNombre()) == nombre and dep.getNoReg() == this->academico.getNoReg()) {
                         cout << "Eliminando: " << dep.getNombre() << endl;
@@ -477,9 +470,7 @@ void MenuUsr::formacion() {
             while(!file.eof()) {
                 Formacion form;
                 file.read((char*)&form, sizeof(Formacion));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
                 if(form.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
@@ -675,9 +666,7 @@ void MenuUsr::formacion() {
                     Formacion form;
                     file_out.read((char*)&form, sizeof(Formacion));
                     //Verifica que el archivo no se haya terminado
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
                     if(string(form.getTipo()) == tipoGrado and string(form.getNombre()) == nombreGrado
                             and form.getNoReg() == this->academico.getNoReg()) {
@@ -857,9 +846,7 @@ void MenuUsr::produccion() {
             while(!file.eof()) {
                 Produccion pro;
                 file.read((char*)&pro, sizeof(Produccion));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
                 if(pro.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
@@ -871,7 +858,6 @@ void MenuUsr::produccion() {
                     ifstream file_aut(string(DIR) + string(ARCH_AUTOR));
                     if(!file_aut.good()) {
                         file_aut.close();
-
                         ofstream file_pro(string(DIR) + string(ARCH_PRODUCCION));
                         file_pro.close();
                         cout << "ERROR. No existe el archivo. Creando archivo...";
@@ -938,9 +924,7 @@ void MenuUsr::produccion() {
                 fstream file_out(string(DIR) + string(ARCH_PRODUCCION), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&pro, sizeof(Produccion));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
                     if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre
                             and pro.getNoReg() == this->academico.getNoReg()) {
@@ -1034,9 +1018,7 @@ void MenuUsr::produccion() {
                         fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
                         while(!file_out.eof()) {
                             file_out.read((char*)&aut, sizeof(Autor));
-                            if(file_out.eof()) {
-                                break;
-                            }
+                            if(file_out.eof()) { break; }
                             //Rompe el ciclo cuando encuentra la formacion para modificarla
                             if(string(pro.getNoRegistro()) == string(aut.getNoRegistro()) and string(aut.getNombre()) == nombre) {
                                 //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -1055,7 +1037,7 @@ void MenuUsr::produccion() {
                         pro.setNoRegistro(noRegistro);
                     } else if (opc == "5") {
                         string status, opc;
-                        cout << "Elija el status actual de la producción." << endl;
+                        cout << endl << "Elija el status actual de la producción." << endl;
                         cout << "1) Aceptado." << endl;
                         cout << "2) En proceso." << endl;
                         cout << "3) Publicado." << endl << endl;
@@ -1106,9 +1088,7 @@ void MenuUsr::produccion() {
                                     fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
                                     while(!file_out.eof()) {
                                         file_out.read((char*)&aut, sizeof(Autor));
-                                        if(file_out.eof()) {
-                                            break;
-                                        }
+                                        if(file_out.eof()) { break; }
                                         //Rompe el ciclo cuando encuentra la formacion para modificarla
                                         if(string(pro.getNoRegistro()) == string(aut.getNoRegistro()) and string(aut.getNombre()) == nombre) {
                                             //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -1158,9 +1138,7 @@ void MenuUsr::produccion() {
                                     fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
                                     while(!file_out.eof()) {
                                         file_out.read((char*)&aut, sizeof(Autor));
-                                        if(file_out.eof()) {
-                                            break;
-                                        }
+                                        if(file_out.eof()) { break; }
                                         //Rompe el ciclo cuando encuentra la formacion para modificarla
                                         if(string(pro.getNoRegistro()) == string(aut.getNoRegistro()) and string(aut.getNombre()) == nombre) {
                                             //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -1229,11 +1207,9 @@ void MenuUsr::produccion() {
                 while(!file_out.eof()) {
                     Produccion pro;
                     file_out.read((char*)&pro, sizeof(Produccion));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
-                    if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre and pro.getNoReg() == academico.getNoReg()) {
+                    if(string(pro.getTipo()) == tipo and string(pro.getNombre()) == nombre and pro.getNoReg() == this->academico.getNoReg()) {
                         cout << "Eliminando: " << pro.getTipo() << " " << pro.getNombre() << endl;
                         noRegistro = pro.getNoRegistro();
                     } else {
@@ -1356,9 +1332,7 @@ void MenuUsr::docencia() {
             while(!file.eof()) {
                 Docencia doc;
                 file.read((char*)&doc, sizeof(Docencia));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
                 if(doc.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
@@ -1385,9 +1359,7 @@ void MenuUsr::docencia() {
                 fstream file_out(string(DIR) + string(ARCH_DOCENCIA), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&doc, sizeof(Docencia));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
                     if(string(doc.getNombre()) == nombre and doc.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -1479,9 +1451,7 @@ void MenuUsr::docencia() {
                 while(!file_out.eof()) {
                     Docencia doc;
                     file_out.read((char*)&doc, sizeof(Docencia));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
                     if(string(doc.getNombre()) == nombre and doc.getNoReg() == this->academico.getNoReg()) {
                         cout << "Eliminando: " << doc.getNombre() << endl;
@@ -1582,11 +1552,9 @@ void MenuUsr::tutoria() {
             while(!file.eof()) {
                 Tutoria tut;
                 file.read((char*)&tut, sizeof(Tutoria));
-                if(file.eof()) {
-                    break;
-                }
+                if(file.eof()) { break; }
                 //Busca si existe el nombre de dependiente por el usuario
-                if(tut.getNoReg() == academico.getNoReg()) {
+                if(tut.getNoReg() == this->academico.getNoReg()) {
                     bandera = true;
                     cout << "Alumno tutorado: " << tut.getNombreTutorado() << endl;
                     cout << "Fecha de inicio: " << tut.getFechaInicio().toString() << " -> Fecha de fin: " << tut.getFechaFin().toString() << endl;
@@ -1611,9 +1579,7 @@ void MenuUsr::tutoria() {
                 fstream file_out(string(DIR) + string(ARCH_TUTORIA), ios::in|ios::out);
                 while(!file_out.eof()) {
                     file_out.read((char*)&tut, sizeof(Tutoria));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Rompe el ciclo cuando encuentra la formacion para modificarla
                     if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == this->academico.getNoReg()) {
                         //Toma la posicion en el archivo y la guarda para despues sobreescribir para la modificación
@@ -1706,11 +1672,9 @@ void MenuUsr::tutoria() {
                 while(!file_out.eof()) {
                     Tutoria tut;
                     file_out.read((char*)&tut, sizeof(Tutoria));
-                    if(file_out.eof()) {
-                        break;
-                    }
+                    if(file_out.eof()) { break; }
                     //Crea el archivo temporal para guardar los registros, menos el que se quiere eliminar
-                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == academico.getNoReg()) {
+                    if(string(tut.getNombreTutorado()) == nombre and tut.getNoReg() == this->academico.getNoReg()) {
                         cout << "Eliminando: " << tut.getNombreTutorado() << endl;
                     } else {
                         guardaTutoria(tut, string(DIR) + "Temporal.txt");
@@ -2184,8 +2148,6 @@ void MenuUsr::creaReporte(Academico& ac) {
     exportacion.close();
 }
 
-
-
 bool MenuUsr::fechaCorrecta(const std::string& fecha) {
     regex rx("[0-9]{2}/[0-9]{2}/[0-9]{4}");
     if(regex_match(fecha, rx)) {
@@ -2223,7 +2185,6 @@ bool MenuUsr::formatoNumero(const std::string& numero) {
     }
     return false;
 }
-
 
 bool MenuUsr::formatoEmail(const std::string& email) {
     regex rx("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
