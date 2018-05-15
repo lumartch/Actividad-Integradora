@@ -853,7 +853,7 @@ void MenuUsr::produccion() {
                     cout << "Titulo: " << pro.getTipo() << " " << pro.getNombre() << endl;
                     cout << "Fecha de elaboración: " << pro.getFechaElaboracion().toString() << endl;
                     cout << "No. Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
-                    cout << "Autores: " << endl;
+                    cout << "-----Co-Autores-----" << endl;
 
                     ifstream file_aut(string(DIR) + string(ARCH_AUTOR));
                     if(!file_aut.good()) {
@@ -2019,9 +2019,7 @@ void MenuUsr::creaReporte(Academico& ac) {
         while(!arch_form.eof()) {
             Formacion form;
             arch_form.read((char*)&form, sizeof(Formacion));
-            if(arch_form.eof()) {
-                break;
-            }
+            if(arch_form.eof()) { break; }
             if(form.getNoReg() == ac.getNoReg()) {
                 exportacion << form.getTipo() << " " << form.getNombre() << endl;
                 exportacion << "Fecha de inicio: " << form.getFechaInicio().toString() << " - > Fecha de fin: " << form.getFechaFinal().toString() << endl;
@@ -2054,16 +2052,14 @@ void MenuUsr::creaReporte(Academico& ac) {
                 exportacion << pro.getTipo() << " " << pro.getNombre() << endl;
                 exportacion << "Fecha de elaboración: " << pro.getFechaElaboracion().toString() << endl;
                 exportacion << "No.Registro: " << pro.getNoRegistro() << " -> Status: " << pro.getStatus() << endl;
-                exportacion << "Autores: " << endl;
+                exportacion << "--------------------------Co-Autores---------------------------" << endl;
                 bool ex = false;
                 ifstream arch_aut(string(DIR) + string(ARCH_AUTOR));
                 if(arch_aut.good()){
                     while(!arch_aut.eof()) {
                         Autor aut;
                         arch_aut.read((char*)&aut, sizeof(Autor));
-                        if(arch_aut.eof()) {
-                            break;
-                        }
+                        if(arch_aut.eof()) { break; }
                         if(string(aut.getNoRegistro()) == string(pro.getNoRegistro())) {
                             exportacion << "Nombre: " << aut.getNombre() << endl;
                             ex = true;

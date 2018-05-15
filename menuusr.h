@@ -11,6 +11,7 @@
 #include "produccion.h"
 #include "autor.h"
 #include "Lista.h"
+#include "listaproduccion.h"
 
 //Dependencias de librerias
 #include <fstream>

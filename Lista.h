@@ -1,7 +1,6 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#include <fstream>
 #include <string>
 #include <cstring>
 #include "academico.h"
@@ -22,8 +21,7 @@ public:
     Nodo* getAnterior();
 };
 
-class Lista
-{
+class Lista {
 public:
     Lista();
     virtual ~Lista();

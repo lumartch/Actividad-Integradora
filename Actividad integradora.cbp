@@ -48,6 +48,8 @@
 		<Unit filename="fecha.h" />
 		<Unit filename="formacion.cpp" />
 		<Unit filename="formacion.h" />
+		<Unit filename="listaproduccion.cpp" />
+		<Unit filename="listaproduccion.h" />
 		<Unit filename="login.cpp" />
 		<Unit filename="login.h" />
 		<Unit filename="main.cpp" />
