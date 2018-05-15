@@ -64,13 +64,16 @@ void MenuUsr::infoPersonal() {
         cout << "4) Actualizar telefono." << endl;
         cout << "5) Actualizar email." << endl;
         cout << "6) Actualizar estado civil." << endl;
-        cout << "7) Administrar dependientes economicos." << endl;
+        cout << "7) Actualizar contraseña." << endl;
+        cout << "8) Administrar dependientes economicos." << endl;
+        cout << "9) Mostrar información de cuenta." << endl;
         cout << "0) Salir..." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
         } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and
-                opc != "5" and opc != "6" and opc != "7" and opc != "0");
+                opc != "5" and opc != "6" and opc != "7"  and opc != "8" and
+                opc != "9" and opc != "0");
         //Edicion del perfil de usuario
         if(opc == "1") {
             string nombre;
@@ -130,13 +133,44 @@ void MenuUsr::infoPersonal() {
             }
             cout << endl << "¡Estado civil actualizado!";
         } else if(opc == "7") {
+            string password;
+            cout << endl << "Ingrese la nueva contraseña: ";
+            getline(cin, password);
+            this->usuario.setPassword(password);
+        } else if(opc == "8") {
             dependientesEconomicos();
+        } else if(opc == "9") {
+            system(CLEAR);
+            cout << "---------------------------------------------------------------" << endl;
+            cout << "Username: " << this->usuario.getUsername() <<  "  ->  Contraseña: " << this->usuario.getPassword()<< endl;
+            cout << "Academico: " << this->academico.getNombre() << "    | Email: " << this->academico.getEmail() << endl;
+            cout << "Domicilio: " << this->academico.getDomicilio() << " ->  Ciudad: " << this->academico.getCiudad() << endl;
+            cout << "Telefono: " << this->academico.getTelefono() << "       | Estado civil: " << this->academico.getEstadoCivil() << endl;
+            cout << "---------------------------------------------------------------" << endl;
         } else {
             //Abre el archivo y coloca el puntero en la posicion de escritura para sobreescribir el academico
             fstream file_academico(string(DIR) + string(ARCH_AC), ios::in|ios::out);
             file_academico.seekp(usuario.getDireccionFisica(), ios::beg);
             file_academico.write((char*)&this->academico, sizeof(Academico));
             file_academico.close();
+
+            //Sobre información sobre la cuenta de usuario
+            fstream file_usuario(string(DIR) + string(ARCH_USR), ios::in| ios::out);
+            long int pos;
+            while(!file_usuario.eof()){
+                Usuario usr;
+                file_usuario.read((char*)& usr, sizeof(Usuario));
+                if(file_usuario.eof()){ break; }
+                if(string(usr.getUsername()) == string(this->usuario.getUsername())) {
+                    pos = file_usuario.tellg();
+                    pos -= sizeof(Usuario);
+                    file_usuario.seekp(pos, ios::beg);
+                    file_usuario.write((char*)& this->usuario, sizeof(Usuario));
+                    cout << "Si entro: " << usr.getUsername();
+                    break;
+                }
+            }
+            file_usuario.close();
             cout << endl << "Terminando de modificar información personal...";
         }
         if(opc != "0") {
@@ -1971,12 +2005,11 @@ void MenuUsr::configuracion() {
                         }
                     }
                 } while(!bandera);
-                if(opc != "0"){
+                if(opc != "0") {
                     cout << endl << "Exportando información académica..." << endl;
                     creaReporte(listaResultado[atoi(opc.c_str())]);
                     cout << endl << "¡Exportación exitosa!" << endl;
-                }
-                else{
+                } else {
                     cout << endl << "Cancelación de reporte..." << endl;
                 }
                 listaResultado.eliminarNodos();

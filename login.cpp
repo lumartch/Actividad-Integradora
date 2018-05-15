@@ -48,11 +48,12 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
         if(file.eof()){break;}
 
         //Si el usuario y la contraseña leidos del archivo, son iguales
-        if(usr.getUsername() == username and usr.getPassword() == password){
+        if(string(usr.getUsername()) == username and string(usr.getPassword()) == password){
             usuario = usr;
             existe = true;
         }
     }
+    file.close();
 
     if(existe){
         //Login de usuario existente

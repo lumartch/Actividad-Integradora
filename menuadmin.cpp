@@ -206,7 +206,6 @@ bool MenuAdmin::existeUsername(const std::string& username) {
 }
 
 void MenuAdmin::insertarUsuario(Usuario& usuario) {
-
     //Crea el registro dentro del archivo de academicos
     Academico academico;
     academico.setNoReg(this->noReg);
