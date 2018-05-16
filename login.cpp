@@ -4,6 +4,7 @@ Login::Login() {
     //Crea el directorio de los archivos por defecto
     system(string(MKDIR).c_str());
     system("mkdir Reportes");
+    system("mkdir Imagenes");
     crearArchivosDefecto();
     menuLogin();
 }

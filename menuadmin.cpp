@@ -173,7 +173,10 @@ void MenuAdmin::modificarUsuario() {
             }
         }
         arch_usr.close();
-
+        if(usr.getNoRegistro() == 1){
+            cout << endl << "No se puede modificar el administrador principal del sistema." << endl;
+            return;
+        }
         string opc;
         do {
             system(CLEAR);
@@ -189,6 +192,10 @@ void MenuAdmin::modificarUsuario() {
                 cout << endl << "El usuario se restaurara con una contraseña simple. Contraseña de temporal: 123" << endl;
                 usr.setPassword("123");
             } else if(opc == "2") {
+                if(string(usr.getTipo()) == "Admin" and this->usuario.getNoRegistro() != 1){
+                    cout << endl << "Solo el administrador principal del sistema puede modificar los permisos de otros administradores permisos." << endl;
+                    return;
+                }
                 string tipo;
                 cout << endl << "Elija el tipo de usuario." << endl;
                 cout << "1) Administrador." << endl;

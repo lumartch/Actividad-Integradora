@@ -35,11 +35,13 @@
 #define MKDIR "mkdir Archivos/"
 #define DIR "Archivos/"
 #define DIRREP "Reportes/"
+#define DIRIMG "Imagenes/"
 #else
 #define CLEAR "cls"
 #define MKDIR "mkdir Archivos\\"
 #define DIR "Archivos\\"
 #define DIRREP "Reportes\\"
+#define DIRIMG "Imagenes\\"
 #endif
 
 using namespace std;
