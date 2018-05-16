@@ -1015,7 +1015,7 @@ void MenuUsr::produccion() {
                         } while(existe);
                         //Modifica la relación con los autores para que no se pierda concordancia de datos
                         Autor aut;
-                        fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                        fstream file_out(string(DIR) + string(ARCH_AUTOR), ios::in|ios::out);
                         while(!file_out.eof()) {
                             file_out.read((char*)&aut, sizeof(Autor));
                             if(file_out.eof()) { break; }
@@ -1056,6 +1056,7 @@ void MenuUsr::produccion() {
                     } else if (opc == "6") {
                         string opc;
                         do {
+                            system(CLEAR);
                             cout << "*** Administración de colaboradores, producción " << pro.getTipo() << " " << pro.getNombre() << " ***" << endl << endl;
                             cout << "1) Agregar autor." << endl;
                             cout << "2) Modificar autor." << endl;
@@ -1085,7 +1086,7 @@ void MenuUsr::produccion() {
                                     Autor aut;
                                     long int posArchivo = 0;
                                     //Busca al dependiente dentro del archivo
-                                    fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                                    ifstream file_out(string(DIR) + string(ARCH_AUTOR));
                                     while(!file_out.eof()) {
                                         file_out.read((char*)&aut, sizeof(Autor));
                                         if(file_out.eof()) { break; }
@@ -1135,7 +1136,7 @@ void MenuUsr::produccion() {
                                 if(existeAutor(nombre, string(pro.getNoRegistro()))) {
                                     Autor aut;
                                     //Busca al dependiente dentro del archivo
-                                    fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                                    fstream file_out(string(DIR) + string(ARCH_AUTOR), ios::in|ios::out);
                                     while(!file_out.eof()) {
                                         file_out.read((char*)&aut, sizeof(Autor));
                                         if(file_out.eof()) { break; }
@@ -1159,12 +1160,18 @@ void MenuUsr::produccion() {
                                 cout << endl << "Administración de autores terminada.";
                             }
                         } while(opc != "0");
+                        if(opc != "0"){
+                            pausa();
+                        }
                     } else {
                         fstream file(string(DIR) + string(ARCH_PRODUCCION), ios::in|ios::out);
                         file.seekg(posArchivo, ios::beg);
                         file.write((char*)& pro, sizeof(Produccion));
                         file.close();
                         cout << endl << "Modificación completa de la producción.";
+                    }
+                    if(opc != "0"){
+                        pausa();
                     }
                 } while(opc != "0");
             } else {

@@ -1935,7 +1935,7 @@ void MenuAdmin::administrarProduccion() {
                             } while(existe);
                             //Modifica la relación con los autores para que no se pierda concordancia de datos
                             Autor aut;
-                            fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                            fstream file_out(string(DIR) + string(ARCH_AUTOR), ios::in|ios::out);
                             while(!file_out.eof()) {
                                 file_out.read((char*)&aut, sizeof(Autor));
                                 if(file_out.eof()) { break; }
@@ -2006,7 +2006,7 @@ void MenuAdmin::administrarProduccion() {
                                         Autor aut;
                                         long int posArchivo = 0;
                                         //Busca al dependiente dentro del archivo
-                                        fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                                        fstream file_out(string(DIR) + string(ARCH_AUTOR), ios::in|ios::out);
                                         while(!file_out.eof()) {
                                             file_out.read((char*)&aut, sizeof(Autor));
                                             if(file_out.eof()) { break; }
@@ -2056,7 +2056,7 @@ void MenuAdmin::administrarProduccion() {
                                     if(existeAutor(nombre, string(pro.getNoRegistro()))) {
                                         Autor aut;
                                         //Busca al dependiente dentro del archivo
-                                        fstream file_out(string(DIR) + string(AUTOR_H), ios::in|ios::out);
+                                        ifstream file_out(string(DIR) + string(ARCH_AUTOR));
                                         while(!file_out.eof()) {
                                             file_out.read((char*)&aut, sizeof(Autor));
                                             if(file_out.eof()) { break; }
@@ -2079,7 +2079,11 @@ void MenuAdmin::administrarProduccion() {
                                 } else {
                                     cout << endl << "Administración de autores terminada.";
                                 }
+                                if(opc != "0"){
+                                    pausa();
+                                }
                             } while(opc != "0");
+
                         } else {
                             //Sobreescribe la produccion
                             fstream file(string(DIR) + string(ARCH_PRODUCCION), ios::in|ios::out);
@@ -2087,6 +2091,9 @@ void MenuAdmin::administrarProduccion() {
                             file.write((char*)& pro, sizeof(Produccion));
                             file.close();
                             cout << endl << "Modificación completa de la producción.";
+                        }
+                        if(opc != "0"){
+                            pausa();
                         }
                     } while(opc != "0");
                 }

@@ -113,3 +113,117 @@
 	<cstring>
 	"produccion.h"
 
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/academico.cpp
+	"academico.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/academico.h
+	<string>
+	<cstring>
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/autor.cpp
+	"autor.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/autor.h
+	<string>
+	<cstring>
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/dependiente.cpp
+	"dependiente.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/dependiente.h
+	<string>
+	<cstring>
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/docencia.cpp
+	"docencia.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/docencia.h
+	<string>
+	<cstring>
+	"fecha.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/fecha.h
+	<string>
+	<cstring>
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/fecha.cpp
+	"fecha.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/formacion.cpp
+	"formacion.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/formacion.h
+	"fecha.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/Lista.cpp
+	"Lista.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/Lista.h
+	<string>
+	<cstring>
+	"academico.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/listaproduccion.cpp
+	"listaproduccion.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/listaproduccion.h
+	<string>
+	<cstring>
+	"produccion.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/produccion.h
+	<string>
+	<cstring>
+	"fecha.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/login.cpp
+	"login.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/login.h
+	"menuadmin.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/menuadmin.h
+	"menuusr.h"
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/menuusr.h
+	"usuario.h"
+	"academico.h"
+	"dependiente.h"
+	"formacion.h"
+	"docencia.h"
+	"tutoria.h"
+	"produccion.h"
+	"autor.h"
+	"Lista.h"
+	"listaproduccion.h"
+	<fstream>
+	<iostream>
+	<regex>
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/usuario.h
+	<string>
+	<cstring>
+
+1526433394 /home/lumartch/Escritorio/Actividad integradora/tutoria.h
+	<string>
+	<cstring>
+	"fecha.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/main.cpp
+	"login.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/produccion.cpp
+	"produccion.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/tutoria.cpp
+	"tutoria.h"
+
+1526433394 source:/home/lumartch/Escritorio/Actividad integradora/usuario.cpp
+	"usuario.h"
+
+1526433693 source:/home/lumartch/Escritorio/Actividad integradora/menuadmin.cpp
+	"menuadmin.h"
+
+1526433589 source:/home/lumartch/Escritorio/Actividad integradora/menuusr.cpp
+	"menuusr.h"
+
