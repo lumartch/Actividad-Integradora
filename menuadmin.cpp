@@ -234,6 +234,10 @@ void MenuAdmin::eliminarUsuario() {
     cout << "Ingrese el usuario (username) a eliminar: ";
     getline(cin, username);
     if(existeUsername(username)) {
+        if(username == "admin"){
+            cout << endl << "No se puede eliminar al administrador principal del sistema." << endl;
+            return;
+        }
         ifstream leer(string(DIR) + string(ARCH_USR));
         while(!leer.eof()) {
             Usuario usr;
