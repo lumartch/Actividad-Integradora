@@ -2,12 +2,14 @@
 #define MENUADMIN_H
 
 #include "menuusr.h"
+#include "AVL.hpp"
 
 class MenuAdmin {
 private:
     int noReg;
     Academico academico;
     Usuario usuario;
+    BTree<Usuario>* arbol;
     bool existeUsername(const std::string& username);
     void insertarUsuario(Usuario& usuario);
     bool formatoNumero(const std::string& numero);
@@ -29,7 +31,19 @@ private:
     Fecha regresaFecha(std::string&fecha);
 public:
     MenuAdmin();
-    MenuAdmin(const Academico & academico, const Usuario & usuario);
+    //MenuAdmin(const Academico & academico, const Usuario & usuario);
+    MenuAdmin(const Academico & academico, const Usuario & usuario, BTree<Usuario>*arbol){
+        //Inicializa el No de registro para proximas insersiones
+        ifstream file_reg(string(DIR) + string(ARCH_NO_REG));
+        file_reg.read((char*)&this->noReg, sizeof(int));
+        file_reg.close();
+        
+        //Nace el menu con los datos de la cuenta usuario y del academico
+        this->arbol=arbol;
+        this->academico = academico;
+        this->usuario = usuario;
+        menuPrincipal();
+    }
     void menuPrincipal();
     void administrarUsuarios();
     void agregarUsuario();

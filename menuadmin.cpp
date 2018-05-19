@@ -8,7 +8,7 @@ MenuAdmin::~MenuAdmin() {
     //dtor
 }
 
-MenuAdmin::MenuAdmin(const Academico& academico, const Usuario& usuario) {
+/*MenuAdmin::MenuAdmin(const Academico& academico, const Usuario& usuario) {
     //Inicializa el No de registro para proximas insersiones
     ifstream file_reg(string(DIR) + string(ARCH_NO_REG));
     file_reg.read((char*)&this->noReg, sizeof(int));
@@ -18,7 +18,7 @@ MenuAdmin::MenuAdmin(const Academico& academico, const Usuario& usuario) {
     this->academico = academico;
     this->usuario = usuario;
     menuPrincipal();
-}
+}*/
 
 void MenuAdmin::menuPrincipal() {
     string opc;
@@ -234,10 +234,6 @@ void MenuAdmin::eliminarUsuario() {
     cout << "Ingrese el usuario (username) a eliminar: ";
     getline(cin, username);
     if(existeUsername(username)) {
-        if(username == "admin"){
-            cout << endl << "No se puede eliminar al administrador principal del sistema." << endl;
-            return;
-        }
         ifstream leer(string(DIR) + string(ARCH_USR));
         while(!leer.eof()) {
             Usuario usr;
@@ -245,6 +241,11 @@ void MenuAdmin::eliminarUsuario() {
             if(leer.eof()) { break; }
             if(string(usr.getUsername()) == username) {
                 cout << endl << "Eliminando al usuario: " << usr.getUsername() << endl;
+                if(arbol->findData(usr)!=nullptr){
+                    arbol->Eliminar(usr);
+                }
+                
+                
             } else {
                 ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                 escribir.write((char*)&usr, sizeof(Usuario));

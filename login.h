@@ -6,6 +6,7 @@
 class Login {
 private:
     //Arbol avl;
+    BTree<Usuario>* arbol;
     Academico academico;
     Usuario usuario;
 public:

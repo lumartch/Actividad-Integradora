@@ -6,6 +6,28 @@ Login::Login() {
     system("mkdir Reportes");
     system("mkdir Imagenes");
     crearArchivosDefecto();
+    arbol = new BTree<Usuario>();
+
+    if(arbol->isEmpty()){
+        vector<Usuario>usu;
+        ifstream file(string(DIR) + string(ARCH_USR));
+        if(!file.good()){
+            return;
+        }
+        while(!file.eof()){
+            Usuario usr;
+            file.read((char*)&usr, sizeof(Usuario));
+            if(file.eof()){break;}
+            //cout<<usr<<endl;
+            usu.push_back(usr);
+            //arbol.insertData(usr);
+        }
+        file.close();
+        int l=usu.size()/5;
+        if(l==0)l=1;
+        for(int i=0;i<l;i++)arbol->insertData(usu[i]);
+        //arbol->inOrder();
+    }
     menuLogin();
 }
 
@@ -15,11 +37,12 @@ void Login::menuLogin() {
         system(CLEAR);
         cout << "*** Login de Academicos ***" << endl << endl;
         cout << "1) Iniciar sesion." << endl;
+        cout << "2) Mostrar árbol páginado." << endl;
         cout << "0) Salir..." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
-        } while(opc != "1" and opc != "0");
+        } while(opc != "1" and opc != "2" and opc != "0");
         if(opc == "1") {
             Usuario auxUsuario;
             string username, password;
@@ -28,7 +51,13 @@ void Login::menuLogin() {
             cout << "Ingrese la contraseña: ";
             getline(cin, password);
             buscarUsuario(username, password);
-        } else {
+        }
+        else if(opc == "2"){
+            cout<<endl<<endl<<"Arbol: ";
+            arbol->inOrder();
+            cout<<endl<<endl;
+        }
+        else {
             cout << endl << "Gracias por usar el administrador de academicos..." << endl << endl;
         }
         pausa();
@@ -36,14 +65,26 @@ void Login::menuLogin() {
 }
 
 void Login::buscarUsuario(const std::string& username, const std::string& password) {
+    bool existe = false;
+    Usuario usuario;
+    //Posible implementacion del arbol paginado, para busquedas de usuarios
+    Usuario usr;
+    usr.setUsername(username);
+    usr.setPassword(password);
+    if(arbol->findData(usr)!=nullptr){
+        usuario = arbol->retrieveData(arbol->findData(usr));
+        arbol->findData(usr)->cantB++;
+        existe=true;
+    }
+
+
+
     ifstream file(string(DIR) + string(ARCH_USR));
     if(!file.good()){
         return;
     }
-    //Posible implementacion del arbol paginado, para busquedas de usuarios
-    Usuario usuario;
-    bool existe = false;
-    while(!file.eof()){
+    while(!file.eof() && !existe){
+        //cout<<"ENTRE"<<endl;
         Usuario usr;
         file.read((char*)&usr, sizeof(Usuario));
         if(file.eof()){break;}
@@ -52,6 +93,7 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
         if(string(usr.getUsername()) == username and string(usr.getPassword()) == password){
             usuario = usr;
             existe = true;
+            arbol->insertarEliminar(usuario);
         }
     }
     file.close();
@@ -72,7 +114,7 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
         file_academico.close();
         if(std::string(usuario.getTipo()) == "Admin"){
             //Inicia menu de administrador
-            new MenuAdmin(academico, usuario);
+            new MenuAdmin(academico, usuario, arbol);
         }
         else{
             //Inicia menu de usuario normal

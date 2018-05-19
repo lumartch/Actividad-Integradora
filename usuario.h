@@ -27,6 +27,24 @@ public:
     long int getDireccionFisica();
     std::string toString();
     virtual ~Usuario();
+    
+    bool operator<(const Usuario &t) const
+    {
+        return strcmp(username, t.username)<0;
+        
+    }
+    bool operator==(const Usuario &t) const
+    {
+        return strcmp(username, t.username)==0;
+        
+    }
+    friend std::ostream & operator << (std::ostream & os,  Usuario & c){
+        std::string x,y;
+        x=c.username;
+        y=c.password;
+        os << x;
+        return os;
+    }
 };
 
 #endif // USUARIO_H

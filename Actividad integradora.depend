@@ -227,79 +227,80 @@
 1526433589 source:/home/lumartch/Escritorio/Actividad integradora/menuusr.cpp
 	"menuusr.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/academico.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/academico.cpp
 	"academico.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/academico.h
+1526688227 /home/lumartch/Actividad-Integradora/academico.h
 	<string>
 	<cstring>
 
-1526685794 source:/home/lumartch/Actividad-Integradora/autor.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/autor.cpp
 	"autor.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/autor.h
+1526688227 /home/lumartch/Actividad-Integradora/autor.h
 	<string>
 	<cstring>
 
-1526685794 source:/home/lumartch/Actividad-Integradora/dependiente.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/dependiente.cpp
 	"dependiente.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/dependiente.h
+1526688227 /home/lumartch/Actividad-Integradora/dependiente.h
 	<string>
 	<cstring>
 
-1526685794 source:/home/lumartch/Actividad-Integradora/docencia.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/docencia.cpp
 	"docencia.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/docencia.h
+1526688227 /home/lumartch/Actividad-Integradora/docencia.h
 	<string>
 	<cstring>
 	"fecha.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/fecha.h
+1526688227 /home/lumartch/Actividad-Integradora/fecha.h
 	<string>
 	<cstring>
 
-1526685794 source:/home/lumartch/Actividad-Integradora/fecha.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/fecha.cpp
 	"fecha.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/formacion.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/formacion.cpp
 	"formacion.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/formacion.h
+1526688227 /home/lumartch/Actividad-Integradora/formacion.h
 	"fecha.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/Lista.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/Lista.cpp
 	"Lista.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/Lista.h
+1526688227 /home/lumartch/Actividad-Integradora/Lista.h
 	<string>
 	<cstring>
 	"academico.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/listaproduccion.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/listaproduccion.cpp
 	"listaproduccion.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/listaproduccion.h
+1526688227 /home/lumartch/Actividad-Integradora/listaproduccion.h
 	<string>
 	<cstring>
 	"produccion.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/produccion.h
+1526688227 /home/lumartch/Actividad-Integradora/produccion.h
 	<string>
 	<cstring>
 	"fecha.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/login.cpp
+1526692480 source:/home/lumartch/Actividad-Integradora/login.cpp
 	"login.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/login.h
+1526691871 /home/lumartch/Actividad-Integradora/login.h
 	"menuadmin.h"
 
-1526685794 /home/lumartch/Actividad-Integradora/menuadmin.h
+1526692052 /home/lumartch/Actividad-Integradora/menuadmin.h
 	"menuusr.h"
+	"AVL.hpp"
 
-1526685794 /home/lumartch/Actividad-Integradora/menuusr.h
+1526688227 /home/lumartch/Actividad-Integradora/menuusr.h
 	"usuario.h"
 	"academico.h"
 	"dependiente.h"
@@ -314,30 +315,38 @@
 	<iostream>
 	<regex>
 
-1526685794 /home/lumartch/Actividad-Integradora/usuario.h
+1526642348 /home/lumartch/Actividad-Integradora/usuario.h
 	<string>
 	<cstring>
 
-1526685794 /home/lumartch/Actividad-Integradora/tutoria.h
+1526688227 /home/lumartch/Actividad-Integradora/tutoria.h
 	<string>
 	<cstring>
 	"fecha.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/main.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/main.cpp
 	"login.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/menuusr.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/menuusr.cpp
 	"menuusr.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/produccion.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/produccion.cpp
 	"produccion.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/tutoria.cpp
+1526688227 source:/home/lumartch/Actividad-Integradora/tutoria.cpp
 	"tutoria.h"
 
-1526685794 source:/home/lumartch/Actividad-Integradora/usuario.cpp
+1526426734 source:/home/lumartch/Actividad-Integradora/usuario.cpp
 	"usuario.h"
 
-1526685886 source:/home/lumartch/Actividad-Integradora/menuadmin.cpp
+1526692323 source:/home/lumartch/Actividad-Integradora/menuadmin.cpp
 	"menuadmin.h"
+
+1526692349 /home/lumartch/Actividad-Integradora/AVL.hpp
+	<climits>
+	<iostream>
+	<algorithm>
+	<string>
+	<vector>
+	<fstream>
 
