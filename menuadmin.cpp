@@ -234,6 +234,10 @@ void MenuAdmin::eliminarUsuario() {
     cout << "Ingrese el usuario (username) a eliminar: ";
     getline(cin, username);
     if(existeUsername(username)) {
+        if(username == "admin"){
+            cout << endl << "No se puede eliminar al administrador principal del sistema." << endl;
+            return;
+        }
         ifstream leer(string(DIR) + string(ARCH_USR));
         while(!leer.eof()) {
             Usuario usr;
@@ -244,8 +248,8 @@ void MenuAdmin::eliminarUsuario() {
                 if(arbol->findData(usr)!=nullptr){
                     arbol->Eliminar(usr);
                 }
-                
-                
+
+
             } else {
                 ofstream escribir(string(DIR) + "Temporal.txt", ios::app);
                 escribir.write((char*)&usr, sizeof(Usuario));
@@ -274,7 +278,7 @@ void MenuAdmin::administrarAcademicos() {
         do {
             cout << ">> ";
             getline(cin, opc);
-        } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "0");
+        } while(opc != "1" and opc != "2" and opc != "3" and opc != "0");
         if(opc == "1") {
             mostrarAcademicos();
         } else if(opc == "2") {

@@ -350,7 +350,7 @@ void BTree<T>::inOrder(Node<T>*&r) {
     }
 
     inOrder(r->getLeft());
-    std::cout << r->getData() <<r->cantB<< ", ";
+    std::cout << r->getData() << " : " << r->cantB<< ", ";
     inOrder(r->getRight());
 }
 

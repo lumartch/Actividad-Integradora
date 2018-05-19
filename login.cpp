@@ -74,7 +74,7 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
     if(arbol->findData(usr)!=nullptr){
         usuario = arbol->retrieveData(arbol->findData(usr));
         arbol->findData(usr)->cantB++;
-        existe=true;
+        existe = true;
     }
 
 
