@@ -7,7 +7,7 @@ Login::Login() {
     system("mkdir Imagenes");
     crearArchivosDefecto();
     arbol = new BTree<Usuario>();
-
+    arbol->leer();
     if(arbol->isEmpty()){
         vector<Usuario>usu;
         ifstream file(string(DIR) + string(ARCH_USR));
@@ -17,16 +17,13 @@ Login::Login() {
         while(!file.eof()){
             Usuario usr;
             file.read((char*)&usr, sizeof(Usuario));
-            if(file.eof()){break;}
-            //cout<<usr<<endl;
+            if(file.eof()){ break; }
             usu.push_back(usr);
-            //arbol.insertData(usr);
         }
         file.close();
         int l=usu.size()/5;
         if(l==0)l=1;
         for(int i=0;i<l;i++)arbol->insertData(usu[i]);
-        //arbol->inOrder();
     }
     menuLogin();
 }
@@ -58,6 +55,7 @@ void Login::menuLogin() {
             cout<<endl<<endl;
         }
         else {
+            arbol->guardar();
             cout << endl << "Gracias por usar el administrador de academicos..." << endl << endl;
         }
         pausa();
@@ -76,8 +74,6 @@ void Login::buscarUsuario(const std::string& username, const std::string& passwo
         arbol->findData(usr)->cantB++;
         existe = true;
     }
-
-
 
     ifstream file(string(DIR) + string(ARCH_USR));
     if(!file.good()){

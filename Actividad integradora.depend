@@ -290,7 +290,7 @@
 	<cstring>
 	"fecha.h"
 
-1526692480 source:/home/lumartch/Actividad-Integradora/login.cpp
+1526856621 source:/home/lumartch/Actividad-Integradora/login.cpp
 	"login.h"
 
 1526691871 /home/lumartch/Actividad-Integradora/login.h
@@ -342,7 +342,7 @@
 1526693051 source:/home/lumartch/Actividad-Integradora/menuadmin.cpp
 	"menuadmin.h"
 
-1526693389 /home/lumartch/Actividad-Integradora/AVL.hpp
+1526857399 /home/lumartch/Actividad-Integradora/AVL.hpp
 	<climits>
 	<iostream>
 	<algorithm>

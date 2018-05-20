@@ -34,19 +34,14 @@ public:
     Node();
     Node(const T&);
     ~Node();
-
-
     T* getDataPtr();
     T& getData();
-
     Node<T>*& getRight();
     Node<T>*& getLeft();
-
     void setDataPtr(T*);
     void setData(const T&);
     void setRight(Node<T>*&);
     void setLeft(Node<T>*&);
-
 };
 
 template <class T>
@@ -61,7 +56,9 @@ Node<T>::Node(const T&e) : left(nullptr), right(nullptr) {
 }
 
 template <class T>
-Node<T>::~Node() { delete dataPtr; }
+Node<T>::~Node() {
+    delete dataPtr;
+}
 
 template <class T>
 T* Node<T>::getDataPtr() {
@@ -98,8 +95,9 @@ void Node<T>::setData(const T&e) {
         if((dataPtr = new T(e)) == nullptr) {
             throw NodeException("Memoria no disponible, creando data, setData de node.");
         }
+    } else {
+        *dataPtr = e;
     }
-    else { *dataPtr = e; }
 }
 
 template <class T>
@@ -132,32 +130,25 @@ class BTree {
 private:
     Node<T>* root;
     void insertData(Node<T>*&, const T&);
+    void insertDataLoad(Node<T>*&, const T&, const int &cant);
     void deleteData(Node<T>*&, Node<T>*&);
     unsigned int getHeight(Node<T>*&);
     Node<T>*& getLowest(Node<T>*&);
     Node<T>*& getBiggest(Node<T>*&);
     Node<T>*& findData(Node<T>*&, const T&);
-
     void preOrder(Node<T>*&);
     void inOrder(Node<T>*&);
     void postOrder(Node<T>*&);
-
     void deleteAll(Node<T>*&);
-
     int getBalanceFactor(Node<T>*&);
-
     void doBalancing(Node<T>*&);
-
     void simpleRotationToTheLeft(Node<T>*&);
     void simpleRotationToTheRight(Node<T>*&);
-
     void doubleRotationToTheLeft(Node<T>*&);
     void doubleRotationToTheRight(Node<T>*&);
-
     void findMinSearch(Node<T>*&r);
     void vecPEliminar(Node<T>*&r);
     void findEliminar(Node<T>*&r,const T&);
-
 public:
     int menorCantB;
     Node<T>* menorDataB;
@@ -165,33 +156,28 @@ public:
     void insertarEliminar(const T&e);
     vector<pair<T, int>>vec;
     void Eliminar(const T&);
-
-
     BTree();
     ~BTree();
-
     bool isEmpty();
-
     void insertData(const T&);
+    void insertDataLoad(const T&, const int &cant);
     void deleteData(Node<T>*&);
-
     T& retrieveData(Node<T>*&);
     Node<T>*& findData(const T&);
-
     unsigned int getHeight();
-
     Node<T>*& getLowest();
     Node<T>*& getBiggest();
-
     bool isLeaf(Node<T>*&);
-
     void preOrder();
     void inOrder();
     void postOrder();
-
     void deleteAll();
+    void guardar();
+    void guardar(Node<T>*&r);
+    void leer();
 
 };
+
 template<class T>
 void BTree<T>::insertData(Node<T>*&r, const T&e) {
     if(r == nullptr) {
@@ -202,19 +188,15 @@ void BTree<T>::insertData(Node<T>*&r, const T&e) {
 
                 throw BTreeException("Memoria no disponible.");
             }
-        }
-        catch(NodeException ex) {
+        } catch(NodeException ex) {
             BTreeException("error");
         }
-    }
-    else {
+    } else {
         if(e < r->getData()) {
             insertData(r->getLeft(), e);
-        }
-        else {
+        } else {
             insertData(r->getRight(), e);
         }
-
         doBalancing(r);
     }
 }
@@ -241,7 +223,6 @@ void BTree<T>::preOrder(Node<T>*&r) {
     if(r == nullptr) {
         return;
     }
-
     std::cout << r->getData() << ", ";
     preOrder(r->getLeft());
     preOrder(r->getRight());
@@ -255,14 +236,14 @@ void BTree<T>::findMinSearch(Node<T>*&r) {
     }
 
     findMinSearch(r->getLeft());
-    if(r->cantB < menorCantB){
+    if(r->cantB < menorCantB) {
         menorCantB = r->cantB;
         menorDataB = r;
     }
     findMinSearch(r->getRight());
 }
 template<class T>
-Node<T>*& BTree<T>::menorParaEliminar(){
+Node<T>*& BTree<T>::menorParaEliminar() {
     menorCantB=INT_MAX;
     menorDataB=nullptr;
     findMinSearch(root);
@@ -276,8 +257,7 @@ void BTree<T>::vecPEliminar(Node<T>*&r) {
         return;
     }
     vecPEliminar(r->getLeft());
-    //cout<<r->getData()<<endl;
-    if(!(r->getData() == menorDataB->getData())){
+    if(!(r->getData() == menorDataB->getData())) {
         pair<T, int>par;
         par.first=r->getData();
         par.second=r->cantB;
@@ -286,8 +266,7 @@ void BTree<T>::vecPEliminar(Node<T>*&r) {
     vecPEliminar(r->getRight());
 }
 template<class T>
-void BTree<T>::insertarEliminar(const T&e){
-    //insertData(root, e);
+void BTree<T>::insertarEliminar(const T&e) {
     vec.clear();
     menorParaEliminar();
     vecPEliminar(root);
@@ -307,7 +286,7 @@ void BTree<T>::findEliminar(Node<T>*&r,const T&e) {
         return;
     }
     findEliminar(r->getLeft(),e);
-    if(!(r->getData() == e)){
+    if(!(r->getData() == e)) {
         pair<T, int>par;
         par.first=r->getData();
         par.second=r->cantB;
@@ -317,7 +296,7 @@ void BTree<T>::findEliminar(Node<T>*&r,const T&e) {
 }
 
 template<class T>
-void BTree<T>::Eliminar(const T&e){
+void BTree<T>::Eliminar(const T&e) {
     vec.clear();
     findEliminar(root,e);
     root = nullptr;
@@ -326,18 +305,19 @@ void BTree<T>::Eliminar(const T&e){
         findData(vec[i].first)->cantB=vec[i].second;
     }
     ifstream file(string(DIR) + string(ARCH_USR));
-    if(!file.good()){
+    if(!file.good()) {
         return;
     }
-    while(!file.eof()){
+    while(!file.eof()) {
         Usuario usr;
         file.read((char*)&usr, sizeof(Usuario));
-        if(file.eof()){break;}
-        if(findData(usr)==nullptr){
+        if(file.eof()) {
+            break;
+        }
+        if(findData(usr)==nullptr) {
             insertData(root, usr);
             break;
         }
-        //arbol.insertData(usr);
     }
     file.close();
 }
@@ -370,7 +350,6 @@ Node<T>*& BTree<T>::getLowest(Node<T>*&r) {
     if(r == nullptr or r->getLeft() == nullptr) {
         return r;
     }
-
     return getLowest(r->getLeft());
 }
 
@@ -379,7 +358,6 @@ Node<T>*& BTree<T>::getBiggest(Node<T>*&r) {
     if(r == nullptr or r->getRight() == nullptr) {
         return r;
     }
-
     return getBiggest(r->getRight());
 }
 
@@ -390,8 +368,7 @@ Node<T>*& BTree<T>::findData(Node<T>*&r, const T&e) {
     }
     if(e < r->getData()) {
         return findData(r->getLeft(),e);
-    }
-    else {
+    } else {
         return findData(r->getRight(),e);
     }
 }
@@ -408,29 +385,23 @@ int BTree<T>::getBalanceFactor(Node<T>*& r) {
 
 template<class T>
 void BTree<T>::doBalancing(Node<T>*& r) {
-    switch(getBalanceFactor(r)){
-        case 2: ///Esta desbalanceado a la derecha
-            if(getBalanceFactor(r->getRight()) == 1){///Coincide signo
-                //cout << "RSI [" << r->getData() << "]" << std::endl;
-                simpleRotationToTheLeft(r);
-            }
-            else{
-                //cout << "RDI [" << r->getData() << "]" << std::endl;
-                doubleRotationToTheLeft(r);
-            }
+    switch(getBalanceFactor(r)) {
+    case 2: ///Esta desbalanceado a la derecha
+        if(getBalanceFactor(r->getRight()) == 1) { ///Coincide signo
+            simpleRotationToTheLeft(r);
+        } else {
+            doubleRotationToTheLeft(r);
+        }
 
-            break;
+        break;
 
-        case -2: ///Esta desbalanceado a la izquierda
-            if(getBalanceFactor(r->getLeft()) == -1){///coincide signo
-                //cout << "RSD [" << r->getData() << "]" << std::endl;
-                simpleRotationToTheRight(r);
-            }
-            else{
-                //cout << "RDD [" << r->getData() << "]" << std::endl;
-                doubleRotationToTheRight(r);
-            }
-            break;
+    case -2: ///Esta desbalanceado a la izquierda
+        if(getBalanceFactor(r->getLeft()) == -1) { ///coincide signo
+            simpleRotationToTheRight(r);
+        } else {
+            doubleRotationToTheRight(r);
+        }
+        break;
     }
 }
 
@@ -466,8 +437,6 @@ void BTree<T>::doubleRotationToTheRight(Node<T>*& r) {
     simpleRotationToTheRight(r);
 }
 
-
-
 template<class T>
 BTree<T>::BTree() : root(nullptr) {
 }
@@ -492,7 +461,6 @@ void BTree<T>::deleteData(Node<T>*&r) {
     if(r == nullptr) {
         return;
     }
-
     deleteAll(r->getLeft());
     deleteAll(r->getRight());
     delete r;
@@ -546,8 +514,71 @@ void BTree<T>::postOrder() {
 template<class T>
 void BTree<T>::deleteAll() {
     deleteAll(root);
-
     root = nullptr;
+}
+
+template<class T>
+void BTree<T>::guardar() {
+    remove("Archivos/Arbol.txt");
+    guardar(root);
+}
+
+template<class T>
+void BTree<T>::guardar(Node<T>*&r) {
+    if(r == nullptr) {
+        return;
+    }
+    guardar(r->getLeft());
+    //Escribe el objeto y las veces que fue buscado
+    ofstream out("Archivos/Arbol.txt", ios::app);
+    out.write((char*)&r->cantB, sizeof(int));
+    out.write((char*)&r->getData(), sizeof(T));
+    out.close();
+    guardar(r->getRight());
+}
+
+template<class T>
+void BTree<T>::leer() {
+    ifstream in("Archivos/Arbol.txt");
+    if(!in.good()){
+        return;
+    }
+    while(!in.eof()){
+        T aux;
+        int cont;
+        in.read((char*)&cont, sizeof(int));
+        in.read((char*)&aux, sizeof(T));
+        if(in.eof()) { break; }
+        insertDataLoad(aux, cont);
+    }
+    in.close();
+}
+
+template<class T>
+void BTree<T>::insertDataLoad(const T&e, const int&cant) {
+    insertDataLoad(root, e, cant);
+}
+
+template<class T>
+void BTree<T>::insertDataLoad(Node<T>*&r, const T&e, const int&cant) {
+    if(r == nullptr) {
+        try {
+            r = new Node<T>(e);
+            r->cantB = cant;
+            if(r == nullptr) {
+                throw BTreeException("Memoria no disponible.");
+            }
+        } catch(NodeException ex) {
+            BTreeException("error");
+        }
+    } else {
+        if(e < r->getData()) {
+            insertDataLoad(r->getLeft(), e, cant);
+        } else {
+            insertDataLoad(r->getRight(), e, cant);
+        }
+        doBalancing(r);
+    }
 }
 
 #endif /* AVL_hpp */
