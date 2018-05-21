@@ -175,7 +175,6 @@ public:
     void guardar();
     void guardar(Node<T>*&r);
     void leer();
-
 };
 
 template<class T>

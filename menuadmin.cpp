@@ -126,6 +126,26 @@ void MenuAdmin::agregarUsuario() {
     newUsuario.setNoReg(this->noReg);
     insertarUsuario(newUsuario);
     cout << endl << "Usuario registrado exitosamente.";
+    //En caso de haber cambios en el archivo
+    vector<Usuario>usu;
+    ifstream file(string(DIR) + string(ARCH_USR));
+    if(!file.good()){
+        return;
+    }
+    while(!file.eof()){
+        Usuario usr;
+        file.read((char*)&usr, sizeof(Usuario));
+        if(file.eof()){ break; }
+        usu.push_back(usr);
+    }
+    file.close();
+    int l=usu.size()/5;
+    if(l==0)l=1;
+    for(int i=0;i<l;i++){
+        if(arbol->findData(usu[i]) == nullptr){
+            arbol->insertData(usu[i]);
+        }
+    }
 }
 
 void MenuAdmin::mostrarUsuario() {
