@@ -17,6 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <unistd.h>
 
 //Definicion del nombre de archivos
 #define ARCH_USR "Usuarios.txt"
@@ -36,12 +37,14 @@
 #define DIR "Archivos/"
 #define DIRREP "Reportes/"
 #define DIRIMG "Imagenes/"
+#define SLASH "/"
 #else
 #define CLEAR "cls"
 #define MKDIR "mkdir Archivos\\"
 #define DIR "Archivos\\"
 #define DIRREP "Reportes\\"
 #define DIRIMG "Imagenes\\"
+#define SLASH "\\"
 #endif
 
 using namespace std;

@@ -149,6 +149,10 @@ void Login::crearArchivosDefecto() {
     direccionFisica -= sizeof(Academico);
     arch_academicos_nuevo.close();
 
+    //Crea directorio de imagen
+    string mkDir = "mkdir " + string(DIRIMG) + to_string(noReg);
+    system(mkDir.c_str());
+
     //Crea nuevo usuario Administrador
     Usuario usuario(noReg, "admin", "admin", "Admin", direccionFisica);
     ofstream file_usuario(string(DIR) + string(ARCH_USR));

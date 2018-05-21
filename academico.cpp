@@ -8,6 +8,7 @@ Academico::Academico() {
     strcpy(this->telefono, "N/A");
     strcpy(this->email, "N/A");
     strcpy(this->estadoCivil, "N/A");
+    strcpy(this->fotografia, "logo.png");
 }
 
 Academico::Academico(const int & noReg, const std::string& nombre, const std::string& domicilio, const std::string& ciudad, const std::string& telefono, const std::string& email, const std::string& estadoCivil) {
@@ -88,6 +89,13 @@ std::string Academico::toString() {
     return res;
 }
 
+void Academico::setFotografia(const std::string& fotografia) {
+    strcpy(this->fotografia, fotografia.c_str());
+}
+
+char* Academico::getFotografia() {
+    return fotografia;
+}
 
 Academico::~Academico() {
     //dtor

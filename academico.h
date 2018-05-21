@@ -13,7 +13,7 @@ private:
     char telefono[15];
     char email[50];
     char estadoCivil[15];
-    //char fotografia[50];
+    char fotografia[100];
 public:
     Academico();
     Academico(const int& noReg, const std::string& nombre,
@@ -26,7 +26,7 @@ public:
     void setTelefono(const std::string& telefono);
     void setEmail(const std::string& email);
     void setEstadoCivil(const std::string& estadoCivil);
-    //void setFotografia(const std::string& fotografia);
+    void setFotografia(const std::string& fotografia);
     int getNoReg();
     char* getNombre();
     char* getDomicilio();
@@ -34,7 +34,7 @@ public:
     char* getTelefono();
     char* getEmail();
     char* getEstadoCivil();
-    //char* getFotografia();
+    char* getFotografia();
     std::string toString();
     virtual ~Academico();
 };

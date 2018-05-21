@@ -64,16 +64,17 @@ void MenuUsr::infoPersonal() {
         cout << "4) Actualizar telefono." << endl;
         cout << "5) Actualizar email." << endl;
         cout << "6) Actualizar estado civil." << endl;
-        cout << "7) Actualizar contraseña." << endl;
-        cout << "8) Administrar dependientes economicos." << endl;
-        cout << "9) Mostrar información de cuenta." << endl;
+        cout << "7) Actualizar foto de perfil." << endl;
+        cout << "8) Actualizar contraseña." << endl;
+        cout << "9) Administrar dependientes economicos." << endl;
+        cout << "10) Mostrar información de cuenta." << endl;
         cout << "0) Salir..." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
         } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and
                 opc != "5" and opc != "6" and opc != "7"  and opc != "8" and
-                opc != "9" and opc != "0");
+                opc != "9" and opc != "10" and opc != "0");
         //Edicion del perfil de usuario
         if(opc == "1") {
             string nombre;
@@ -133,20 +134,55 @@ void MenuUsr::infoPersonal() {
             }
             cout << endl << "¡Estado civil actualizado!";
         } else if(opc == "7") {
+            cout << endl << "Seleccione la foto de perfil." << endl;
+            char file[1024];
+            for(int i = 0; i < 1024; i++){ file[i] = '\0'; }
+            FILE *f = popen("zenity --file-selection --file-filter=''*.jpg' '*.jpeg' '*.png''", "r");
+            fgets(file, 1024, f);
+
+            //Elimina el salto de linea del buscador de archivo
+            for(int i = 0; i < 1024; i++){
+                if(file[i] == '\n'){ file[i] = '\0'; }
+            }
+            if(string(file).length() == 0){
+                cout << endl << "No se selecciono un archivo." << endl;
+            }
+            else{
+                //Remueve todos los archivos dentro del directorio
+                string rm = "rm " + string(DIRIMG) + to_string(this->academico.getNoReg()) + string(SLASH) + "*";
+                system(rm.c_str());
+
+                //Obtiene la ruta actual del proyecto
+                char cwd[1024];
+                getcwd(cwd, sizeof(cwd));
+
+                //Realiza la copia en el directorio del academico con el camio de nombre
+                string cp = "cp -a " + string(file) + " " + string(cwd) + string(SLASH) + string(DIRIMG) + to_string(this->academico.getNoReg()) + string(SLASH) + to_string(this->academico.getNoReg());
+                system(cp.c_str());
+
+                //Sobreescribe la direccion del objeto
+                this->academico.setFotografia(string(DIRIMG) + to_string(this->academico.getNoReg()) + string(SLASH) + to_string(this->academico.getNoReg()));
+                cout << endl << "Se cambio la foto de perfil exitosamente.";
+            }
+        } else if(opc == "8") {
             string password;
             cout << endl << "Ingrese la nueva contraseña: ";
             getline(cin, password);
             this->usuario.setPassword(password);
-        } else if(opc == "8") {
-            dependientesEconomicos();
         } else if(opc == "9") {
+            dependientesEconomicos();
+        } else if(opc == "10") {
             system(CLEAR);
+            //Instalar dependencia en linux de deepin-image-viewer
             cout << "---------------------------------------------------------------" << endl;
             cout << "Username: " << this->usuario.getUsername() <<  "  ->  Contraseña: " << this->usuario.getPassword()<< endl;
             cout << "Academico: " << this->academico.getNombre() << "    | Email: " << this->academico.getEmail() << endl;
             cout << "Domicilio: " << this->academico.getDomicilio() << " ->  Ciudad: " << this->academico.getCiudad() << endl;
             cout << "Telefono: " << this->academico.getTelefono() << "       | Estado civil: " << this->academico.getEstadoCivil() << endl;
             cout << "---------------------------------------------------------------" << endl;
+            cout << "Para continuar con la aplicación, debera cerrar la imagen..." << endl;
+            string img = "deepin-image-viewer " + string(this->academico.getFotografia());
+            system(img.c_str());
         } else {
             //Abre el archivo y coloca el puntero en la posicion de escritura para sobreescribir el academico
             fstream file_academico(string(DIR) + string(ARCH_AC), ios::in|ios::out);
@@ -1937,6 +1973,9 @@ void MenuUsr::configuracion() {
             cout << endl << "Exportando información académica..." << endl;
             creaReporte(this->academico);
             cout << endl << "¡Exportación exitosa!" << endl;
+             cout << "Para continuar con la aplicación, debera cerrar la imagen..." << endl;
+            string img = "deepin-image-viewer " + string(this->academico.getFotografia());
+            system(img.c_str());
         } else if(opc == "2") {
             string nombre;
             cout << endl << "Ingrese el nombre (Completo o parcial) del academico a buscar: ";
@@ -1980,6 +2019,11 @@ void MenuUsr::configuracion() {
                     cout << endl << "Exportando información académica..." << endl;
                     creaReporte(listaResultado[atoi(opc.c_str())]);
                     cout << endl << "¡Exportación exitosa!" << endl;
+
+                    cout << "Para continuar con la aplicación, debera cerrar la imagen..." << endl;
+
+                    string img = "deepin-image-viewer " + string(listaResultado[atoi(opc.c_str())].getFotografia());
+                    system(img.c_str());
                 } else {
                     cout << endl << "Cancelación de reporte..." << endl;
                 }

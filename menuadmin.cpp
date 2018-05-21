@@ -125,6 +125,11 @@ void MenuAdmin::agregarUsuario() {
     this->noReg++;
     newUsuario.setNoReg(this->noReg);
     insertarUsuario(newUsuario);
+
+    //Crea directorio de imagen
+    string mkDir = "mkdir " + string(DIRIMG) + to_string(this->noReg);
+    system(mkDir.c_str());
+
     cout << endl << "Usuario registrado exitosamente.";
     //En caso de haber cambios en el archivo
     vector<Usuario>usu;
@@ -392,7 +397,7 @@ void MenuAdmin::modificarAcademico() {
 
 void MenuAdmin::infoPersonal(Academico& ac) {
     string opc;
-    do {
+    do{
         system(CLEAR);
         cout << "*** Administración de información personal - "<< ac.getNombre() <<" ***" << endl << endl;
         cout << "1) Actualizar nombre." << endl;
@@ -401,18 +406,19 @@ void MenuAdmin::infoPersonal(Academico& ac) {
         cout << "4) Actualizar telefono." << endl;
         cout << "5) Actualizar email." << endl;
         cout << "6) Actualizar estado civil." << endl;
-        cout << "7) Administrar dependientes economicos." << endl;
-        cout << "8) Administrar formación académica." << endl;
-        cout << "9) Administrar docencia académica." << endl;
-        cout << "10) Administrar tutoria académica." << endl;
-        cout << "11) Mostrar información de académico." << endl;
+        cout << "7) Actualizar foto de perfil." << endl;
+        cout << "8) Administrar dependientes economicos." << endl;
+        cout << "9) Administrar formación académica." << endl;
+        cout << "10) Administrar docencia académica." << endl;
+        cout << "11) Administrar tutoria académica." << endl;
+        cout << "12) Mostrar información de académico." << endl;
         cout << "0) Salir..." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
         } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and
                 opc != "5" and opc != "6" and opc != "7"  and opc != "8" and
-                opc != "9" and opc != "10"  and opc != "11" and opc != "0");
+                opc != "9" and opc != "10" and opc != "11" and opc != "12" and opc != "0");
         //Edicion del perfil de usuario
         if(opc == "1") {
             string nombre;
@@ -472,20 +478,54 @@ void MenuAdmin::infoPersonal(Academico& ac) {
             }
             cout << endl << "¡Estado civil actualizado!";
         } else if(opc == "7") {
-            dependientesEconomicos(ac);
+            cout << endl << "Seleccione la foto de perfil." << endl;
+            char file[1024];
+            for(int i = 0; i < 1024; i++){ file[i] = '\0'; }
+            FILE *f = popen("zenity --file-selection --file-filter=''*.jpg' '*.jpeg' '*.png''", "r");
+            fgets(file, 1024, f);
+
+            //Elimina el salto de linea del buscador de archivo
+            for(int i = 0; i < 1024; i++){
+                if(file[i] == '\n'){ file[i] = '\0'; }
+            }
+            if(string(file).length() == 0){
+                cout << endl << "No se selecciono un archivo." << endl;
+            }
+            else{
+                //Remueve todos los archivos dentro del directorio
+                string rm = "rm " + string(DIRIMG) + to_string(ac.getNoReg()) + string(SLASH) + "*";
+                system(rm.c_str());
+
+                //Obtiene la ruta actual del proyecto
+                char cwd[1024];
+                getcwd(cwd, sizeof(cwd));
+
+                //Realiza la copia en el directorio del academico con el camio de nombre
+                string cp = "cp -a " + string(file) + " " + string(cwd) + string(SLASH) + string(DIRIMG) + to_string(ac.getNoReg()) + string(SLASH) + to_string(ac.getNoReg());
+                system(cp.c_str());
+
+                //Sobreescribe la direccion del objeto
+                ac.setFotografia(string(DIRIMG) + to_string(ac.getNoReg()) + string(SLASH) + to_string(ac.getNoReg()));
+                cout << endl << "Se cambio la foto de perfil exitosamente.";
+            }
         } else if(opc == "8") {
-            formacion(ac);
+            dependientesEconomicos(ac);
         } else if(opc == "9") {
-            docencia(ac);
+            formacion(ac);
         } else if(opc == "10") {
-            tutoria(ac);
+            docencia(ac);
         } else if(opc == "11") {
+            tutoria(ac);
+        } else if(opc == "12") {
             system(CLEAR);
             cout << "---------------------------------------------------------------" << endl;
             cout << "Academico: " << ac.getNombre() << "    | Email: " << ac.getEmail() << endl;
             cout << "Domicilio: " << ac.getDomicilio() << " ->  Ciudad: " << ac.getCiudad() << endl;
             cout << "Telefono: " << ac.getTelefono() << "       | Estado civil: " << ac.getEstadoCivil() << endl;
             cout << "---------------------------------------------------------------" << endl;
+            cout << "Para continuar con la aplicación, debera cerrar la imagen..." << endl;
+            string img = "deepin-image-viewer " + string(ac.getFotografia());
+            system(img.c_str());
         } else {
             //Guarda la información recien modificada
             ifstream leer(string(DIR) + string(ARCH_AC));

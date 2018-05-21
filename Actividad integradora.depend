@@ -227,10 +227,10 @@
 1526433589 source:/home/lumartch/Escritorio/Actividad integradora/menuusr.cpp
 	"menuusr.h"
 
-1526859372 source:/home/lumartch/Actividad-Integradora/academico.cpp
+1526710097 source:/home/lumartch/Actividad-Integradora/academico.cpp
 	"academico.h"
 
-1526859372 /home/lumartch/Actividad-Integradora/academico.h
+1526710097 /home/lumartch/Actividad-Integradora/academico.h
 	<string>
 	<cstring>
 
@@ -290,7 +290,7 @@
 	<cstring>
 	"fecha.h"
 
-1526860204 source:/home/lumartch/Actividad-Integradora/login.cpp
+1526862545 source:/home/lumartch/Actividad-Integradora/login.cpp
 	"login.h"
 
 1526859373 /home/lumartch/Actividad-Integradora/login.h
@@ -300,7 +300,7 @@
 	"menuusr.h"
 	"AVL.hpp"
 
-1526859373 /home/lumartch/Actividad-Integradora/menuusr.h
+1526862390 /home/lumartch/Actividad-Integradora/menuusr.h
 	"usuario.h"
 	"academico.h"
 	"dependiente.h"
@@ -314,6 +314,7 @@
 	<fstream>
 	<iostream>
 	<regex>
+	<unistd.h>
 
 1526859373 /home/lumartch/Actividad-Integradora/usuario.h
 	<string>
@@ -327,7 +328,7 @@
 1526859373 source:/home/lumartch/Actividad-Integradora/main.cpp
 	"login.h"
 
-1526859373 source:/home/lumartch/Actividad-Integradora/menuusr.cpp
+1526861808 source:/home/lumartch/Actividad-Integradora/menuusr.cpp
 	"menuusr.h"
 
 1526859373 source:/home/lumartch/Actividad-Integradora/produccion.cpp
@@ -339,7 +340,7 @@
 1526859373 source:/home/lumartch/Actividad-Integradora/usuario.cpp
 	"usuario.h"
 
-1526860397 source:/home/lumartch/Actividad-Integradora/menuadmin.cpp
+1526862424 source:/home/lumartch/Actividad-Integradora/menuadmin.cpp
 	"menuadmin.h"
 
 1526859473 /home/lumartch/Actividad-Integradora/AVL.hpp
